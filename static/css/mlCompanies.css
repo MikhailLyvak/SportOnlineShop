@@ -1,0 +1,28 @@
+.ml_display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flexed {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.green-border {
+  border: 2px solid green !important;
+  ;
+}
+
+.gold-border {
+  border: 2px solid rgb(252, 211, 32) !important;
+  ;
+}
+
+.hover-effect {
+  cursor: pointer;
+  transform: scale(1.2);
+  transition: transform 0.2s;
+}

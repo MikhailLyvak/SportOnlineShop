@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags widget_tweaks%}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% block extra_css %}
+    <!--Swiper slider css-->
+    <link href="{% static 'libs/swiper/swiper-bundle.min.css'%}" rel="stylesheet" type="text/css" />
+{% endblock extra_css %}
+
+{% block header %}
+{% include 'includes/homeTopBar.html' %}
+{% endblock header %}
+
+
+{% block content %}
+<div class="main-content">
+
+  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
+    <div class="container-fluid">
+
+      <!-- start page title -->
+      <div class="row">
+        <div class="col-12">
+          <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Сторінка товару</h4>
+          </div>
+        </div>
+      </div>
+      <!-- end page title -->
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card  border border-2">
+            <div class="card-body">
+              <div class="row gx-lg-5">
+                <div class="col-xl-4 col-md-8 mx-auto">
+                  <div class="product-img-slider sticky-side-div">
+                      <div class="swiper product-thumbnail-slider p-2 rounded bg-light">
+                        <div class="swiper-wrapper">
+                          {% if good.photos.count > 0 %}
+                            {% for photo in good.photos.all %}
+                              {% if forloop.counter <= 4 %}
+                                <div class="swiper-slide">
+                                  <img src="{{ photo.photo.url }}" alt="" class="img-fluid d-block mx-auto" />
+                                </div>
+                              {% endif %}
+                            {% endfor %}
+                          {% else %}
+                            <div class="swiper-slide">
+                              <img src="{% static 'images/default-good.png' %}" alt="" class="img-fluid d-block" />
+                            </div>
+                          {% endif %}
+                        </div>
+                          <div class="swiper-button-next"></div>
+                          <div class="swiper-button-prev"></div>
+                      </div>
+                      <!-- end swiper thumbnail slide -->
+                      <div class="swiper product-nav-slider mt-2">
+                          <div class="swiper-wrapper">
+                            {% if good.photos.count > 0 %}
+                              {% for photo in good.photos.all %}
+                                {% if forloop.counter <= 4 %}
+                                  <div class="swiper-slide">
+                                      <div class="nav-slide-item ">
+                                          <img src="{{ photo.photo.url }}" alt="" class="img-fluid d-block" />
+                                      </div>
+                                  </div>
+                                  {% endif %}
+                                {% endfor %}
+                                {% else %}
+                                <div class="swiper-slide">
+                                  <div class="nav-slide-item ">
+                                      <img src="{% static 'images/default-good.png' %}" alt="" class="img-fluid d-block" />
+                                  </div>
+                              </div>
+                              {% endif %}
+                          </div>
+                  </div>
+                  </div>
+
+                </div>
+                <!-- end col -->
+
+                <div class="col-xl-8">
+                  <div class="mt-xl-0 mt-5">
+                    <div class="d-flex">
+                      <div class="flex-grow-1">
+                        <h4>{{ good.good.name }}</h4>
+                        <div class="hstack gap-3 flex-wrap">
+                          <div>
+                            <a href="#" class="text-primary d-block">
+                              {{ good.good.producer.name }}</a>
+                          </div>
+                          <div class="vr"></div>
+                          <div class="text-muted">Смак : <span class="text-body fw-medium">{{ good.taste.name }}</span>
+                          </div>
+                          <div class="vr"></div>
+                          <div class="text-muted">Розмір : <span class="text-body fw-medium">{{ good.size.name }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <a class="btn btn-info m-1" href="{% url 'app_goods:shop-goods' %}">До списку товарів</a>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <button class="btn btn-success waves-effect waves-light m-1" onclick=addToCart({{ good.id }})>
+                          <i class="ri-shopping-cart-2-line"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row mt-4">
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="p-2 border border-dashed rounded">
+                          <div class="d-flex align-items-center">
+                            <div class="avatar-sm me-2">
+                              <div class="avatar-title rounded bg-transparent text-info fs-24">
+                                <i class="ri-money-dollar-circle-fill"></i>
+                              </div>
+                            </div>
+                            <div class="flex-grow-1">
+                              <p class="text-muted mb-1">Ціна :</p>
+                              {% if good.on_discount %}
+                                <h5 class="mb-0 fs-11 text-danger"><del>{{ good.sell_price|floatformat:"2"|intcomma }} грн.</del></h5>
+                                <h5 class="mb-0 fs-18 text-success">{{ good.discount_price|floatformat:"2"|intcomma }} грн.</h5>
+                              {% else %}
+                                <h5 class="mb-0 fs-16">{{ good.sell_price|floatformat:"2"|intcomma }} грн.</h5>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end col -->
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="p-2 border border-dashed rounded">
+                          <div class="d-flex align-items-center">
+                            <div class="avatar-sm me-2">
+                              <div class="avatar-title rounded bg-transparent text-info fs-24">
+                                <i class="ri-file-copy-2-fill"></i>
+                              </div>
+                            </div>
+                            <div class="flex-grow-1">
+                              <p class="text-muted mb-1">Виробник :</p>
+                              <h5 class="mb-0">{{ good.good.producer.name }}</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end col -->
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="p-2 border border-dashed rounded">
+                          <div class="d-flex align-items-center">
+                            <div class="avatar-sm me-2">
+                              <div class="avatar-title rounded bg-transparent text-info fs-24">
+                                <i class="ri-scales-2-fill"></i>
+                              </div>
+                            </div>
+                            <div class="flex-grow-1">
+                              <p class="text-muted mb-1">Розмір :</p>
+                              <h5 class="mb-0">{{ good.size.name }}</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end col -->
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="p-2 border border-dashed rounded">
+                          <div class="d-flex align-items-center">
+                            <div class="avatar-sm me-2">
+                              <div class="avatar-title rounded bg-transparent text-info fs-24">
+                                <i class="ri-game-fill"></i>
+                              </div>
+                            </div>
+                            <div class="flex-grow-1">
+                              <p class="text-muted mb-1">Смак :</p>
+                              <h5 class="mb-0">{{ good.taste.name }}</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end col -->
+                    </div>
+
+                    <div class="row">
+                      <div class="col-xl-6">
+                        <div class="mt-4">
+                          <h5 class="fs-14">Розміри :</h5>
+                          <div class="d-flex flex-wrap gap-2">
+                            {% for size in sizes %}
+                            <a href="{% url 'app_goods:good-detail' pk=size.1 %}">
+                              {% if size.1 is not good.pk %}
+                              <input type="radio" class="btn-check">
+                              {% else %}
+                              <input type="radio" class="btn-check" disabled="">
+                              {% endif %}
+                              <label
+                                class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center">
+                                {{ size.0 }}
+                              </label>
+                            </a>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end col -->
+
+                      <div class="col-xl-6">
+                        <div class="mt-4 text-start">
+                          <button class="btn btn-soft-success waves-effect waves-light m-1" onclick=addToCart(good.id)>
+                            <i class="ri-shopping-cart-2-line fs-19"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                    <div class="mt-4 text-muted">
+                      <h5 class="fs-14">Description :</h5>
+                      <p>{{ good.description }}</p>
+                    </div>
+                    <div class="product-content mt-5">
+                      <h5 class="fs-14 mb-3">Product Description :</h5>
+                      <nav>
+                        <ul class="nav nav-tabs nav-tabs-custom nav-info" id="nav-tab" role="tablist">
+                          <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="nav-speci-tab" data-bs-toggle="tab" href="#nav-speci"
+                              role="tab" aria-controls="nav-speci" aria-selected="true">Особливості</a>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="nav-detail-tab" data-bs-toggle="tab" href="#nav-detail" role="tab"
+                              aria-controls="nav-detail" aria-selected="false" tabindex="-1">Деталі виробника</a>
+                          </li>
+                        </ul>
+                      </nav>
+                      <div class="tab-content border border-top-0 p-4" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-speci" role="tabpanel"
+                          aria-labelledby="nav-speci-tab">
+                          <div class="table-responsive">
+                            <table class="table mb-0">
+                              <tbody>
+                                <tr>
+                                  <th scope="row" style="width: 200px;">Виробник</th>
+                                  <td>{{ good.good.producer.name }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Вага</th>
+                                  <td>{{ good.size.name }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Смак</th>
+                                  <td>{{ good.taste.name }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Ціна</th>
+                                  <td>{{ good.sell_price|floatformat:"2"|intcomma }} грн.</td>
+                                </tr>
+                                <tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab">
+                          <div>
+                            <h5 class="font-size-16 mb-3">{{ good.good.producer.name }}</h5>
+
+                            {% if good.good.producer.description %}
+                            <p>{{ good.good.producer.description }}</p>
+                            {% else %}
+                            <p>Виробник не надав опису</p>
+                            {% endif %}
+
+
+                            <!-- <div>
+                              <p class="mb-2"><i class="mdi mdi-circle-medium me-1 text-muted align-middle"></i> Machine
+                                Wash</p>
+                              <p class="mb-2"><i class="mdi mdi-circle-medium me-1 text-muted align-middle"></i> Fit
+                                Type: Regular</p>
+                              <p class="mb-2"><i class="mdi mdi-circle-medium me-1 text-muted align-middle"></i> 100%
+                                Cotton</p>
+                              <p class="mb-0"><i class="mdi mdi-circle-medium me-1 text-muted align-middle"></i> Long
+                                sleeve</p>
+                            </div> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- product-content -->
+                    <!-- end card body -->
+                  </div>
+                </div>
+                <!-- end col -->
+              </div>
+              <!-- end row -->
+            </div>
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+
+    </div>
+    <!-- container-fluid -->
+  </div>
+  <!-- End Page-content -->
+
+  <footer class="footer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <script>document.write(new Date().getFullYear())</script>2024 © Velzon.
+        </div>
+        <div class="col-sm-6">
+          <div class="text-sm-end d-none d-sm-block">
+            Design &amp; Develop by Themesbrand
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+{% endblock content %}
+{% block extra_js %}
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+<script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
+<script src="{% static 'js/shop/goodsCardsList.js' %}"></script>
+<script src="{% static 'js/shop/goodsCart.js' %}"></script>
+<script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
+<script src="{% static 'libs/swiper/swiper-bundle.min.js'%}"></script>
+<script src="{% static 'js/pages/ecommerce-product-details.init.js'%}"></script>
+
+{% endblock extra_js %}

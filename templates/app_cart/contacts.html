@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags widget_tweaks%}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% block extra_css %}
+    <!--Swiper slider css-->
+    <link href="{% static 'libs/swiper/swiper-bundle.min.css'%}" rel="stylesheet" type="text/css" />
+{% endblock extra_css %}
+
+{% block header %}
+{% include 'includes/homeTopBar.html' %}
+{% endblock header %}
+
+
+{% block content %}
+<div class="main-content">
+
+  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)" style="min-height: 800px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center" style="min-height: 800px;">
+          <div class="col-lg-10">
+              <div class="card">
+                  <div class="bg-warning-subtle position-relative">
+                      <div class="card-body p-5">
+                          <div class="text-center">
+                              <h3>Наші контакти</h3>
+                              <p class="mb-0 text-muted">Останнэ оновлення: 8 травня, 2024</p>
+                          </div>
+                      </div>
+                      <div class="shape">
+                          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="1440" height="60" preserveAspectRatio="none" viewBox="0 0 1440 60">
+                              <g mask="url(&quot;#SvgjsMask1001&quot;)" fill="none">
+                                  <path d="M 0,4 C 144,13 432,48 720,49 C 1008,50 1296,17 1440,9L1440 60L0 60z" style="fill: var(--vz-secondary-bg);"></path>
+                              </g>
+                              <defs>
+                                  <mask id="SvgjsMask1001">
+                                      <rect width="1440" height="60" fill="#ffffff"></rect>
+                                  </mask>
+                              </defs>
+                          </svg>
+                      </div>
+                  </div>
+                  <div class="card-body p-4">
+                      <div>
+                          <h5>Вітаємо на SportRelaxNutritions</h5>
+                          <p>Моб. телефон <span class="text-muted">+380 50 954 91 70</span></p>
+                          <p>Email <span class="text-muted">sportrelaxnutritions@gmail.com</span></p>
+                      </div>
+                  </div>
+              </div>
+          </div><!--end col-->
+
+      </div>
+      <!-- end page title -->
+
+          <!-- end card -->
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+
+    </div>
+    <!-- container-fluid -->
+  </div>
+  <!-- End Page-content -->
+
+  <footer class="footer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <script>document.write(new Date().getFullYear())</script>2024 © Velzon.
+        </div>
+        <div class="col-sm-6">
+          <div class="text-sm-end d-none d-sm-block">
+            Design &amp; Develop by Themesbrand
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+{% endblock content %}
+{% block extra_js %}
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+<script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
+<script src="{% static 'js/shop/goodsCardsList.js' %}"></script>
+<script src="{% static 'js/shop/goodsCart.js' %}"></script>
+<script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
+<script src="{% static 'libs/swiper/swiper-bundle.min.js'%}"></script>
+<script src="{% static 'js/pages/ecommerce-product-details.init.js'%}"></script>
+
+{% endblock extra_js %}

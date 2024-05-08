@@ -1,0 +1,66 @@
+{% load static %}
+<div class="app-menu navbar-menu" id="sida-bar-ml">
+  <!-- LOGO -->
+  <div class="navbar-brand-box">
+    <!-- Dark Logo-->
+    <a href="http://127.0.0.1:8000/" class="logo logo-dark mb-3">
+      <span class="logo-sm">
+        <img src="{% static 'images/sportLogo.jpg' %}" alt="" height="15">
+      </span>
+      <span class="logo-lg mt-2 mb-2">
+        <img src="{% static 'images/sportLogo.jpg' %}" alt="" height="96">
+      </span>
+    </a>
+    <!-- Light Logo-->
+    <a href="http://127.0.0.1:8000/" class="logo logo-light mb-3">
+      <span class="logo-sm mt-2 mb-2">
+        <img src="{% static 'images/sportLogo.jpg' %}" alt="" height="15">
+      </span>
+      <span class="logo-lg mt-2">
+        <img src="{% static 'images/sportLogo.jpg' %}" alt="" height="96">
+      </span>
+    </a>
+    <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+      <i class="ri-record-circle-line"></i>
+    </button>
+  </div>
+  
+  <div id="" style="overflow-x: hidden;">
+    <div class="container-fluid" style="overflow-x: hidden;">
+      <div id="two-column-menu">
+      </div>
+      <ul class="navbar-nav" id="navbar-nav">
+        <div class="simplebar-wrapper" style="margin: 0px;">
+          <div class="simplebar-height-auto-observer-wrapper">
+            <div class="simplebar-height-auto-observer"></div>
+          </div>
+          <div class="simplebar-mask">
+            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+              <div class="simplebar-content" style="padding: 0px;">
+                <li class="menu-title"><span>Фільтр по типу</span></li>
+                <!-- Iterate over each category and create dropdown menus -->
+                <ul class="nav nav-sm flex-column">
+                  <!-- JavaScript will dynamically generate dropdown menus here -->
+                  
+                </ul>
+                <li class="nav-item">
+                  <a class="nav-link menu-link" href="#" onclick="goodCardsList('/api/goods/', true)">
+                    <i class="ri-find-replace-line fs-18"></i> <span data-key="t-authentication">Очистити фільтри</span>
+                  </a>
+              </li>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="simplebar-placeholder" style="width: 249px; height: 529px;"></div>
+    </div>
+    </ul>
+  </div>
+  <!-- Sidebar -->
+</div>
+<div class="sidebar-background" style="overflow-x: hidden;"></div>
+</div>
+<!-- Left Sidebar End -->
+<!-- Vertical Overlay-->
+<div class="vertical-overlay"></div>

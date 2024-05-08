@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags widget_tweaks%}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% load mathfilters %}
+{% block extra_css %}
+{% endblock extra_css %}
+{% block header %}
+  {% include 'includes/homeTopBar.html' %}
+{% endblock header %}
+
+{% block content %}
+
+<div class="main-content">
+  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-xl-8">
+          <div class="row align-items-center gy-3 mb-3">
+            <div class="col-sm">
+              <div>
+                <h5 class="fs-14 mb-0">У вашій корзині ({{ cart_items.count }} товари)</h5>
+              </div>
+            </div>
+            <div class="col-sm-auto">
+              <a
+                href="{% url 'app_goods:shop-goods' %}"
+                class="link-primary text-decoration-underline"
+                >Продовжити покупку</a
+              >
+            </div>
+          </div>
+          {% for item in cart_items %}
+              <div class="card product">
+                <div class="card-body">
+                  <div class="row gy-3">
+                    <div class="col-sm-auto">
+                      <div class="avatar-lg bg-light rounded p-1">
+                        {% if item.good_variant.photos.exists %}
+                            <img src="{{ item.good_variant.photos.first.photo.url }}" alt="" class="img-fluid d-block" />
+                        {% else %}
+                            <img src="{% static 'images/default-good.png' %}" alt="Default Photo" class="img-fluid d-block" />
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="col-sm">
+                      <h5 class="fs-14 text-truncate">
+                        <a
+                          href="#"
+                          class="text-body"
+                          >{{ item.good_variant }}</a
+                        >
+                      </h5>
+                      <ul class="list-inline text-muted">
+                        <li class="list-inline-item">
+                          Смак : <span class="fw-medium">{{ item.good_variant.taste.name }}</span>
+                        </li>
+                        <li class="list-inline-item">
+                          Розмір : <span class="fw-medium">{{ item.good_variant.size.name }}</span>
+                        </li>
+                      </ul>
+                      <style>
+                        .disabled {
+                          pointer-events: none;
+                          opacity: 0.7; /* optional: reduce opacity to visually indicate it's disabled */
+                        }
+                      </style>
+                      <div class="input-step">
+                        <button 
+                        {% if item.amount <= 1 %}
+                          class="disabled"
+                        {% endif %}
+                           onclick="window.location.href='{% url 'app_cart:action-cart-item' pk=item.pk action='minus' %}'" id="djnago-minus">–</button>
+                        <input
+                          type="number"
+                          class="product-quantity"
+                          value="{{ item.amount }}"
+                          min="0"
+                          max="100"
+                        />
+                        <button onclick="window.location.href='{% url 'app_cart:action-cart-item' pk=item.pk action='add' %}'" id="djnago-add">+</button>
+                      </div>
+                    </div>
+                    <div class="col-sm-auto">
+                      <div class="text-lg-end">
+                        <p class="text-muted mb-1">Ціна за одиницю:</p>
+                        <h5 class="fs-14">
+                          {% if item.good_variant.on_discount %}
+                            <h5 class="mb-0 fs-11 text-danger"><del>{{ item.good_variant.sell_price|floatformat:"2"|intcomma }} грн.</del></h5>
+                            <h5 class="mb-0 fs-14 text-success">{{ item.good_variant.discount_price|floatformat:"2"|intcomma }} грн.</h5>
+                          {% else %}
+                            <h5 class="mb-0 fs-14">{{ item.good_variant.sell_price|floatformat:"2"|intcomma }} грн.</h5>
+                          {% endif %}
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- card body -->
+                <div class="card-footer">
+                  <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                      <div class="d-flex flex-wrap my-n1">
+                        <div>
+                          <a
+                            href="{% url 'app_cart:delete-cart-item' pk=item.pk %}"
+                            class="d-block text-body p-1 px-2"
+                            ><i
+                              class="ri-delete-bin-fill text-muted align-bottom me-1"
+                            ></i>
+                            Видалити</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-auto">
+                      <div class="d-flex align-items-center gap-2 text-muted">
+                        <div>Сума :</div>
+                        <h5 class="fs-14 mb-0">
+                          
+                          {% if item.good_variant.on_discount %}
+                            {{ item.good_variant.discount_price|mul:item.amount|floatformat:"2"|intcomma }} грн.
+                          {% else %}
+                            {{ item.good_variant.sell_price|mul:item.amount|floatformat:"2"|intcomma }} грн.
+                          {% endif %}
+                            
+                          
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- end card footer -->
+              </div>
+            {% endfor %}
+          
+          <!-- end card -->
+
+          <div class="text-end mb-4">
+            <a
+              href="{% url 'app_orders:create-order' %}"
+              class="btn btn-success btn-label right ms-auto"
+              ><i
+                class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"
+              ></i>
+              Оформити замовлення</a
+            >
+          </div>
+        </div>
+        <!-- end col -->
+
+        <div class="col-xl-4">
+          <div class="sticky-side-div">
+            <div class="card">
+              <div class="card-header border-bottom-dashed">
+                <h5 class="card-title mb-0">Інформація по замовленню</h5>
+              </div>
+              <div class="card-header bg-light-subtle border-bottom-dashed">
+                <div class="text-center">
+                  <h6 class="mb-2">
+                    Маэш <span class="fw-semibold">промо</span> код ?
+                  </h6>
+                </div>
+                <div class="hstack gap-3 px-3 mx-n3">
+                  <input
+                    class="form-control me-auto"
+                    type="text"
+                    placeholder="Введіть код купона тут..."
+                    aria-label="Введіть код купона тут..."
+                  />
+                  <button type="button" class="btn btn-success w-xs">
+                    Apply
+                  </button>
+                </div>
+              </div>
+              <div class="card-body pt-2">
+                <div class="table-responsive">
+                  <table class="table table-borderless mb-0">
+                    <tbody>
+                      <tr>
+                        <td>Сума без знижок :</td>
+                        <td class="text-end" id="cart-subtotal">{{ calc_result.total_clear_price|floatformat:"2"|intcomma }} грн.</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Знижки <span class="text-muted"></span> :
+                        </td>
+                        <td class="text-end" id="cart-discount">- {{ calc_result.total_discount|floatformat:"2"|intcomma }} грн.</td>
+                      </tr>
+                      <tr class="table-active">
+                        <th>Загалом (UAH) :</th>
+                        <td class="text-end">
+                          <span class="fw-semibold" id="cart-total">
+                            {{ calc_result.total_price|floatformat:"2"|intcomma }} грн.
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- end table-responsive -->
+              </div>
+            </div>
+
+            <div class="alert border-dashed alert-danger" role="alert">
+              <div class="d-flex align-items-center">
+                <lord-icon
+                  src="https://cdn.lordicon.com/nkmsrxys.json"
+                  trigger="loop"
+                  colors="primary:#121331,secondary:#f06548"
+                  style="width: 80px; height: 80px"
+                >
+                </lord-icon>
+                <div class="ms-2">
+                  <h5 class="fs-14 text-danger fw-semibold">
+                    Інформація по доставці
+                  </h5>
+                  <p class="text-body mb-1">
+                    В <span class="fw-semibold">м.Луцьк</span> отримати товар можна з рук 
+                    <br />
+                    В інші міста доставка <span class="fw-semibold">Новою Поштою</span>
+                  </p>
+                  <button
+                    type="button"
+                    class="btn ps-0 btn-sm btn-link text-danger text-uppercase"
+                  >
+                    Контакти
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end stickey -->
+        </div>
+      </div>
+      <!-- end row -->
+    </div>
+    <!-- container-fluid -->
+  </div>
+  <!-- End Page-content -->
+
+</div>
+
+{% endblock content %} {% block extra_js %}
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+<script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
+<script src="{% static 'js/shop/goodsCardsList.js' %}"></script>
+<script src="{% static 'js/shop/goodsCart.js' %}"></script>
+<script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
+
+
+
+{% endblock extra_js %}

@@ -1,0 +1,1071 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{% load humanize %}
+{% load mathfilters %}
+{% endblock title %}
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/ml_style.css' %}">
+{% endblock extra_css %}
+
+{% block header %}
+{% include 'includes/homeTopBar.html' %}
+{% endblock header %}
+{% block content %}
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="main-content">
+  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-9">
+          <div class="card">
+            <div class="card-header">
+              <div class="d-flex align-items-center">
+                <h5 class="card-title flex-grow-1 mb-0">Замовлення #{{ order.pk }}</h5>
+                <div class="flex-shrink-0">
+                  
+                  {% if order.invoice_status == "FILLED" and order.payment_type == "CP" %}
+                    <span class="badge bg-success fs-18">Оформлено</span>
+                  {% elif order.invoice_status == "FILLED" and order.payment_type == "OP" %}
+                  <style>
+                    .centered-content {
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      text-align: center; /* This is for IE11 */
+                  }                  
+                  </style>
+                  <span class="badge bg-warning fs-18 centered-content">
+                      <div class="spinner-border spinner-border-sm text-light" style="margin-right: 10px;" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                        Очікує оплати
+                    </span>
+                  {% elif order.invoice_status == "PAYED" %}
+                    <span class="badge bg-success fs-18">Оплачено</span>
+                  {% endif %}
+                    
+                  <!-- Border spinner -->
+
+
+
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive table-card">
+                <table
+                  class="table table-nowrap align-middle table-borderless mb-0"
+                >
+                  <thead class="table-light text-muted">
+                    <tr>
+                      <th scope="col">Деталі товару</th>
+                      <th scope="col">Ціна одиниці</th>
+                      <th scope="col">К-ть</th>
+                      <th scope="col">Виробник</th>
+                      <th scope="col" class="text-end">Загальна сума</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in order_items %}
+                    <tr>
+                      <td>
+                        <div class="d-flex">
+                          <div
+                            class="flex-shrink-0 avatar-md bg-light rounded p-1"
+                          >
+                          {% if item.good_variant.photos.exists %}
+                              <img src="{{ item.good_variant.photos.first.photo.url }}" alt="" class="img-fluid d-block" />
+                          {% else %}
+                              <img src="{% static 'images/default-good.png' %}" alt="Default Photo" class="img-fluid d-block" />
+                          {% endif %}
+                          </div>
+                          <div class="flex-grow-1 ms-3">
+                            <h5 class="fs-15">
+                              <a
+                                href="{% url 'app_goods:good-detail' pk=item.good_variant.pk %}"
+                                class="link-primary"
+                                >{{ item }}</a
+                              >
+                            </h5>
+                            <p class="text-muted mb-0">
+                              Смак: <span class="fw-medium">{{ item.good_variant.taste.name }}</span>
+                            </p>
+                            <p class="text-muted mb-0">
+                              Розмір: <span class="fw-medium">{{ item.good_variant.size.name }}</span>
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <h5 class="fs-14">
+                          {% if item.good_variant.on_discount %}
+                            <h5 class="mb-0 fs-11 text-danger"><del>{{ item.good_variant.sell_price|floatformat:"2"|intcomma }} грн.</del></h5>
+                            <h5 class="mb-0 fs-14 text-success">{{ item.good_variant.discount_price|floatformat:"2"|intcomma }} грн.</h5>
+                          {% else %}
+                            <h5 class="mb-0 fs-14">{{ item.good_variant.sell_price|floatformat:"2"|intcomma }} грн.</h5>
+                          {% endif %}
+                        </h5>
+                      </td>
+                      <td>{{ item.amount }}</td>
+                      <td>
+                        {{ item.good_variant.good.producer.name }}
+                      </td>
+                      <td class="fw-medium text-end">
+                        {% if item.good_variant.on_discount %}
+                            {{ item.good_variant.discount_price|mul:item.amount|floatformat:"2"|intcomma }} грн.
+                          {% else %}
+                            {{ item.good_variant.sell_price|mul:item.amount|floatformat:"2"|intcomma }} грн.
+                          {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="border-top border-top-dashed">
+                      <td colspan="1" class="fw-medium p-0">
+                        <table class="table table-borderless mb-0">
+                          <tbody>
+                            <tr>
+                              <td>Сума без знижок :</td>
+                              <td class="text-start">{{ calc_result.total_clear_price|floatformat:"2"|intcomma }} грн.</td>
+                            </tr>
+                            <tr>
+                              <td>Знижки <span class="text-muted"></span> :</td>
+                              <td class="text-start" id="cart-discount">- {{ calc_result.total_discount|floatformat:"2"|intcomma }} грн.</td>
+                            </tr>
+                            <tr>
+                              <td>Загалом (UAH) :</td>
+                              <td class="text-start">
+                                <span class="fw-semibold" id="cart-total">
+                                  {{ calc_result.total_price|floatformat:"2"|intcomma }} грн.
+                                </span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                      <td colspan="3"></td>
+                      
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!--end card-->
+          <!--end card-->
+        </div>
+        <!--end col-->
+        <div class="col-xl-3">
+          {% if order.invoice_status == "FILLED" or order.invoice_status == "PAYED" or order.invoice_status == "TIMEOUT" %}
+          <div class="card" id="delivery-card">
+            <div class="card-header">
+              <div class="d-flex">
+                <h5 class="card-title flex-grow-1 mb-0">
+                  <i class="mdi mdi-truck-fast-outline align-middle me-1 text-muted"></i>
+                  Деталі доставки
+                </h5>
+              </div>
+            </div>
+            
+            {% if order.delivery_type == "NP" %}
+              <div class="card-body" id="nova-poshta-info-filled">
+                <div class="text-center">
+                  <lord-icon
+                    src="https://cdn.lordicon.com/uetqnvvg.json"
+                    trigger="loop"
+                    colors="primary:#405189,secondary:#0ab39c"
+                    style="width: 80px; height: 80px"
+                  ></lord-icon>
+                  <h5 class="fs-16 mt-2 mb-3">Доставка Новою Поштою</h5>
+                </div>
+                <div class="mb-3">
+                  <select class="form-control" data-choices="searchEnabled: true" name="choices-single-default-filled" id="choices-single-default-filled" disabled>
+                      <option value="">{{ order.np_city }}</option>
+                  </select>
+              </div>
+                <div class="mb-3">
+                  <select class="form-control" data-choices="searchEnabled: true" name="fixed-select-filled" id="fixed-select-filled" disabled>
+                      <option value="">{{ order.nova_post_address }}</option>
+                  </select>
+              </div>
+              </div>
+
+            {% elif order.delivery_type == "UP" %}
+              <div class="card-body" id="urk-post-info-filled">
+                <div class="text-center">
+                  <lord-icon
+                    src="https://cdn.lordicon.com/uetqnvvg.json"
+                    trigger="loop"
+                    colors="primary:#405189,secondary:#0ab39c"
+                    style="width: 80px; height: 80px"
+                  ></lord-icon>
+                  <h5 class="fs-16 mt-2 mb-3">Доставка Укр Поштою</h5>
+                </div>
+                <input class="form-control" type="text" placeholder="Введіть адресу доставки" disabled value="{{ order.ukr_post_adress }}">
+              </div>
+            {% elif order.delivery_type == "SL" %}
+              <div class="card-body" id="self-delivery-info-filled">
+                <div class="alert border-dashed alert-success" role="alert">
+                  <div class="d-flex align-items-center">
+                    <lord-icon src="https://cdn.lordicon.com/fhtaantg.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:55px;height:55px"></lord-icon>
+                    <div class="ms-2">
+                      <h5 class="fs-14 text-success fw-semibold">
+                        Смовивоз з SportLife Луцьк
+                      </h5>
+                      <p class="text-body mb-1">
+                        В <span class="fw-semibold">м.Луцьк</span> отримати товар можна за адресою 
+                        <br />
+                        проспект Василя Мойсея, <span class="fw-semibold">7А</span>
+                      </p>
+                      <a
+                        type="button"
+                        target="_blank"
+                        href="https://www.google.com/maps/dir//%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82+%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8F+%D0%9C%D0%BE%D0%B9%D1%81%D0%B5%D1%8F,+7%D0%90,+%D0%9B%D1%83%D1%86%D1%8C%D0%BA,+%D0%92%D0%BE%D0%BB%D0%B8%D0%BD%D1%81%D1%8C%D0%BA%D0%B0+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,+43026/@50.7533508,25.2528238,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x472599e3712676ad:0xb7c54e67c1c033e3!2m2!1d25.3352241!2d50.7533798?entry=ttu"
+                        class="btn ps-0 btn-sm btn-link text-success text-uppercase"
+                      >
+                        На мапі
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+
+          </div>
+
+          {% else %}
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">
+                  <i class="ri-map-pin-line align-middle me-1 text-muted"></i>
+                  Виберіть метод доставки
+                </h5>
+              </div>
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                  const npDeliveryCheckbox = document.getElementById('np-delivery');
+                  const ukrPostDeliveryCheckbox = document.getElementById('ukr-post-delivery');
+                  const selfDeliveryCheckbox = document.getElementById('self-delivery');
+              
+                  // Event listener for Novaya Poshta checkbox
+                  npDeliveryCheckbox.addEventListener('change', function() {
+                      showDeliveryInfo('nova-poshta-info');
+                  });
+              
+                  // Event listener for Ukr Poshta checkbox
+                  ukrPostDeliveryCheckbox.addEventListener('change', function() {
+                      showDeliveryInfo('urk-post-info');
+                  });
+              
+                  // Event listener for Self Delivery checkbox
+                  selfDeliveryCheckbox.addEventListener('change', function() {
+                      showDeliveryInfo('self-delivery-info');
+                  });
+              
+                  // Function to show the corresponding delivery info based on the selected checkbox
+                  function showDeliveryInfo(deliveryInfoId) {
+                    const deliveryInfo = document.getElementById(deliveryInfoId);
+                    if (deliveryInfo) {
+                        // Show the specified delivery info
+                        deliveryInfo.style.display = 'block';
+            
+                        // Hide other delivery info
+                        if (deliveryInfoId !== 'nova-poshta-info') {
+                            const npDeliveryInfo = document.getElementById('nova-poshta-info');
+                            if (npDeliveryInfo) {
+                                npDeliveryInfo.style.display = 'none';
+                                npDeliveryCheckbox.checked = false;
+                            }
+                        }
+                        if (deliveryInfoId !== 'urk-post-info') {
+                            const ukrPostDeliveryInfo = document.getElementById('urk-post-info');
+                            if (ukrPostDeliveryInfo) {
+                                ukrPostDeliveryInfo.style.display = 'none';
+                                ukrPostDeliveryCheckbox.checked = false;
+                            }
+                        }
+                        if (deliveryInfoId !== 'self-delivery-info') {
+                            const selfDeliveryInfo = document.getElementById('self-delivery-info');
+                            if (selfDeliveryInfo) {
+                                selfDeliveryInfo.style.display = 'none';
+                                selfDeliveryCheckbox.checked = false;
+                            }
+                        }
+                    }
+                }
+              });
+              </script>
+              <div class="card-body">
+                <div class="form-check form-switch form-switch-custom form-switch-info m-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="np-delivery">
+                  <label class="form-check-label" for="SwitchCheck10">Нова пошта</label>
+                </div>
+                <div class="form-check form-switch form-switch-custom form-switch-warning m-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="ukr-post-delivery">
+                  <label class="form-check-label" href="/#delivery-card" for="SwitchCheck10">Укр пошта</label>
+                </div>
+                <div class="form-check form-switch form-switch-custom form-switch-success m-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="self-delivery">
+                  <label class="form-check-label" for="SwitchCheck10">Самовивіз з Спорт Лайф Луцьк</label>
+                </div>
+              </div>
+            </div>
+            <div class="card" id="delivery-card">
+              <div class="card-header">
+                <div class="d-flex">
+                  <h5 class="card-title flex-grow-1 mb-0">
+                    <i class="mdi mdi-truck-fast-outline align-middle me-1 text-muted"></i>
+                    Деталі доставки
+                  </h5>
+                </div>
+              </div>
+              <div class="card-body" id="nova-poshta-info"  style="display: none;">
+                <div class="text-center">
+                  <lord-icon
+                    src="https://cdn.lordicon.com/uetqnvvg.json"
+                    trigger="loop"
+                    colors="primary:#405189,secondary:#0ab39c"
+                    style="width: 80px; height: 80px"
+                  ></lord-icon>
+                  <h5 class="fs-16 mt-2 mb-3">Доставка Новою Поштою</h5>
+                </div>
+                <div class="mb-3">
+                  <select class="form-control" data-choices="searchEnabled: true" name="choices-single-default" id="choices-single-default">
+                      <option value="">Виберіть місто або населений пункт</option>
+                  </select>
+              </div>
+                <div class="mb-3">
+                  <select class="form-control" data-choices="searchEnabled: true" name="fixed-select" id="fixed-select" style="display: none;">
+                      <option value="">Виберіть зручне для вас відділення</option>
+                  </select>
+              </div>
+              </div>
+              <div class="card-body" id="urk-post-info"  style="display: none;">
+                <div class="text-center">
+                  <lord-icon
+                    src="https://cdn.lordicon.com/uetqnvvg.json"
+                    trigger="loop"
+                    colors="primary:#405189,secondary:#0ab39c"
+                    style="width: 80px; height: 80px"
+                  ></lord-icon>
+                  <h5 class="fs-16 mt-2 mb-3">Доставка Укр Поштою</h5>
+                </div>
+                <input class="form-control" type="text" placeholder="Введіть адресу доставки" id="ukr-post-adress">
+              </div>
+              <div class="card-body" id="self-delivery-info"  style="display: none;">
+                <div class="alert border-dashed alert-success" role="alert">
+                  <div class="d-flex align-items-center">
+                    <lord-icon src="https://cdn.lordicon.com/fhtaantg.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:55px;height:55px"></lord-icon>
+                    <div class="ms-2">
+                      <h5 class="fs-14 text-success fw-semibold">
+                        Смовивоз з SportLife Луцьк
+                      </h5>
+                      <p class="text-body mb-1">
+                        В <span class="fw-semibold">м.Луцьк</span> отримати товар можна за адресою 
+                        <br />
+                        проспект Василя Мойсея, <span class="fw-semibold">7А</span>
+                      </p>
+                      <a
+                        type="button"
+                        target="_blank"
+                        href="https://www.google.com/maps/dir//%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82+%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8F+%D0%9C%D0%BE%D0%B9%D1%81%D0%B5%D1%8F,+7%D0%90,+%D0%9B%D1%83%D1%86%D1%8C%D0%BA,+%D0%92%D0%BE%D0%BB%D0%B8%D0%BD%D1%81%D1%8C%D0%BA%D0%B0+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C,+43026/@50.7533508,25.2528238,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x472599e3712676ad:0xb7c54e67c1c033e3!2m2!1d25.3352241!2d50.7533798?entry=ttu"
+                        class="btn ps-0 btn-sm btn-link text-success text-uppercase"
+                      >
+                        На мапі
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+          {% endif %}
+            
+          
+          
+          <!--end card-->
+          <div class="card">
+            <div class="card-header">
+              <div class="d-flex">
+                <h5 class="card-title flex-grow-1 mb-0">Ваші данні для доставки</h5>
+              </div>
+            </div>
+            <script>
+              function checkInput(input) {
+                const value = input.value.trim(); // Trim leading and trailing spaces
+                const iconId = input.id + "Icon";
+                const icon = document.getElementById(iconId);
+                const errorMessageId = input.id + "ErrorMessage";
+                const errorMessage = document.getElementById(errorMessageId);
+            
+                // If the value is empty, add border-danger class to the input, text-danger class to the icon, and display the error message
+                if (value === "") {
+                    input.classList.add("border", "border-danger");
+                    icon.classList.add("text-danger");
+                    errorMessage.style.display = "block";
+                } else {
+                    // If the value is not empty, remove border-danger class from the input, text-danger class from the icon, and hide the error message
+                    input.classList.remove("border", "border-danger");
+                    icon.classList.remove("text-danger");
+                    errorMessage.style.display = "none";
+                }
+            }
+            </script>
+            {% if order.invoice_status == "FILLED" or order.invoice_status == "PAYED" or order.invoice_status == "TIMEOUT" %}
+              <div class="card-body">
+                <div>
+                  <div class="form-icon mt-2">
+                      <input type="text" class="form-control form-control-icon" id="fioData-filled" disabled value="{{ order.user_fio }}">
+                      <i class="ri-user-follow-fill" id="fioDataIcon"></i>
+                  </div>
+                  <span class="text-danger" id="fioDataErrorMessage" style="display: none;">Це поле обов'язкове до заповнення!</span>
+              </div>
+              <div>
+                  <div class="form-icon mt-2">
+                      <input type="email" class="form-control form-control-icon" id="emailData-filled" disabled value="{{ order.user_email }}">
+                      <i class="ri-mail-unread-line" id="emailDataIcon"></i>
+                  </div>
+                  <span class="text-danger" id="emailDataErrorMessage" style="display: none;">Це поле обов'язкове до заповнення!</span>
+              </div>
+              <div>
+                  <div class="form-icon mt-2">
+                      <input type="text" class="form-control form-control-icon" id="cleave-phone-filled" disabled value="{{ order.user_phone }}">
+                      <i class="ri-phone-fill" id="cleave-phoneIcon"></i>
+                  </div>
+                  <span class="text-danger" id="cleave-phoneErrorMessage" style="display: none;">Це поле обов'язкове до заповнення!</span>
+              </div>
+              </div>
+            {% else %}
+              <div class="card-body">
+                <div>
+                  <div class="form-icon mt-2">
+                      <input type="text" class="form-control form-control-icon" id="fioData" placeholder="Фамілія Ім'я По-Батькові" onblur="checkInput(this)">
+                      <i class="ri-user-follow-fill" id="fioDataIcon"></i>
+                  </div>
+                  <span class="text-danger" id="fioDataErrorMessage" style="display: none;">Це поле обов'язкове до заповнення!</span>
+              </div>
+              <div>
+                  <div class="form-icon mt-2">
+                      <input type="email" class="form-control form-control-icon" id="emailData" placeholder="example@gmail.com" onblur="checkInput(this)">
+                      <i class="ri-mail-unread-line" id="emailDataIcon"></i>
+                  </div>
+                  <span class="text-danger" id="emailDataErrorMessage" style="display: none;">Це поле обов'язкове до заповнення!</span>
+              </div>
+              <div>
+                  <div class="form-icon mt-2">
+                      <input type="text" class="form-control form-control-icon" id="cleave-phone" placeholder="(xxx)xxx-xxxx" onblur="checkInput(this)">
+                      <i class="ri-phone-fill" id="cleave-phoneIcon"></i>
+                  </div>
+                  <span class="text-danger" id="cleave-phoneErrorMessage" style="display: none;">Це поле обов'язкове до заповнення!</span>
+              </div>
+              </div>
+            {% endif %}
+            
+          </div>
+          <!--end card-->
+          {% if order.invoice_status == "FILLED" and order.payment_type == "OP" or order.invoice_status == "PAYED" or order.invoice_status == "TIMEOUT" %}
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">
+                  <a
+                    class="btn btn-sm btn-info text-center"
+                    title="Сторінка для оплати замовлення"
+                    target="_blank"
+                    href="{{ order.payment_url }}"
+                  >
+                    Сторінка оплати
+                  </a>
+                  Деталі оплати
+                </h5>
+              </div>
+              <div class="card-body"> 
+                  <select class="form-select mb-3" aria-label=".form-select-lg example" id="pay-type-filled" disabled>
+                    {% if order.payment_type == "OP" %}
+                      <option selected value="payNow">Оплатити онлайн</option>
+                    {% else %}
+                      <option value="payOnGet">Оплати при отриманні</option>
+                    {% endif %}
+                  </select>
+                  <style>
+                    .btn-icon {
+                      display: flex;
+                      align-items: center;
+                  }
+                  </style>
+                  {% if order.invoice_status == "FILLED" and order.payment_type == "OP" %}
+                    <div class="row">
+                      <div class="col-xxl-12 text-end">
+                        <button
+                            class="btn btn-outline-success btn-border btn-xl text-end fs-18"
+                            style="display: flex; align-items: center; justify-content: center;"
+                            id="order-update-btn-filled"
+                            onclick="checkPaymentStatusButton('{{ order.order_reference }}', '{{ order.pk }}')"
+                        >
+                            <lord-icon
+                                src="https://cdn.lordicon.com/nkmsrxys.json"
+                                trigger="loop"
+                                colors="primary:#121331,secondary:#f06548"
+                                style="width: 35px; height: 35px; margin-right: 5px;"
+                            >
+                            </lord-icon>
+                            <span style="display: inline-block;">Перевірити оплату</span>
+                        </button>
+                        
+                      
+                      </div>
+                    </div>
+                  {% endif %}
+                    
+                  
+              </div>
+          {% else %}
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i
+                  class="ri-secure-payment-line align-bottom me-1 text-muted"
+                ></i>
+                Деталі оплати
+              </h5>
+            </div>
+            <div class="card-body"> 
+              {% if calc_result.total_price <= 100 %}
+              <div class="alert border-dashed alert-danger" role="alert">
+                <div class="d-flex align-items-center">
+                  <div class="ms-2">
+                    <p class="text-body mb-1">
+                      При замовленні на суму <span class="fw-semibold">менше 100 грн</span>,
+                      <br />
+                      покупка здійснюється лише за <span class="fw-semibold"> передоплатою</span>
+                    </p>
+                  </div>
+                </div>
+                </div>
+                <select class="form-select mb-3" aria-label=".form-select-lg example" id="pay-type" disabled>
+                  <option selected value="payNow">Оплатити онлайн</option>
+                </select>
+                {% else %}
+                <select class="form-select mb-3" aria-label=".form-select-lg example" id="pay-type">
+                  <option selected value="payNow">Оплатити онлайн</option>
+                  <option value="payOnGet">Оплати при отриманні</option>
+                </select>
+                {% endif %}
+                <style>
+                  .btn-icon {
+                    display: flex;
+                    align-items: center;
+                }
+                </style>
+                <div class="row">
+                  <div class="col-xxl-12 text-end">
+                    <button
+                        class="btn btn-outline-success btn-border btn-xl text-end fs-18"
+                        style="display: flex; align-items: center; justify-content: center;"
+                        id="order-update-btn"
+                        disabled
+                    >
+                        <lord-icon
+                            src="https://cdn.lordicon.com/nkmsrxys.json"
+                            trigger="loop"
+                            colors="primary:#121331,secondary:#f06548"
+                            style="width: 35px; height: 35px; margin-right: 5px;"
+                        >
+                        </lord-icon>
+                        <span style="display: inline-block;">Замовити</span>
+                    </button>
+                  
+                  </div>
+                </div>
+            </div>
+          {% endif %}
+          
+          </div>
+          <!--end card-->
+        </div>
+        <!--end col-->
+      </div>
+      <!--end row-->
+    </div>
+    <!-- container-fluid -->
+  </div>
+  <!-- End Page-content -->
+
+  
+</div>
+<!-- end main content-->
+{% endblock content %}
+{% block extra_js %}
+<script src="{% static 'libs/cleave.js/dist/cleave.min.js'%}"></script>
+<script src="{% static 'js/pages/form-masks.init.js'%}"></script>
+<script src="{% static 'libs/prismjs/prism.js'%}"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script>
+  function notify(message, type){
+    let msg_color;
+    if (type == 'alert-danger'){
+        msg_color = '#F06548';
+    } else if (type == 'alert-warning'){
+        msg_color = '#e89d10';
+    }
+    else{
+        msg_color = '#0AB39C';
+    }
+    Toastify({
+        text: message,
+        duration: 8000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        backgroundColor: msg_color,
+        stopOnFocus: true,
+    }).showToast();
+  }
+</script>
+<script>
+  const NP_API_KEY = "{{ NP_API_KEY }}"
+</script>
+<script>
+  function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+      const context = this;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(context, args);
+      }, delay);
+    };
+  }
+
+  function getCities(apiKey, findByString) {
+    return new Promise((resolve, reject) => {
+      const url = "https://api.novaposhta.ua/v2.0/json/";
+      const payload = {
+        apiKey: apiKey,
+        modelName: "Address",
+        calledMethod: "getCities",
+        methodProperties: {
+          Page: 1,
+          Limit: 5,
+          FindByString: findByString
+        }
+      };
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          resolve(data.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  function populateSelectBox(apiKey, findByString) {
+    getCities(apiKey, findByString)
+      .then(cities => {
+        const choices = cities.map(city => ({
+          value: city.Ref,
+          label: city.Description
+        }));
+
+        const existingChoices = document.getElementById("choices-single-default").choices;
+        if (existingChoices) {
+          existingChoices.setChoices(choices, 'value', 'label', true);
+        } else {
+          const choicesInstance = new Choices('#choices-single-default', {
+            choices: choices,
+            searchEnabled: true
+          });
+          document.getElementById("choices-single-default").choices = choicesInstance;
+        }
+
+        attachInputEventListener();
+      })
+      .catch(error => {
+        console.error("Failed to populate select box:", error);
+      });
+  }
+
+  function attachInputEventListener() {
+    const searchInput = document.querySelector('.choices__input--cloned');
+    if (searchInput) {
+      const debouncedPopulate = debounce(populateSelectBox, 500);
+      searchInput.addEventListener("input", function () {
+        const searchString = this.value;
+        debouncedPopulate(NP_API_KEY, searchString);
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    populateSelectBox(NP_API_KEY, "");
+  });
+
+  document.getElementById("choices-single-default").addEventListener("change", function () {
+    const selectedValue = this.value;
+    const fixedSelect = document.getElementById("fixed-select");
+    if (selectedValue) {
+      fixedSelect.style.display = "block";
+      populateFixedSelect(NP_API_KEY, selectedValue);
+    } else {
+      fixedSelect.style.display = "none";
+    }
+  });
+
+  function getNP(apiKey, CityName, findByString) {
+    console.log('CityName:', CityName, 'findByString:', findByString);
+    return new Promise((resolve, reject) => {
+      const url = "https://api.novaposhta.ua/v2.0/json/";
+      const payload = {
+        apiKey: apiKey,
+        modelName: "Address",
+        calledMethod: "getWarehouses",
+        methodProperties: {
+          FindByString: "",
+          Page: 1,
+          Limit: 100,
+          CityRef: CityName,
+          Language: "UA",
+        }
+      };
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("NP data:", data);
+          resolve(data.data);
+        })
+        .catch(error => {
+          console.error("Error fetching data NP:", error);
+          reject(error);
+        });
+    })
+  }
+
+  function populateFixedSelect(apiKey, cityName) {
+    getNP(apiKey, cityName, "")
+      .then(warehouses => {
+
+        const options = warehouses.map(warehouse => ({
+          value: warehouse.Ref,
+          label: warehouse.Description,
+          disabled: warehouse.WarehouseStatus !== "Working"
+        }));
+
+        const existingChoices = document.getElementById("fixed-select").choices;
+        if (existingChoices) {
+          existingChoices.setChoices(options, 'value', 'label', true);
+        } else {
+          const choicesInstance = new Choices('#fixed-select', {
+            choices: options,
+            searchEnabled: true
+          });
+          document.getElementById("fixed-select").choices = choicesInstance;
+        }
+      })
+      .catch(error => {
+        console.error("Failed to populate fixed-select box:", error);
+      });
+  }
+
+</script>
+<script>
+  // Payment
+  document.addEventListener('DOMContentLoaded', function() {
+    const fioInput = document.getElementById('fioData');
+    fioInput.addEventListener('input', toggleSubmitButton);
+
+    const emailInput = document.getElementById('emailData');
+    emailInput.addEventListener('input', toggleSubmitButton);
+
+    const phoneInput = document.getElementById('cleave-phone');
+    phoneInput.addEventListener('input', toggleSubmitButton);
+
+    // Add event listeners for checkboxes
+    const npDeliveryCheckbox = document.getElementById('np-delivery');
+    npDeliveryCheckbox.addEventListener('change', toggleSubmitButton);
+
+    const ukrPostDeliveryCheckbox = document.getElementById('ukr-post-delivery');
+    ukrPostDeliveryCheckbox.addEventListener('change', toggleSubmitButton);
+
+    const selfDeliveryCheckbox = document.getElementById('self-delivery');
+    selfDeliveryCheckbox.addEventListener('change', toggleSubmitButton);
+
+    // Add event listeners for select elements (if needed)
+    const citySelect = document.getElementById('choices-single-default');
+    citySelect.addEventListener('change', toggleSubmitButton);
+
+    const postOfficeSelect = document.getElementById('fixed-select');
+    postOfficeSelect.addEventListener('change', toggleSubmitButton);
+
+    // Function to get the checked delivery option
+    function getCheckedDeliveryOption() {
+        if (npDeliveryCheckbox.checked) {
+            return 'NP';
+        } else if (ukrPostDeliveryCheckbox.checked) {
+            return 'UP';
+        } else if (selfDeliveryCheckbox.checked) {
+            return 'SL';
+        } else {
+            return ''; // No option selected
+        }
+    }
+
+    function areFieldsFilled() {
+      const npDeliveryCheckbox = document.getElementById('np-delivery');
+      const ukrPostDeliveryCheckbox = document.getElementById('ukr-post-delivery');
+      const selfDeliveryCheckbox = document.getElementById('self-delivery');
+      const fioInput = document.getElementById('fioData');
+      const emailInput = document.getElementById('emailData');
+      const phoneInput = document.getElementById('cleave-phone');
+      const npCitySelect = document.getElementById('choices-single-default');
+      const novaPostAddressSelect = document.getElementById('fixed-select');
+      const ukrPostAddressInput = document.getElementById('ukr-post-adress');
+  
+      if (
+          (npDeliveryCheckbox.checked || ukrPostDeliveryCheckbox.checked || selfDeliveryCheckbox.checked) &&
+          fioInput.value.trim() !== '' &&
+          emailInput.value.trim() !== '' &&
+          phoneInput.value.trim() !== ''
+      ) {
+          if (npDeliveryCheckbox.checked) {
+              return (npCitySelect.value.trim() !== '' && novaPostAddressSelect.value.trim() !== '');
+          } else if (ukrPostDeliveryCheckbox.checked) {
+              return (ukrPostAddressInput.value.trim() !== '');
+          } else {
+              return true;
+          }
+      } else {
+          return false;
+      }
+  }
+
+  function toggleSubmitButton() {
+    const submitBtn = document.getElementById('order-update-btn');
+    submitBtn.disabled = !areFieldsFilled();
+  }
+
+    // Submit button event listener
+    const submitBtn = document.getElementById('order-update-btn');
+    submitBtn.addEventListener('click', async function(event) {
+      event.preventDefault();
+  
+      // Get the checked delivery option
+      const deliveryType = getCheckedDeliveryOption();
+      const paymentType = document.getElementById('pay-type').value;
+      
+      // Prepare data based on delivery type
+      let data = {};
+      if (deliveryType === 'NP') {
+          data.np_city = document.getElementById('choices-single-default').textContent.trim();
+          data.nova_post_address = document.getElementById('fixed-select').textContent.trim();
+      } else if (deliveryType === 'UP') {
+          data.ukr_post_adress = document.getElementById('ukr-post-adress').value;
+      } else if (deliveryType === 'SL') {
+          // No additional data needed for self delivery
+      }
+  
+      // Get user input data
+      data.user_fio = document.getElementById('fioData').value;
+      data.user_email = document.getElementById('emailData').value;
+      data.user_phone = document.getElementById('cleave-phone').value;
+      data.delivery_type = deliveryType
+      if (document.getElementById('pay-type').value === 'payNow') {
+          data.payment_type = 'OP';
+      } else {
+          data.payment_type = 'CP';
+      }
+  
+      // Get the order primary key
+      const orderPk = "{{ order.pk }}"; // You need to define this function
+      console.log(data, orderPk)
+  
+      // Send the data to update the order
+      try {
+        const response = await fetch(`/api/orders/${orderPk}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+    
+        if (!response.ok) {
+            throw new Error('Failed to update order');
+        }
+
+        submitBtn.disabled = true;
+    
+        const responseData = await response.json();
+        const paymentUrl = responseData.payment_url;
+        const orderReference = responseData.order_reference;
+    
+        console.log('Order updated successfully');
+    
+        const currentPageUrl = window.location.href;
+        
+
+        if ( paymentType === "payOnGet") {
+          window.location.href = currentPageUrl;
+        } else {
+          window.open(paymentUrl, '_blank');
+          setTimeout(() => {
+            checkPaymentStatus(orderReference, orderPk);
+        }, 1000);
+        }
+        
+
+    } catch (error) {
+        console.error('Error updating order:', error);
+    }
+  });
+
+  function checkPaymentStatus(orderReference, orderPk) {
+    console.log('Checking payment status for order:', orderReference);
+  
+    let intervalId;
+
+    const checkStatus = async () => {
+        try {
+            const response = await fetch('/check-payment-status/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ order_reference: orderReference })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to check payment status');
+            }
+
+            const data = await response.json();
+
+
+            console.log('Payment status:', data);
+
+            if (data.transactionStatus === 'Approved') {
+              console.log('Payment successful');
+              await updateOrderStatus(orderReference, 'PAYED');
+              window.location.href = `/order-detail/${orderPk}`;
+              clearInterval(intervalId); // Stop checking status
+            }
+        } catch (error) {
+            console.error('Error checking payment status:', error);
+        }
+    };
+
+    // Call checkStatus every 5 seconds for 1 minute
+    const interval = setInterval(checkStatus, 5000);
+    setTimeout(async () => {
+      clearInterval(intervalId); // Stop checking status
+      await updateOrderStatus(orderReference, 'TIMEOUT');
+  }, 60000);
+}
+
+async function updateOrderStatus(orderReference, status) {
+  const orderPk = "{{ order.pk }}";
+  try {
+      const response = await fetch('/update_order_status/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ order_pk: orderPk, status: status })
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to update order status');
+      }
+
+      console.log('Order status updated:', status);
+  } catch (error) {
+      console.error('Error updating order status:', error);
+  }
+}
+});
+
+</script>
+<script>
+  async function updateOrderStatusButton(orderReference, status) {
+    const orderPk = "{{ order.pk }}";
+    try {
+        const response = await fetch('/update_order_status/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ order_pk: orderPk, status: status })
+        });
+  
+        if (!response.ok) {
+            throw new Error('Failed to update order status');
+        }
+  
+        console.log('Order status updated:', status);
+    } catch (error) {
+        console.error('Error updating order status:', error);
+    }
+  }
+
+  async function checkPaymentStatusButton(orderReference, orderPk) {
+    console.log('Checking payment status for order:', orderReference);
+
+    try {
+        const response = await fetch('/check-payment-status/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ order_reference: orderReference })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to check payment status');
+        }
+
+        const data = await response.json();
+
+        console.log('Payment status:', data);
+
+        if (data.transactionStatus === 'Approved') {
+            console.log('Payment successful');
+            updateOrderStatusButton(orderReference, 'PAYED');
+            window.location.href = `/order-detail/${orderPk}`;
+        } else {
+            console.log('Payment unsuccessful');
+            notify("Здається ви ще оплатили замовлення або оплата обробляється.", 'alert-warning');
+        }
+    } catch (error) {
+        console.error('Error checking payment status:', error);
+    }
+}
+</script>
+
+{% endblock extra_js %}

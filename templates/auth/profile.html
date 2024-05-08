@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main_context %}
+  <h2>Welcome to your profile</h2>
+  <a href="{% url 'admin:app_goods_goodvariant_add' %}?next={% url 'admin_user:profile_view' %}">Create Good Variant</a>
+  <p>This is your protected profile page.</p>
+  <p>{{ user.username }}</p>
+  <a type="button" class="btn btn-secondary" href="{% url 'admin_user:logout' %}">Log Out</a>
+
+  <a type="button" data-bs-toggle="modal" data-bs-target="#CreateFullVisitModal"
+    class="card-animate btn btn-ghost-success btn-lg">
+    + Створити
+  </a>
+
+{% endblock main_context %}
+
+{% block extra_content %}
+<div id="CreateFullVisitModal" class="modal fade" tabindex="-1" aria-labelledby="CreateVisitModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="CreateVisitModalLabel">Створення нового Адміна</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          
+          <p>
+            Ім'я адміна: 
+            {% if registration_form.username.field.required %}
+            <span class="text-danger">
+              *
+            </span>
+            {% endif %}
+            {{ registration_form.username }}
+          </p>
+          <p>
+            Поштова: 
+            {% if registration_form.email.field.required %}
+            <span class="text-danger">
+              *
+            </span>
+            {% endif %} 
+            {{ registration_form.email }}
+          </p>
+          <p>
+            Пароль 1: 
+            {% if registration_form.password1.field.required %}
+            <span class="text-danger">
+            *
+          </span>
+            {% endif %}
+             {{ registration_form.password1 }}
+          </p>
+          <p>
+            Пароль 2: 
+            {% if registration_form.password2.field.required %}
+            <span class="text-danger">
+              *
+            </span>
+            {% endif %} 
+            {{ registration_form.password2 }}
+          </p>
+          
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" data-bs-dismiss="false">Зберегти зміни</button>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Відміна</button>
+        {% if registration_form.errors %}
+            {{ registration_form.non_field_errors }}
+            {% for field_errors in registration_form.errors.values %}
+              {% for error in field_errors %}
+              <div class="alert alert-danger">{{ error }}</div>
+              {% endfor %}
+            {% endfor %}
+        {% endif %}
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock extra_content %}
+
+{% block extra_js %}
+  <!-- ckeditor -->
+  <script src="{% static 'libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js'%}"></script>
+
+  <!-- dropzone js -->
+  <script src="{% static 'libs/dropzone/dist/dropzone-min.js'%}"></script>
+  <!-- project-create init -->
+  <script src="{% static 'js/pages/project-create.init.js'%}"></script>
+  <!-- JS animations -->
+  <script src="{% static 'js/objects/visit_animatons.js' %}"></script>
+
+{% endblock extra_js %}
+  

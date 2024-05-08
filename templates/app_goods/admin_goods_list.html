@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags widget_tweaks%}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+
+{% block sidebar %}
+{% include 'includes/adminSideBar.html' %}
+{% endblock sidebar %}
+{% block content %}
+<div class="main-content">
+  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
+    <div class="container-fluid">
+
+      <!-- start page title -->
+      <div class="row">
+        <div class="col-12">
+          <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Товари</h4>
+
+            <div class="page-title-right">
+              <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item"><a href="javascript: void(0);">Адмін-панель</a></li>
+                <li class="breadcrumb-item active">Товари</li>
+              </ol>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- end page title -->
+
+      <div class="row">
+        <div class="col-xl-3 col-lg-4">
+          <div class="card border ">
+            <div class="accordion accordion-flush filter-accordion">
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingBrands">
+                  <button class="accordion-button bg-transparent shadow-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseBrands" aria-expanded="true" aria-controls="flush-collapseBrands">
+                    <span class="text-muted text-uppercase fs-12 fw-medium">Фільтр по типам</span> <span
+                      class="badge bg-success rounded-pill align-middle ms-1 filter-badge">
+                      {{ filter_amount }}
+                  </button>
+                </h2>
+                <style>
+                  .form-container {
+                    max-height: 556px;
+                    overflow-y: auto;
+                  }
+
+                  .simplebar-scrollbar::before {
+                    background-color: rgba(125, 187, 247, 0.7);
+                    border-radius: 10px;
+                    opacity: 1;
+                    height: 75px;
+                    width: 8px;
+                  }
+                </style>
+                <div id="flush-collapseBrands" class="accordion-collapse collapse show"
+                  aria-labelledby="flush-headingBrands">
+                  <div class="accordion-body text-body pt-0">
+                    <div class="d-flex flex-column gap-2 mt-3 filter-check">
+                      <form method="GET">
+                        <!-- SimpleBar scrollable container -->
+                        <div class="form-container simplebar" data-simplebar>
+                          <!-- Form fields -->
+                          {% for field in good_filter.form %}
+                          {{ field|attr:"class:text-start m-1" }}
+                          {% endfor %}
+                        </div>
+                        <!-- Submit button -->
+                        <button class="btn btn-light text-success mt-3" type="submit">Застосувати</button>
+                      </form>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <!-- end accordion-item -->
+            </div>
+          </div>
+          <!-- end card -->
+        </div>
+        <!-- end col -->
+        <style>
+          .ml_display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+        </style>
+        <div class="col-xl-9 col-lg-8">
+          <div class="card border">
+            <div class="card-header border-0">
+              <div class="row g-4 ml_display">
+                <div class="col-sm-auto">
+                  <div>
+                    <a href="{% url 'admin:app_goods_goodvariant_add' %}?next={% url 'admin_user:profile_view' %}"
+                      class="btn btn-success" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Додати
+                      товар</a>
+                  </div>
+                </div>
+                <div class="col-sm-auto">
+                  <form action="" method="get">
+                    {% csrf_token %}
+                    <div class="col-sm">
+                      <div class="d-flex justify-content-sm-end">
+                        <div class="search-box ms-2">
+                          <div>{{ search_form }}</div>
+                          <i class="ri-search-line search-icon"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- <input type="text" class="form-control" id="searchProductList" placeholder="Search Products..."> -->
+              </div>
+            </div>
+            <!-- end card header -->
+            <div class="card-body" style="min-height:632px;">
+              <div class="tab-content text-muted">
+                <div class="tab-pane active" id="productnav-all" role="tabpanel">
+                  <div id="table-product-list-all" class="table-card gridjs-border-none">
+                    <div role="complementary" class="gridjs gridjs-container" style="width: 100%;">
+                      <div class="gridjs-wrapper" style="height: auto;">
+
+                        <table role="grid" class="gridjs-table" style="height: auto;">
+                          <thead class="gridjs-thead">
+                            <tr class="gridjs-tr">
+                              <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
+                                style="width: 460px;">
+                                <div class="row align-items-center justify-content-center">
+                                  <div class="col-12 m-0">Продукт</div>
+                                </div>
+                              </th>
+                              <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
+                                style="min-width: 70px;">
+                                <div class="row align-items-center justify-content-center">
+                                  <div class="col-12 m-0 text-center">К-ть</div>
+                                </div>
+                              </th>
+                              <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
+                                style="">
+                                <div class="row align-items-center justify-content-center">
+                                  <div class="col-12 m-0 text-center">Ціна закупки</div>
+                                </div>
+                              </th>
+                              <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
+                                style="">
+                                <div class="row align-items-center justify-content-center">
+                                  <div class="col-12 m-0 text-center">Ціна продажу</div>
+                                </div>
+                              </th>
+                              <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
+                                style="">
+                                <div class="row align-items-center justify-content-center">
+                                  <div class="col-12 m-0 text-center">Знижка</div>
+                                </div>
+                              </th>
+                              <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
+                                style="">
+                                <div class="row align-items-center justify-content-center">
+                                  <div class="col-12 m-0 text-center">Остання покупка</div>
+                                </div>
+                              </th>
+                              <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
+                                style="">
+                                <div class="row align-items-center justify-content-center">
+                                  <div class="col-12 m-0 text-center">Дії</div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody class="gridjs-tbody">
+                            {% for good in goods_list %}
+                            <tr class="gridjs-tr">
+                              <td data-column-id="product" class="gridjs-td"><span>
+                                  <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 me-3">
+                                      <div class="avatar-sm bg-light rounded p-1">
+                                        <img {% if good.photos.exists %} src="{{ good.photos.first.photo.url }}" 
+                                        {% else%} src="{% static 'images/default-good.png' %}" {% endif %} alt=""
+                                          class="img-fluid d-block">
+                                      </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                      <h5 class="fs-14 mb-1"><a href="#" class="text-body">{{ good.name }}</a></h5>
+                                      <p class="text-muted mb-0">Смак : <span class="fw-medium">{{ good.taste }}</span>
+                                        | Розмір : <span class="fw-medium">{{ good.size }}</span></p>
+                                    </div>
+                                  </div>
+                                </span></td>
+                              <td data-column-id="stock" class="gridjs-td text-center">{{ good.amount }}</td>
+                              <td data-column-id="price" class="gridjs-td text-center"><span>{{ good.stock_price }}
+                                  грн.</span></td>
+                              <td data-column-id="orders" class="gridjs-td text-center">
+                                {% if good.on_discount %}
+                                <div class="row">
+                                  <div class="col-md-12">
+                                      <div>
+                                          <span class="text-muted">{{ good.sell_price }} грн.</span>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row text-center">
+                                  <div class="col-md-12 text-center">
+                                      <div>
+                                          <span class="badge bg-success">{{ good.discount_price }} грн.</span>
+                                      </div>
+                                  </div>
+                              </div>
+                                {% else %}
+                                {{ good.sell_price }} грн.
+                                {% endif %}
+                              </td>
+                              <td data-column-id="orders" class="gridjs-td text-center">
+                                {% if good.on_discount %}
+                                <span class="badge bg-success fs-12"> {{ good.discount_percentage}}%</span>
+                                {% else %}
+                                <span class="badge bg-danger fs-12">0%</span>
+                                {% endif %}
+                              </td>
+                              <td data-column-id="lastSell" class="gridjs-td text-center">{{ good.update_date|date:"d-m-Y H:i" }}</td>
+                              <td data-column-id="action" class="gridjs-td text-center">
+                                <span>
+                                  <div class="dropdown"><button class="btn btn-soft-secondary btn-sm dropdown"
+                                      type="button" data-bs-toggle="dropdown" aria-expanded="false"><i
+                                        class="ri-more-fill"></i></button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                      <li><a class="dropdown-item edit-list" data-edit-id="1"
+                                          href="{% url 'app_goods:good-delete' good.id %}"><i
+                                            class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Видалити </a>
+                                      </li>
+                                      <li><a class="dropdown-item edit-list" data-edit-id="1"
+                                          href="{% url 'admin:app_goods_goodvariant_change' good.id %}"><i
+                                            class="ri-pencil-fill align-bottom me-2 text-muted"></i> Редагувати</a>
+                                      </li>
+                                      
+                                      {% if good.on_discount is True %}
+                                        <li>
+                                          <a class="dropdown-item edit-list"
+                                            data-edit-id="1"
+                                            href="{% url 'app_goods:remove-discount' good.id %}"
+                                            placeholder="Видалити знижку"
+                                          >
+                                            <i class="ri-exchange-dollar-line align-bottom me-2 text-muted"></i>
+                                            Видалити знижку
+                                          </a>
+                                        </li>
+                                      {% else %}
+                                        <li>
+                                          <a
+                                            id="Button_{{ good.id }}"
+                                            title="Додати знижку"
+                                            type="button"
+                                            href="#"
+                                            class="dropdown-item edit-list"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#addGoodDiscount_{{ good.id }}"
+                                          >
+                                          <i class="ri-exchange-dollar-fill align-bottom me-2 text-muted"></i>
+                                            Додати знижку
+                                            
+                                          </a>
+                                        </li>
+                                      {% endif %}
+                                        
+                                      
+                                    </ul>
+                                  </div>
+                                </span>
+                              </td>
+                            </tr>
+                            <div id="addGoodDiscount_{{ good.id }}" class="modal fade" tabindex="-1"
+                                  aria-labelledby="addGoodDiscountModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered">
+                                      <div class="modal-content">
+                                          <div class="modal-body mt-3">
+                                              <!-- Form for updating comment -->
+                                              
+                                              <form method="post" action="{% url 'app_goods:good-add-discount' good.id %}">
+                                                {% csrf_token %}
+                                                
+                                                <h4 class="text-center text-muted mb-5">
+                                                  Додати знижку для товару <br>{{ good.name }}
+                                                </h4>
+                                                  <p>
+                                                  {{ add_discount_form.discount_percentage }}
+                                                  </p>
+                                                <div class="modal-footer align-content-center">
+                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Відміна</button>
+                                                    <button class="btn btn-success w-sm" type="submit">Зберегти</button>
+                                                </div>
+                                            </form>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                        {% if not goods_list %}
+                        <div class="noresult" style="display: block;">
+                          <div class="text-center">
+                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                              colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                            <h5 class="mt-2">Вибачте! Пошук на дав результатів</h5>
+                            <p class="text-muted mb-0">Здається товару за результатаму вашого пошуку не існує в системі.
+                            </p>
+                          </div>
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- end tab pane -->
+                <!-- end tab pane -->
+              </div>
+              <!-- end tab content -->
+
+            </div>
+            <!-- end card body -->
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="text-start" style="margin-left: 50px;">
+
+              </div>
+            </div>
+            <div class="col-8" style="position: relative;">
+              <!-- Your content goes here -->
+
+              <!-- Pagination includes positioned to the right with margin-left: 5px -->
+              <div style="position: absolute; top: 0; right: 0; margin-right: 50px;">
+                {% include "includes/pagination.html" %}
+              </div>
+            </div>
+          </div>
+          <!-- end card -->
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block extra_js %}
+
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+<script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
+{% endblock extra_js %}

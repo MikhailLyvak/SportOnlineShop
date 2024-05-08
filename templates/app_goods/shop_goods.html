@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags widget_tweaks%}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+
+
+
+{% block header %}
+{% include 'includes/homeTopBar.html' %}
+{% endblock header %}
+
+{% block sidebar %}
+{% include 'includes/homeSideBar.html' %}
+{% endblock sidebar %}
+
+{% block content %}
+
+<style>
+  .custom-card-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .custom-card-body> :last-child {
+    margin-top: auto;
+  }
+</style>
+
+<div class="main-content bg-light">
+  <div class="page-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0"></h4>
+            <div class="text-center">
+              <select class="form-select rounded-pill" aria-label="Default select example" style="max-width: 300px;" id="four-filter">
+                <option value="name" selected> Від А до Я</option>
+                <option value="-name">Від Я до А</option>
+                <option value="sell_price">Від найдешевших</option>
+                <option value="-sell_price">Від найдорожчих</option>
+            </select>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="row row-cols-1 row-cols-xxl-4 g-4" id="goodCardsListContainer">
+        <!-- Товари завантажуються динамічно за допомогою AJAX -->
+      </div>
+      <style>
+        .ml_display {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        #next_button {
+          max-width: 200px;
+        }
+      </style>
+      <div class="col-12 m-2 text-center d-flex justify-content-center">
+        <a id="next_button" style="cursor:pointer; min-width:90px;"
+          class="btn btn-soft-info waves-effect waves-light text-center fs-20 ml_display">
+        </a>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>
+<script>
+  function scrollToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+  window.onscroll = function () {
+    var btn = document.getElementById("back-to-top");
+
+    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+      btn.style.display = "block";
+    } else {
+      btn.style.display = "none";
+    }
+  };
+
+  // Initially hide the button on page load
+  document.addEventListener("DOMContentLoaded", function () {
+    var btn = document.getElementById("back-to-top");
+    btn.style.display = "none";
+  });
+</script>
+<button onclick="scrollToTop()" class="btn btn-danger btn-icon rounded-pill" id="back-to-top"
+  style="position: fixed; bottom: 35px; right: 2px; opacity: 0.6;">
+  <i class="ri-arrow-up-line"></i>
+</button>
+
+
+{% endblock content %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+<script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
+<script src="{% static 'js/shop/goodsCardsList.js' %}"></script>
+<script src="{% static 'js/shop/goodsCart.js' %}"></script>
+<script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
+
+{% endblock extra_js %}

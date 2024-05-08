@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Авторизація</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/icons.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/app.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/custom.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/ml_login.css' %}">
+  <script src="{% static 'js/layout.js' %}"></script>
+</head>
+<body>
+<form method="post" class="page-content">
+  {% csrf_token %}
+  <div class="container-fluid">
+    <div class="card-body">
+      <div class="row justify-content-center">
+        <div class="card m-3 border border-info border-3 rounded-3 mt-5"
+          style="max-width:600px; min-width:400px; background-color: rgba(255, 255, 255, 0.9);">
+          <div class="card-header" style="background-color: rgba(255, 255, 255, 0);">
+            <h3 class="display-6 text-body fw-medium text-center">Авторизуватися</h3>
+          </div>
+          <div class="card-body">
+            <div class="row justify-content-center ">
+              {% if form.non_field_errors %}
+              <ul class="list-unstyled">
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger mb-xl-0 m-3 text-center" role="alert">
+                  {{ error }}
+                </div>
+                {% endfor %}
+              </ul>
+              {% endif %}
+              <div class="form-floating mb-3" style="max-width:85%;">
+                {{ form.email }}
+                <label for="emailfloatingInput" style="margin-left:12px;">Email Address</label>
+              </div>
+              <div class="form-floating mb-3" style="max-width:85%;">
+                {{ form.password }}
+                <label for="passwordfloatingInput" style="margin-left:12px;">Password</label>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-8">
+                <button type="submit" class="btn btn-info" style="margin-left:45px; padding:10px 35px;">Увійти</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<footer>
+  <div class="container-fluid text-muted">Made by Mykhail Lyvak</div>
+</footer>
+</body>
+</html>
