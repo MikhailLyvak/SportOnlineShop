@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+
+  web-app:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    # command: gunicorn config.wsgi:application --preload --bind 0.0.0.0:8000 --workers 4
+    command: python manage.py runserver 0.0.0.0:8000

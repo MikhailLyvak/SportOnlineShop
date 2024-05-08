@@ -89,7 +89,6 @@ const deleteCartItem = (itemId) => {
       if (!response.ok) {
         throw new Error('Failed to delete cart item');
       }
-      console.log('Cart item deleted successfully');
     })
     .catch(error => {
       console.error('Error deleting cart item:', error.message);

@@ -30,7 +30,7 @@ class AdminGoodsListView(LoginRequiredMixin, FilterView):
     def get_queryset(self) -> QuerySet:
         queryset = GoodVariant.objects.select_related(
             "size", "taste", "good"
-        ).prefetch_related("photos")
+        ).prefetch_related("photos").order_by("-amount")
 
         name = self.request.GET.get("name")
         if name:
@@ -88,6 +88,16 @@ def remove_discount(request, pk):
     good.on_discount = False
     good.discount_percentage = 0
     good.discount_price = good.sell_price
+    good.save()
+    return redirect(request.META.get("HTTP_REFERER"))
+
+
+def add_or_remove_good(request, pk):
+    good = get_object_or_404(GoodVariant, pk=pk)
+    if good.amount > 0:
+        good.amount = 0
+    else:
+        good.amount = 1
     good.save()
     return redirect(request.META.get("HTTP_REFERER"))
 

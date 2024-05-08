@@ -110,7 +110,7 @@ function goodCardsList(url, isSearch = false) {
               <div class="row mt-3 mb-3">
                 <div class="col-12">
                 ${sortedSizes.map((size, index) => `
-                <a type="button" href="/${size.variant_id}/" class="btn ${getButtonColor(index)} waves-effect waves-light rounded-4"
+                <a type="button" href="/${size.variant_id}/" class="btn ${getButtonColor(index, size.variant_id, good.id)} waves-effect waves-light rounded-4"
                 ${size.amount === 0 ? 'disabled' : ''}
                 >${size.name}</a>
               `).join('')}
@@ -176,9 +176,14 @@ document.getElementById('next_button').addEventListener('click', function () {
   goodCardsList(nextUrl);
 });
 
-function getButtonColor(index) {
+function getButtonColor(index, size_good_id, good_id) {
   const colors = ['success', 'info', 'secondary', 'primary'];
-  return `btn-outline-${colors[index]}`;
+  if (size_good_id === good_id) {
+    return `btn-soft-${colors[index]}`;
+  } else {
+    return `btn-outline-${colors[index]}`;
+  }
+  
 }
 
 function notify(message, type){

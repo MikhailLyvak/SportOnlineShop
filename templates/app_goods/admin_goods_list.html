@@ -175,7 +175,7 @@
                           </thead>
                           <tbody class="gridjs-tbody">
                             {% for good in goods_list %}
-                            <tr class="gridjs-tr">
+                            <tr class="gridjs-tr" {% if good.amount == 0 %} style="background-color: rgba(235, 76, 76, 0.21)" {% endif %}>
                               <td data-column-id="product" class="gridjs-td"><span>
                                   <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3">
@@ -237,6 +237,19 @@
                                           href="{% url 'admin:app_goods_goodvariant_change' good.id %}"><i
                                             class="ri-pencil-fill align-bottom me-2 text-muted"></i> Редагувати</a>
                                       </li>
+                                      {% if good.amount > 0 %}
+                                        <li><a class="dropdown-item edit-list" data-edit-id="1"
+                                          href="{% url 'app_goods:good-add-or-remove' good.id %}"><i
+                                            class="ri-eye-off-fill align-bottom me-2 text-muted"></i> Не показувати</a>
+                                        </li>
+                                      {% else %}
+                                        <li><a class="dropdown-item edit-list" data-edit-id="1"
+                                          href="{% url 'app_goods:good-add-or-remove' good.id %}"><i
+                                            class="ri-eye-fill align-bottom me-2 text-muted"></i> Показувати</a>
+                                        </li>
+                                      {% endif %}  
+                                      
+
                                       
                                       {% if good.on_discount is True %}
                                         <li>

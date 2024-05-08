@@ -20,11 +20,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-if settings.DEBUG:
-    import debug_toolbar
 
 urlpatterns = [
-    path("__debug__/", include(debug_toolbar.urls)),
     path("admin/", admin.site.urls),
     path("auth/", include(("admin_user.urls", "admin_user"), namespace="admin_user")),
     path(
