@@ -102,6 +102,7 @@ class OrderViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
             product_price=prices,
             product_count=counts,
             client_email=client_email,
+            return_url_pk=instance.pk,
         )
 
         wayforpay_response = payment_request.make_wayforpay_request()

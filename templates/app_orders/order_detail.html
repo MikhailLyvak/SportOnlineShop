@@ -929,8 +929,11 @@
 
         if ( paymentType === "payOnGet") {
           window.location.href = currentPageUrl;
+          //location.assign(`${location.origin}/order-detail/128`);
         } else {
-          window.open(paymentUrl, '_blank');
+          setTimeout(() => {
+            window.location.href = paymentUrl;
+        }, 1000);
           setTimeout(() => {
             checkPaymentStatus(orderReference, orderPk);
         }, 1000);

@@ -94,34 +94,33 @@ function goodCardsList(url, isSearch = false) {
 
         const sortedSizes = good.sizes.slice().sort((a, b) => a.name.localeCompare(b.name)).slice(0, 4);
         const cardDiv = document.createElement("div");
-        cardDiv.classList.add("col");
+        cardDiv.classList.add("col-6", "m-0", "p-1");
 
         const cardInnerHtml = `
-          <div class="card card-animate m-1 ribbon-box border border-info border-2 rounded-4 card-height-100">
+          <div class="card card-animate m-0 mt-2 ribbon-box border border-info border-2 rounded-4 card-height-100">
             <a href="/${good.id}/">
-              <img class="card-img-top img-fluid rounded-4" 
-                style="max-height: 400px; min-height: 400px; object-fit: contain;" 
+              <img class="card-img-top img-fluid rounded-4 responsive-img"  
                 src="${good.photos.length > 0 ? good.photos[0] : '/static/images/default-good.png'}" 
                 alt="Card image cap">
             </a>
             ${good.on_discount ? `<div class="ribbon-two ribbon-two-danger"><span class="fs-18">-${good.discount_percentage}%</span></div>` : ''}
             <div class="card-body mt-3 border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body">
               <h4 class="card-title mb-2">${good.name}</h4>
-              <div class="row mt-3 mb-3">
+              <div class="row ${window.innerWidth < 768 ? 'md-1 mt-1' : 'mb-3 mt-3'}">
                 <div class="col-12">
                 ${sortedSizes.map((size, index) => `
-                <a type="button" href="/${size.variant_id}/" class="btn ${getButtonColor(index, size.variant_id, good.id)} waves-effect waves-light rounded-4"
+                <a type="button" href="/${size.variant_id}/" class="btn ${getButtonColor(index, size.variant_id, good.id)} ${window.innerWidth < 768 ? 'btn-sm' : 'btn-md'} waves-effect waves-light rounded-4"
                 ${size.amount === 0 ? 'disabled' : ''}
                 >${size.name}</a>
               `).join('')}
                 </div>
               </div>
-              <p class="card-text">${good.description}</p>
-              <div class="row align-items-center justify-content-center mb-3">
+
+              <div class="row align-items-center justify-content-center ${window.innerWidth < 768 ? 'mb-1' : 'mb-3'}">
                 <div class="col-7 text-start align-self-center pt-2">
                   ${good.on_discount ?
-            `<p class="text-danger m-3 mb-0"><del>${good.sell_price} грн.</del></p> <h2 class="text-success m-3 mt-0">${good.discount_price} грн.</h2>` :
-            `<h2 class="text-primary m-3 mt-0">${good.sell_price} грн.</h2>`
+            `<p class="text-danger m-0 mb-0 ${window.innerWidth < 768 ? 'fs-12' : 'fs-16'}"><del>${good.sell_price} грн.</del></p> <h2 class="text-success m-0 mt-0 ${window.innerWidth < 768 ? 'fs-14' : 'fs-18'}">${good.discount_price} грн.</h2>` :
+            `<p class="text-primary m-0 mt-0 ${window.innerWidth < 768 ? 'fs-14' : 'fs-18'}">${good.sell_price} грн.</p>`
           }
                 </div>
                 <div class="col-5 text-end pr-3">

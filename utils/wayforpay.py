@@ -13,6 +13,8 @@ URL = settings.WEY_URL
 SECRET_KEY = settings.WEY_SECRET_KEY
 MERCHANT_ACCOUNT = settings.MERCHANT_ACCOUNT
 MERCHANT_DOMAIN_NAME = settings.MERCHANT_DOMAIN_NAME
+DOMAIN = settings.DOMAIN
+
 
 # TODO: поміняти не реальні | End Block |
 # TODO: Статичні данні | Start Block |
@@ -32,10 +34,12 @@ class MLPay:
         product_price: list,
         product_count: list,
         client_email: str = None,
+        return_url_pk: int = None,
     ) -> None:
         self.product_name = product_name
         self.product_price = product_price
         self.product_count = product_count
+        self.return_url_pk = return_url_pk
         self.client_email = client_email
         self.order_date = int(time.time())
         self.order_timeout = int(604800)
@@ -87,6 +91,7 @@ class MLPay:
             "productPrice": self.product_price,
             "productCount": self.product_count,
             "clientEmail": self.client_email,
+            "returnUrl": f"{DOMAIN}/order-detail/{self.return_url_pk}",
         }
         json_data = json.dumps(data)
         print(json_data)

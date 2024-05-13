@@ -46,9 +46,32 @@
           </div>
         </div>
       </div>
-      <div class="row row-cols-1 row-cols-xxl-4 g-4" id="goodCardsListContainer">
+      <style>
+        /* Default style for both mobile and desktop */
+.responsive-img {
+  object-fit: contain;
+}
+
+/* Media query for mobile */
+@media (max-width: 767px) {
+  .responsive-img {
+    max-height: 180px;
+    min-height: 180px;
+  }
+}
+
+/* Media query for desktop */
+@media (min-width: 768px) {
+  .responsive-img {
+    max-height: 300px;
+    min-height: 300px;
+  }
+}
+
+      </style>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-4 m-0" id="goodCardsListContainer">
         <!-- Товари завантажуються динамічно за допомогою AJAX -->
-      </div>
+    </div>
       <style>
         .ml_display {
           display: flex;

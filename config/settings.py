@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "django_filters",
     "app_cart",
     "app_orders",
+    'corsheaders',
     'django.contrib.humanize',
     'mathfilters',
 ]
@@ -74,12 +75,27 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = [
+    'https://def1-195-114-156-198.ngrok-free.app',
+    'https://416d-31-128-76-130.ngrok-free.app'
+    # Add other allowed origins here
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://api.wayforpay.com",
+    "https://secure.wayforpay.com",
+    # Add other trusted origins here if needed
 ]
 
 ASSETS_ROOT = "/static/assets"
