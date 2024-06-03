@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.humanize',
     'mathfilters',
+    "debug_toolbar",
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -81,21 +82,32 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+IS_DUBUG = env.bool("IS_DUBUG")
+
+if IS_DUBUG:
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: request.META.get('REMOTE_ADDR') == '127.0.0.1',
+    'SHOW_COLLAPSED': True,
+    'RENDER_PANELS': True,
+}
+
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
 CORS_ORIGIN_WHITELIST = [
-    'https://def1-195-114-156-198.ngrok-free.app',
-    'https://416d-31-128-76-130.ngrok-free.app'
-    # Add other allowed origins here
+    'http://185.233.116.13:8000',
+    'http://localhost:8000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://api.wayforpay.com",
-    "https://secure.wayforpay.com",
-    # Add other trusted origins here if needed
+    "http://185.233.116.13:8000",
 ]
 
 ASSETS_ROOT = "/static/assets"
@@ -193,7 +205,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "media/"
 
 
-STATIC_URL = "static/"
 
 STATIC_URL = "/static/"
 STATIC_ROOT = "/static/"

@@ -13,6 +13,7 @@ from .models import (
     GoodVarPhoto,
     GoodTypeCluster,
     GoodType,
+    AimFilters
 )
 # from app_orders.models import Order, OrderItem
 
@@ -49,6 +50,7 @@ class GoodVariantUpdateForm(forms.ModelForm):
             "taste",
             "stock_price",
             "sell_price",
+            "is_top"
         ]
 
 
@@ -87,6 +89,7 @@ admin.site.register(Producer)
 admin.site.register(Good)
 admin.site.register(Size)
 admin.site.register(Taste)
+admin.site.register(AimFilters)
 # admin.site.register(Order)
 # admin.site.register(OrderItem)
 admin.site.register(GoodVariant, GoodVariantAdmin)

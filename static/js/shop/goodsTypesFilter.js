@@ -1,7 +1,7 @@
-fetch('http://127.0.0.1:8000/api/types/')
+fetch('/api/types/')
 	.then(response => response.json())
 	.then(data => {
-		const menu = document.querySelector('.simplebar-content ul');
+		const menu = document.getElementById('main-filter');
 		const icons = [
 			'ri-shape-fill',
 			'ri-focus-2-line',
@@ -40,15 +40,19 @@ fetch('http://127.0.0.1:8000/api/types/')
                 `;
 
 				menuItem.addEventListener('click', function () {
+					console.log("Filter called")
 					filterBy = clusterType;
-					const url = `/api/goods/?good_type_name=${filterBy}&ordering=${orderBy}`;
+					const url = goodCardsListUrl(orderBy, null, null, filterBy)
 					const goodCardsListContainer = document.getElementById("goodCardsListContainer");
 					goodCardsListContainer.innerHTML = '';
 					previousButton = menuItem.querySelector('a');
 					var nextButton = document.getElementById('next_button');
-					nextButton.classList.remove('disabled');
+					if (nextButton) {
+						nextButton.classList.remove('disabled');
+					}
+					
 				
-					goodCardsList(url, true, filterBy);
+					goodCardsList(url, false);
 				});
 				dropdownMenuUl.appendChild(menuItem);
 			});

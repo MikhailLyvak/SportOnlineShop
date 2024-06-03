@@ -74,19 +74,28 @@ class GoodsListSerializer(serializers.ModelSerializer):
     def get_photos(self, obj) -> list:
         photos = getattr(obj, "photos")
         return [photo.photo.url for photo in photos.all().order_by("id")]
+    
+
+class ProducerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producer
+        fields = ["name", "id"]
 
 
-class GoodVarClustersSerializer(serializers.ModelSerializer):
-    cluster_types = serializers.SerializerMethodField()
+class AimFiltersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AimFilters
+        fields = ['id', 'title']
+
+class GoodTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GoodType
+        fields = ['id', 'name']
+
+class GoodTypeClusterSerializer(serializers.ModelSerializer):
+    good_types = GoodTypeSerializer(many=True, read_only=True)
 
     class Meta:
         model = GoodTypeCluster
-        fields = [
-            "id",
-            "name",
-            "cluster_types",
-        ]
+        fields = ['id', 'name', 'good_types']
 
-    def get_cluster_types(self, obj) -> list:
-        types = obj.good_types.all()
-        return [type.name for type in types]

@@ -90,11 +90,35 @@ class Producer(models.Model):
         if not self.pk:
             self.name_lower = self.name.lower()
         super().save(*args, **kwargs)
+        
+
+class AimFilters(models.Model):
+    title = models.CharField(max_length=255)
+    db_name = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = [
+            "title",
+        ]
+        verbose_name = "Фільтр за цілю"
+        verbose_name_plural = "Фільтри за цілями"
+        indexes = [
+            models.Index(
+                fields=["id", "title", "db_name"],
+            ),
+            models.Index(fields=["id"]),
+            models.Index(fields=["title"]),
+            models.Index(fields=["db_name"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.db_name} ({self.title})"
 
 
 class Good(models.Model):
     name = models.CharField(max_length=100)
     name_lower = models.CharField(max_length=100, null=True, blank=True)
+    aim_filter = models.ForeignKey(AimFilters, on_delete=models.CASCADE, null=False, blank=False)
     description = models.TextField(null=True, blank=True)
     good_type = models.ForeignKey(GoodType, on_delete=models.CASCADE)
     producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
@@ -195,6 +219,7 @@ class GoodVariant(models.Model):
     amount = models.IntegerField(default=1)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    is_top = models.BooleanField(default=False)
 
     class Meta:
         ordering = [

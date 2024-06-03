@@ -11,115 +11,692 @@
 {% endblock header %}
 
 {% block sidebar %}
-{% include 'includes/homeSideBar.html' %}
+<!-- {% include 'includes/homeSideBar.html' %} -->
 {% endblock sidebar %}
-
+{% block extra_css %}
+<!-- One of the following themes -->
+<link rel="stylesheet" href="{% static 'libs/@simonwep/pickr/dist/themes/classic.min.css'%}" /> <!-- 'classic' theme -->
+<link rel="stylesheet" href="{% static 'libs/@simonwep/pickr/dist/themes/monolith.min.css'%}" />
+<!-- 'monolith' theme -->
+<link rel="stylesheet" href="{% static 'libs/@simonwep/pickr/dist/themes/nano.min.css'%}" /> <!-- 'nano' theme -->
+<link rel="stylesheet" href="{% static 'css/ml_buttons.css'%}" /> <!-- 'nano' theme -->
+{% endblock extra_css %}
 {% block content %}
 
 <style>
-  .custom-card-body {
-    display: flex;
-    flex-direction: column;
-  }
+    .custom-card-body {
+        display: flex;
+        flex-direction: column;
+    }
 
-  .custom-card-body> :last-child {
-    margin-top: auto;
-  }
+    .custom-card-body> :last-child {
+        margin-top: auto;
+    }
 </style>
 
-<div class="main-content bg-light">
-  <div class="page-content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12">
-          <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0"></h4>
-            <div class="text-center">
-              <select class="form-select rounded-pill" aria-label="Default select example" style="max-width: 300px;" id="four-filter">
-                <option value="name" selected> Від А до Я</option>
-                <option value="-name">Від Я до А</option>
-                <option value="sell_price">Від найдешевших</option>
-                <option value="-sell_price">Від найдорожчих</option>
-            </select>
+<!-- <div
+  class="main-content"
+  style="background-image: url('https://images.pond5.com/nutrition-linear-icons-set-vitamins-illustration-239100396_iconl_nowm.jpeg'); min-height: 910px;"
+> -->
+<div class="main-content" id="test-bg">
+
+    <!-- <div class="main-content bg-light"> -->
+
+    <div class="page-content m-0" id="page-content-adaptive">
+
+
+        <div class="container-fluid" style="padding-left: 0px; padding-right: 0px;" id="container-fluid-adaptive">
+            <style>
+                /* Default style for both mobile and desktop */
+                .responsive-img {
+                    object-fit: contain;
+                }
+
+                /* Media query for mobile */
+                @media (max-width: 767px) {
+                    .responsive-img {
+                        max-height: 180px;
+                        min-height: 140px;
+                    }
+                }
+
+                /* Media query for desktop */
+                @media (min-width: 768px) {
+                    .responsive-img {
+                        max-height: 300px;
+                        min-height: 172px;
+                    }
+                }
+            </style>
+            <style>
+                .blur {
+                    box-shadow: inset 0px 0px 2px #fefefed1 !important;
+                    ;
+                    -webkit-backdrop-filter: saturate(200%) blur(90px) !important;
+                    ;
+                    backdrop-filter: saturate(200%) blur(90px) !important;
+                    ;
+                    background-color: rgba(255, 255, 255, 0.8) !important;
+                }
+
+                .z-index-2 {
+                    z-index: 2 !important;
+                }
+            </style>
+            <div class="row">
+                <div class="col-xl-3 col-lg-4" id="pc-filter" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex mb-3">
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-16">Filters</h5>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="#" class="text-decoration-underline" id="clearall">Clear All</a>
+                                </div>
+                            </div>
+
+                            <div class="filter-choices-input">
+                                <div class="choices" data-type="text" aria-haspopup="true" aria-expanded="false">
+                                    <div class="choices__inner"><input class="form-control choices__input"
+                                            data-choices="" data-choices-removeitem="" type="text"
+                                            id="filter-choices-input"
+                                            value="T-Shirts,Boat,JBL,20% or more,4 &amp; Above Star" hidden=""
+                                            tabindex="-1" data-choice="active">
+                                        <div class="choices__list choices__list--multiple">
+                                            <div class="choices__item choices__item--selectable" data-item=""
+                                                data-id="1" data-value="T-Shirts"
+                                                data-custom-properties="[object Object]" aria-selected="true"
+                                                data-deletable="">T-Shirts<button type="button" class="choices__button"
+                                                    aria-label="Remove item: 'T-Shirts'" data-button="">Remove
+                                                    item</button></div>
+                                            <div class="choices__item choices__item--selectable" data-item=""
+                                                data-id="2" data-value="Boat" data-custom-properties="[object Object]"
+                                                aria-selected="true" data-deletable="">Boat<button type="button"
+                                                    class="choices__button" aria-label="Remove item: 'Boat'"
+                                                    data-button="">Remove item</button></div>
+                                            <div class="choices__item choices__item--selectable" data-item=""
+                                                data-id="3" data-value="JBL" data-custom-properties="[object Object]"
+                                                aria-selected="true" data-deletable="">JBL<button type="button"
+                                                    class="choices__button" aria-label="Remove item: 'JBL'"
+                                                    data-button="">Remove item</button></div>
+                                            <div class="choices__item choices__item--selectable" data-item=""
+                                                data-id="4" data-value="20% or more"
+                                                data-custom-properties="[object Object]" aria-selected="true"
+                                                data-deletable="">20% or more<button type="button"
+                                                    class="choices__button" aria-label="Remove item: '20% or more'"
+                                                    data-button="">Remove item</button></div>
+                                            <div class="choices__item choices__item--selectable" data-item=""
+                                                data-id="5" data-value="4 &amp; Above Star"
+                                                data-custom-properties="[object Object]" aria-selected="true"
+                                                data-deletable="">4 &amp; Above Star<button type="button"
+                                                    class="choices__button"
+                                                    aria-label="Remove item: '4 &amp; Above Star'" data-button="">Remove
+                                                    item</button></div>
+                                        </div><input type="search" name="search_terms"
+                                            class="choices__input choices__input--cloned" autocomplete="off"
+                                            autocapitalize="off" spellcheck="false" role="textbox"
+                                            aria-autocomplete="list" aria-label="null">
+                                    </div>
+                                    <div class="choices__list choices__list--dropdown" aria-expanded="false"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion accordion-flush filter-accordion">
+
+                            <div class="card-body border-bottom">
+                                <div>
+                                    <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Products</p>
+                                    <ul class="list-unstyled mb-0 filter-list">
+                                        <li>
+                                            <a href="#" class="d-flex py-1 align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-13 mb-0 listname">Grocery</h5>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="d-flex py-1 align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-13 mb-0 listname">Fashion</h5>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <span class="badge bg-light text-muted">5</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="d-flex py-1 align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-13 mb-0 listname">Watches</h5>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="d-flex py-1 align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-13 mb-0 listname">Electronics</h5>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <span class="badge bg-light text-muted">5</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="d-flex py-1 align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-13 mb-0 listname">Furniture</h5>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <span class="badge bg-light text-muted">6</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="d-flex py-1 align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-13 mb-0 listname">Automotive Accessories</h5>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="d-flex py-1 align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-13 mb-0 listname">Appliances</h5>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <span class="badge bg-light text-muted">7</span>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" class="d-flex py-1 align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="fs-13 mb-0 listname">Kids</h5>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="card-body border-bottom">
+                                <p class="text-muted text-uppercase fs-12 fw-medium mb-4">Price</p>
+
+                                <div id="product-price-range"
+                                    class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+                                    <div class="noUi-base">
+                                        <div class="noUi-connects">
+                                            <div class="noUi-connect noUi-draggable"
+                                                style="transform: translate(0%, 0px) scale(1, 1);"></div>
+                                        </div>
+                                        <div class="noUi-origin" style="transform: translate(-100%, 0px); z-index: 5;">
+                                            <div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0"
+                                                role="slider" aria-orientation="horizontal" aria-valuemin="0.0"
+                                                aria-valuemax="1980.0" aria-valuenow="0.0" aria-valuetext="$ 0">
+                                                <div class="noUi-touch-area"></div>
+                                            </div>
+                                        </div>
+                                        <div class="noUi-origin" style="transform: translate(0%, 0px); z-index: 4;">
+                                            <div class="noUi-handle noUi-handle-upper" data-handle="1" tabindex="0"
+                                                role="slider" aria-orientation="horizontal" aria-valuemin="20.0"
+                                                aria-valuemax="2000.0" aria-valuenow="2000.0" aria-valuetext="$ 2000">
+                                                <div class="noUi-touch-area"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="formCost d-flex gap-2 align-items-center mt-3">
+                                    <input class="form-control form-control-sm" type="text" id="minCost" value="0">
+                                    <span class="fw-semibold text-muted">to</span> <input
+                                        class="form-control form-control-sm" type="text" id="maxCost" value="1000">
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingBrands">
+                                    <button class="accordion-button bg-transparent shadow-none" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseBrands"
+                                        aria-expanded="true" aria-controls="flush-collapseBrands">
+                                        <span class="text-muted text-uppercase fs-12 fw-medium">Brands</span> <span
+                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge">2</span>
+                                    </button>
+                                </h2>
+
+                                <div id="flush-collapseBrands" class="accordion-collapse collapse show"
+                                    aria-labelledby="flush-headingBrands">
+                                    <div class="accordion-body text-body pt-0">
+                                        <div class="search-box search-box-sm">
+                                            <input type="text" class="form-control bg-light border-0"
+                                                id="searchBrandsList" placeholder="Search Brands...">
+                                            <i class="ri-search-line search-icon"></i>
+                                        </div>
+                                        <div class="d-flex flex-column gap-2 mt-3 filter-check">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="Boat"
+                                                    id="productBrandRadio5" checked="">
+                                                <label class="form-check-label" for="productBrandRadio5">Boat</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="OnePlus"
+                                                    id="productBrandRadio4">
+                                                <label class="form-check-label" for="productBrandRadio4">OnePlus</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="Realme"
+                                                    id="productBrandRadio3">
+                                                <label class="form-check-label" for="productBrandRadio3">Realme</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="Sony"
+                                                    id="productBrandRadio2">
+                                                <label class="form-check-label" for="productBrandRadio2">Sony</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="JBL"
+                                                    id="productBrandRadio1" checked="">
+                                                <label class="form-check-label" for="productBrandRadio1">JBL</label>
+                                            </div>
+
+                                            <div>
+                                                <button type="button"
+                                                    class="btn btn-link text-decoration-none text-uppercase fw-medium p-0">1,235
+                                                    More</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end accordion-item -->
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingDiscount">
+                                    <button class="accordion-button bg-transparent shadow-none collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseDiscount"
+                                        aria-expanded="true" aria-controls="flush-collapseDiscount">
+                                        <span class="text-muted text-uppercase fs-12 fw-medium">Discount</span> <span
+                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge">1</span>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseDiscount" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-headingDiscount">
+                                    <div class="accordion-body text-body pt-1">
+                                        <div class="d-flex flex-column gap-2 filter-check">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="50% or more"
+                                                    id="productdiscountRadio6">
+                                                <label class="form-check-label" for="productdiscountRadio6">50% or
+                                                    more</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="40% or more"
+                                                    id="productdiscountRadio5">
+                                                <label class="form-check-label" for="productdiscountRadio5">40% or
+                                                    more</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="30% or more"
+                                                    id="productdiscountRadio4">
+                                                <label class="form-check-label" for="productdiscountRadio4">
+                                                    30% or more
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="20% or more"
+                                                    id="productdiscountRadio3" checked="">
+                                                <label class="form-check-label" for="productdiscountRadio3">
+                                                    20% or more
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="10% or more"
+                                                    id="productdiscountRadio2">
+                                                <label class="form-check-label" for="productdiscountRadio2">
+                                                    10% or more
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="Less than 10%"
+                                                    id="productdiscountRadio1">
+                                                <label class="form-check-label" for="productdiscountRadio1">
+                                                    Less than 10%
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end accordion-item -->
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingRating">
+                                    <button class="accordion-button bg-transparent shadow-none collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseRating"
+                                        aria-expanded="false" aria-controls="flush-collapseRating">
+                                        <span class="text-muted text-uppercase fs-12 fw-medium">Rating</span> <span
+                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge">1</span>
+                                    </button>
+                                </h2>
+
+                                <div id="flush-collapseRating" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-headingRating">
+                                    <div class="accordion-body text-body">
+                                        <div class="d-flex flex-column gap-2 filter-check">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    value="4 &amp; Above Star" id="productratingRadio4" checked="">
+                                                <label class="form-check-label" for="productratingRadio4">
+                                                    <span class="text-muted">
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                    </span> 4 &amp; Above
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    value="3 &amp; Above Star" id="productratingRadio3">
+                                                <label class="form-check-label" for="productratingRadio3">
+                                                    <span class="text-muted">
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                    </span> 3 &amp; Above
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    value="2 &amp; Above Star" id="productratingRadio2">
+                                                <label class="form-check-label" for="productratingRadio2">
+                                                    <span class="text-muted">
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                    </span> 2 &amp; Above
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="1 Star"
+                                                    id="productratingRadio1">
+                                                <label class="form-check-label" for="productratingRadio1">
+                                                    <span class="text-muted">
+                                                        <i class="mdi mdi-star text-warning"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                        <i class="mdi mdi-star"></i>
+                                                    </span> 1
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end accordion-item -->
+                        </div>
+                    </div>
+                    <!-- end card -->
+                </div>
+                <div class="col-xl-9 p-0">
+                    <!-- With Indicators -->
+                    <div class="m-0" id="caruselDiv">
+
+                    </div>
+                    <div class="row row-cols-1 row-cols-xxl-6 m-0" id="aimButtons">
+                        <!-- JS динамічно відобразить тут кнопки -->
+                    </div>
+                    <div id="topGoods">
+                        <div class="d-flex justify-content-center align-items-center mt-3 mb-0">
+                            <i class="text-danger ri-fire-fill fs-20" style="padding-bottom: 10px;"></i>
+                            <div class="card bg-danger m-2 mt-1 shadow-lg" style="height: 5px; width: 100%;"></div>
+                            <h3 style="white-space: nowrap;">Наші топ товари</h3>
+                            <div class="card bg-danger m-2 mt-1 shadow-lg" style="height: 5px; width: 100%;"></div>
+                            <i class="text-danger ri-fire-fill fs-20" style="padding-bottom: 10px;"></i>
+                        </div>
+
+                        <!-- Top goods -->
+                        <div class="row row-cols-1 row-cols-xxl-6 m-0" id="TopGoodCardsListContainer">
+                            <!-- Товари завантажуються динамічно за допомогою AJAX -->
+                        </div>
+                        <div class="card bg-danger m-2 mt-1" style="height: 5px; width: 99%;"></div>
+                </div>
+                    <div class="row g-0 m-2 text-center" id="siteData">
+                        <div class="col-6 col-sm-3">
+                            <div class="p-3 border border-dashed border-start-0">
+                                <h5 class="mb-1 text-success"><span class="counter-value" data-target="7585">1+ тис.</span></h5>
+                                <p class="text-muted mb-0">Задоволених замовників</p>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-6 col-sm-3">
+                            <div class="p-3 border border-dashed border-start-0">
+                                <h5 class="mb-1 text-success"><span class="counter-value">Безкоштовна доставка</span></h5>
+                                <p class="text-muted mb-0">для замовлень від 2 500 грн.</p>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-6 col-sm-3">
+                            <div class="p-3 border border-dashed border-start-0">
+                                <h5 class="mb-1 text-success"><span class="counter-value" data-target="367">До 4 днів</span></h5>
+                                <p class="text-muted mb-0">Швидка доставка</p>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-6 col-sm-3">
+                            <div class="p-3 border border-dashed border-start-0 border-end-0">
+                                <h5 class="mb-1 text-success"><span class="counter-value" data-target="18.92">500+ продіктів</span></h5>
+                                <p class="text-muted mb-0">Широкий асортимент</p>
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+
+
+                    <div class="d-flex justify-content-center align-items-center mb-3">
+                        <i class="text-info ri-flashlight-fill fs-20"></i>
+                        <div class="card bg-info m-2 mt-1" style="height: 5px; width: 100%;"></div>
+                        <h3 id="searchDataTitle" style="white-space: nowrap;">Інші товари</h3>
+                        <div class="card bg-info m-2 mt-1" style="height: 5px; width: 100%;"></div>
+                        <i class="text-info ri-flashlight-fill fs-20"></i>
+                    </div>
+                    <div class="row row-cols-1 row-cols-xxl-6 m-0" id="goodCardsListContainer">
+                        <!-- Товари завантажуються динамічно за допомогою AJAX -->
+                    </div>
+                    <div class="card bg-info m-2 mt-1" style="height: 5px; width: 100%;"></div>
+
+                </div>
+
+
             </div>
-            
-          </div>
+
+
+            <style>
+                .ml_display {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                #next_button {
+                    max-width: 200px;
+                }
+            </style>
+
+
+            <div class="col-12 m-2 text-center d-flex justify-content-center">
+                <a id="next_button" style="cursor:pointer; min-width:90px;"
+                    class="btn btn-soft-info waves-effect waves-light text-center fs-20 ml_display">
+                </a>
+            </div>
+
+
         </div>
-      </div>
-      <style>
-        /* Default style for both mobile and desktop */
-.responsive-img {
-  object-fit: contain;
-}
+        <div style="position: sticky; bottom: 20px; width: 100%; display: flex; justify-content: center; z-index: 10; margin: 0px;"
+            id="mobileFilters">
+            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                <button class="btn btn-light rounded-end rounded-4 border border-2 border-info  fs-17" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"
+                    style="opacity: 0.9; width: 160px; margin-right: 5px;">
+                    <i class="ri-arrow-up-line"></i> Сортування
+                </button>
+                <button class="btn btn-light rounded-start rounded-4 border border-2 border-info fs-17" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom2" aria-controls="offcanvasBottom2"
+                    style="opacity: 0.9; width: 160px;">
+                    <i class="ri-filter-line"></i> Фільтри
+                </button>
+            </div>
+            <!-- Placement Offcanvas -->
+            <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom"
+                aria-labelledby="offcanvasBottomLabel" style="height: 35% !important; z-index: 2000">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasBottomLabel">Товари посортовані</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="form-check form-switch form-switch-md form-switch-info pb-2 m-2 border-bottom border-2">
+                        <input class="form-check-input" type="checkbox" role="switch" id="name" checked>
+                        <label class="form-check-label fs-17" for="SwitchCheck10">Від А до Я</label>
+                    </div>
+                    <div
+                        class="form-check form-switch form-switch-md form-switch-secondary pb-2 m-2 border-bottom border-2">
+                        <input class="form-check-input" type="checkbox" role="switch" id="-name">
+                        <label class="form-check-label fs-17" for="SwitchCheck10">Від Я до А</label>
+                    </div>
+                    <div
+                        class="form-check form-switch form-switch-md form-switch-warning pb-2 m-2 border-bottom border-2">
+                        <input class="form-check-input" type="checkbox" role="switch" id="sell_price">
+                        <label class="form-check-label fs-17" for="SwitchCheck10">Від найдешевших</label>
+                    </div>
+                    <div
+                        class="form-check form-switch form-switch-md form-switch-success pb-2 m-2 border-bottom border-2">
+                        <input class="form-check-input" type="checkbox" role="switch" id="-sell_price">
+                        <label class="form-check-label fs-17" for="SwitchCheck10">Від найдорожчих</label>
+                    </div>
+                </div>
+            </div>
+            <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom2"
+                aria-labelledby="offcanvasBottomLabel2">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasBottomLabel">Товари посортовані</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body" id="main-filter">
+                    <button class="btn btn-soft-info" onclick="goodCardsList('/api/goods/', true)">
+                        <i class="ri-find-replace-line fs-18"></i> <span data-key="t-authentication">Очистити
+                            фільтри</span>
+                    </button>
 
-/* Media query for mobile */
-@media (max-width: 767px) {
-  .responsive-img {
-    max-height: 180px;
-    min-height: 180px;
-  }
-}
+                    <input type="number" class="form-control" placeholder="From" id="prices-from">
+                    <input type="number" class="form-control" placeholder="To" id="prices-to">
+                    <div class="c-1-color" id="range-slider"></div>
+                </div>
+            </div>
+        </div>
 
-/* Media query for desktop */
-@media (min-width: 768px) {
-  .responsive-img {
-    max-height: 300px;
-    min-height: 300px;
-  }
-}
 
-      </style>
-      <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-4 m-0" id="goodCardsListContainer">
-        <!-- Товари завантажуються динамічно за допомогою AJAX -->
+
     </div>
-      <style>
-        .ml_display {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
 
-        #next_button {
-          max-width: 200px;
-        }
-      </style>
-      <div class="col-12 m-2 text-center d-flex justify-content-center">
-        <a id="next_button" style="cursor:pointer; min-width:90px;"
-          class="btn btn-soft-info waves-effect waves-light text-center fs-20 ml_display">
-        </a>
-      </div>
-
-
-    </div>
-
-  </div>
+</div>
 
 </div>
 <script>
-  function scrollToTop() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-  }
-
-  window.onscroll = function () {
-    var btn = document.getElementById("back-to-top");
-
-    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-      btn.style.display = "block";
-    } else {
-      btn.style.display = "none";
+    function scrollToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
     }
-  };
 
-  // Initially hide the button on page load
-  document.addEventListener("DOMContentLoaded", function () {
-    var btn = document.getElementById("back-to-top");
-    btn.style.display = "none";
-  });
+    window.onscroll = function () {
+        var btn = document.getElementById("back-to-top");
+
+        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    };
+
+    // Initially hide the button on page load
+    document.addEventListener("DOMContentLoaded", function () {
+        var btn = document.getElementById("back-to-top");
+        btn.style.display = "none";
+    });
 </script>
+<script>
+    function updateDisplay() {
+        const pcFilter = document.getElementById('pc-filter');
+        const mobileFilter = document.getElementById('mobileFilters');
+        if (window.innerWidth < 1200) {
+            pcFilter.style.display = 'none';
+            mobileFilter.style.display = 'flex';
+        } else {
+            pcFilter.style.display = '';
+            mobileFilter.style.display = 'none';
+        }
+    }
+
+    // Initial check
+    updateDisplay();
+
+    // Update display on window resize
+    window.addEventListener('resize', updateDisplay);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var slider = document.getElementById('range-slider');
+        var inputFrom = document.getElementById('prices-from');
+        var inputTo = document.getElementById('prices-to');
+
+        noUiSlider.create(slider, {
+            start: [20, 80], // Initial values for the two handles
+            connect: true,   // Show a colored bar between the handles
+            range: {
+                'min': 0,
+                'max': 100
+            },
+            tooltips: [true, true], // Show tooltips for both handles
+            format: {
+                to: function (value) {
+                    return Math.round(value);
+                },
+                from: function (value) {
+                    return Number(value);
+                }
+            }
+        });
+
+        slider.noUiSlider.on('update', function (values, handle) {
+            var value = values[handle];
+            if (handle) {
+                inputTo.value = value;
+            } else {
+                inputFrom.value = value;
+            }
+        });
+
+        inputFrom.addEventListener('change', function () {
+            slider.noUiSlider.set([this.value, null]);
+        });
+
+        inputTo.addEventListener('change', function () {
+            slider.noUiSlider.set([null, this.value]);
+        });
+    });
+</script>
+
 <button onclick="scrollToTop()" class="btn btn-danger btn-icon rounded-pill" id="back-to-top"
-  style="position: fixed; bottom: 35px; right: 2px; opacity: 0.6;">
-  <i class="ri-arrow-up-line"></i>
+    style="position: fixed; top: 90px; right: 2px; opacity: 0.6;">
+    <i class="ri-arrow-up-line"></i>
 </button>
 
 
@@ -129,8 +706,17 @@
 {% block extra_js %}
 <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 <script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
+<script src="{% static 'js/shop/pageAdaptiveConfig.js' %}"></script>
+<script src="{% static 'js/shop/goodsTopBar.js' %}"></script>
 <script src="{% static 'js/shop/goodsCardsList.js' %}"></script>
+<script src="{% static 'js/shop/aimButtons.js' %}"></script>
 <script src="{% static 'js/shop/goodsCart.js' %}"></script>
 <script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
+<script src="{% static 'libs/prismjs/prism.js'%}"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
+
+
 
 {% endblock extra_js %}

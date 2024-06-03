@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="en" {% block html %}data-layout="vertical" data-topbar="light" data-layout-width="fluid"
+<html lang="en" {% block html %}data-layout="horizontal" data-topbar="light" data-layout-width="fluid"
     data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="enable" data-bs-theme="light"
     data-layout-style="default" {% endblock html %}>
 
@@ -28,6 +28,62 @@
     <!-- custom Css-->
     <link href="{% static 'css/custom.min.css'%}" id="app-style" rel="stylesheet" type="text/css" />
     <link href="{% static 'css/ml_style.css'%}" id="app-style" rel="stylesheet" type="text/css" />
+    <link rel="canonical" href="https://appseed.us/ui-kit/soft-ui-design-system"/>
+    <style>
+        .waves {
+          position: relative;
+          width: 100%;
+          height: 15vh;
+          margin-bottom: -7px; /* Fix for safari gap */
+          min-height: 100px;
+          max-height: 150px;
+          transform: rotate(360deg);
+          padding-bottom: 1px;;
+        }
+      
+        .moving-waves {
+          position: absolute;
+          width: 200%;
+          height: 100%;
+          left: 0;
+          bottom: 0;
+          background: url(#gentle-wave) repeat-x;
+          animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+        }
+      
+        @keyframes move-forever {
+          0% {
+            transform: translate3d(-90px, 0, 0);
+          }
+          100% {
+            transform: translate3d(85px, 0, 0);
+          }
+        }
+      
+        .moving-waves use:nth-child(1) {
+          animation: move-forever-1 7s cubic-bezier(0.55, 0.5, 0.45, 0.5) -2s infinite;
+        }
+      
+        .moving-waves use:nth-child(2) {
+          animation: move-forever-2 10s cubic-bezier(0.55, 0.5, 0.45, 0.5) -2s infinite;
+        }
+      
+        .moving-waves use:nth-child(3) {
+          animation: move-forever-3 13s cubic-bezier(0.55, 0.5, 0.45, 0.5) -2s infinite;
+        }
+      
+        .moving-waves use:nth-child(4) {
+          animation: move-forever-4 20s cubic-bezier(0.55, 0.5, 0.45, 0.5) -2s infinite;
+        }
+      
+        .moving-waves use:nth-child(5) {
+          animation: move-forever-5 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) -2s infinite;
+        }
+      
+        .moving-waves use:nth-child(6) {
+          animation: move-forever-6 30s cubic-bezier(0.55, 0.5, 0.45, 0.5) -2s infinite;
+        }
+      </style>
     {% endblock css %}
 </head>
 
@@ -43,8 +99,8 @@
         {% block header %}
         {% include "includes/topbar.html" %}
         {% endblock header %}
+        
         {% block sidebar %}
-        {% include "includes/sidebar.html" %}
         {% endblock sidebar %}
         {% block content %}
         {% block pagetitle %}
@@ -74,8 +130,6 @@
     {% endblock right_sidebar %}
 
     {% block javascript %}
-
-    <script src="/jsi18n/"></script>
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 
     <script src="{% static 'js/pages/notifications.init.js'%}"></script>
@@ -104,6 +158,7 @@
             fontSizeToggle = !fontSizeToggle; // Toggle the font size state
         }
     </script>
+    <!-- #efaf41f2 -->
 
     {% block extra_js %}
     {% endblock extra_js %}
@@ -111,9 +166,20 @@
     <!-- App js -->
     <script src="{% static 'js/app.js'%}"></script>
     {% endblock javascript %}
-
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasLeftLabel">
+      <div class="offcanvas-header">
+          <h5 id="offcanvasLeftLabel">Offcanvas Left</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+          ...
+      </div>
+  </div>
 </body>
-<footer class="footer">
+
+
+<footer class="footer border-top border-2" style="max-height: 50px;">
+    
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">

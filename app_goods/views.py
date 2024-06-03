@@ -4,10 +4,12 @@ from django.db.models.query import QuerySet
 from django.urls import reverse_lazy
 from django.views import generic
 from utils.permissions import admin_login
+from rest_framework.views import APIView
 from django_filters.views import FilterView
 from django.views.generic import TemplateView, DetailView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.db.models import Prefetch, Q
+from rest_framework.response import Response
 
 from rest_framework import filters, permissions
 from django.db.models.query import QuerySet
@@ -92,6 +94,27 @@ def remove_discount(request, pk):
     return redirect(request.META.get("HTTP_REFERER"))
 
 
+@admin_login
+def set_to_top(request, pk: int, is_to_top: str):
+    good = get_object_or_404(GoodVariant, pk=pk)
+    total_amount = GoodVariant.objects.filter(is_top=True).count()
+    
+    is_to_top = is_to_top.lower() == 'true'
+
+    if not is_to_top:
+        good.is_top = False
+        good.save()
+        messages.success(request, "Тепер ваш товар прибрано з топу!")
+    elif total_amount < 6:
+        good.is_top = True
+        good.save()
+        messages.success(request, "Тепер ваш товар в топі!")
+    else:
+        messages.error(request, "Може бути максимум 6 топ товарів!")
+
+    return redirect(request.META.get("HTTP_REFERER"))
+
+
 def add_or_remove_good(request, pk):
     good = get_object_or_404(GoodVariant, pk=pk)
     if good.amount > 0:
@@ -104,6 +127,12 @@ def add_or_remove_good(request, pk):
 
 class ShopGoodsPage(TemplateView):
     template_name = "app_goods/shop_goods.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        top_goods = GoodVariant.objects.filter(is_top=True)[:6]
+        context["top_goods"] = top_goods
+        return context
 
 
 class GoodsListView(ListAPIView):
@@ -129,6 +158,10 @@ class GoodsListView(ListAPIView):
         good_type_name = self.request.query_params.get("good_type_name")
         if good_type_name:
             queryset = queryset.filter(good__good_type__name=good_type_name)
+            
+        aim_filter_name = self.request.query_params.get("aim_filter")
+        if aim_filter_name:
+            queryset = queryset.filter(good__aim_filter__db_name=aim_filter_name)
 
         return queryset
 
@@ -142,14 +175,43 @@ class GoodsListView(ListAPIView):
         return context
 
 
-class GoodVarClustersListView(ListAPIView):
-    serializer_class = GoodVarClustersSerializer
+class TopGoodsListView(ListAPIView):
+    serializer_class = GoodsListSerializer
     permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self):
-        queryset = GoodTypeCluster.objects.prefetch_related("good_types")
+        queryset = (
+            GoodVariant.objects.filter(is_top=True)
+            .select_related("size", "taste", "good__good_type", "good__producer")
+            .prefetch_related("photos").order_by("name")
+        )[:6]
 
         return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["variants"] = list(
+            self.get_queryset().values(
+                "good_id", "taste_id", "size_id", "size__name", "amount", "id"
+            )
+        )
+        return context
+
+class GoodVarClustersListView(APIView):
+    def get(self, request):
+        producers = Producer.objects.all()
+        aim_filters = AimFilters.objects.all()
+        good_type_clusters = GoodTypeCluster.objects.prefetch_related('good_types').all()
+
+        producer_serializer = ProducerSerializer(producers, many=True)
+        aim_filters_serializer = AimFiltersSerializer(aim_filters, many=True)
+        good_type_clusters_serializer = GoodTypeClusterSerializer(good_type_clusters, many=True)
+
+        return Response({
+            'producers': producer_serializer.data,
+            'aim_filters': aim_filters_serializer.data,
+            'good_type_clusters': good_type_clusters_serializer.data
+        })
 
 
 class GoodDetailPage(DetailView):
@@ -161,5 +223,6 @@ class GoodDetailPage(DetailView):
         context = super().get_context_data(**kwargs)
         good = Good.objects.filter(goodvariant=self.object).first()
         sizes = [(good_var.size.name, good_var.id) for good_var in good.goodvariant_set.all().order_by("size__name")]
+        print(sizes)
         context["sizes"] = sizes
         return context

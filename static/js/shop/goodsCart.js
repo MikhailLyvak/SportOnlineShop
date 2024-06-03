@@ -62,7 +62,7 @@ function cartGoodsUpdate() {
                 <i class="bx bx-cart"></i>
               </div>
             </div>
-            <h5 class="mb-3">Your Cart is Empty!</h5>
+            <h5 class="mb-3">Ваша корзина пуста!</h5>
           </div>
         </div>
         `

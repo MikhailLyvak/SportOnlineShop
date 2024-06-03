@@ -72,7 +72,4 @@ class CartSerializer(serializers.ModelSerializer):
                 prices.append(item.amount * item.good_variant.sell_price)
 
         total_price = sum(prices)
-        # Set the locale to use the appropriate thousands separator
-        locale.setlocale(locale.LC_ALL, "uk_UA.UTF-8")
-        formatted_total_price = locale.currency(total_price, grouping=True)
-        return formatted_total_price
+        return total_price

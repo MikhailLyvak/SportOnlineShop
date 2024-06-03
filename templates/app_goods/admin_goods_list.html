@@ -1,8 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'adminBase.html' %}
 {% load crispy_forms_tags widget_tweaks%}
 {% load crispy_forms_filters %}
 {% load static %}
 {% load i18n %}
+
+{% block header %}
+  {% include "includes/adminHeader.html" %}
+{% endblock header %}
 
 {% block sidebar %}
 {% include 'includes/adminSideBar.html' %}
@@ -67,7 +71,12 @@
                         <div class="form-container simplebar" data-simplebar>
                           <!-- Form fields -->
                           {% for field in good_filter.form %}
-                          {{ field|attr:"class:text-start m-1" }}
+                            <div class="form-group">
+                              {% if field.name == "is_top" %}
+                                Показати лише топ товари:
+                              {% endif %}
+                              {{ field|attr:"class:text-start m-1" }}
+                            </div>
                           {% endfor %}
                         </div>
                         <!-- Submit button -->
@@ -190,6 +199,14 @@
                                       <p class="text-muted mb-0">Смак : <span class="fw-medium">{{ good.taste }}</span>
                                         | Розмір : <span class="fw-medium">{{ good.size }}</span></p>
                                     </div>
+                                    
+                                    {% if good.is_top %}
+                                      <div>
+                                        <i title="Топ товар" class="ri-star-s-fill fs-18 text-warning"></i>
+                                      </div>
+                                    {% endif %}
+                                      
+                                    
                                   </div>
                                 </span></td>
                               <td data-column-id="stock" class="gridjs-td text-center">{{ good.amount }}</td>
@@ -248,6 +265,19 @@
                                             class="ri-eye-fill align-bottom me-2 text-muted"></i> Показувати</a>
                                         </li>
                                       {% endif %}  
+                                      {% if good.is_top %}
+                                          <li>
+                                              <a class="dropdown-item edit-list" data-edit-id="1" href="{% url 'app_goods:set-top' good.id 'False' %}">
+                                                  <i class="ri-star-s-fill align-bottom me-2 text-muted"></i> Прибрати з топ
+                                              </a>
+                                          </li>
+                                      {% else %}
+                                          <li>
+                                              <a class="dropdown-item edit-list" data-edit-id="1" href="{% url 'app_goods:set-top' good.id 'True' %}">
+                                                  <i class="ri-star-s-fill align-bottom me-2 text-muted"></i> Додати в топ
+                                              </a>
+                                          </li>
+                                      {% endif %}
                                       
 
                                       
