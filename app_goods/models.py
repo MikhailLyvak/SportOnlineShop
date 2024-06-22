@@ -271,3 +271,25 @@ class GoodVarPhoto(models.Model):
 
     def __str__(self) -> str:
         return f"{self.good_variant.good.name} ({self.good_variant.size.name}, {self.good_variant.taste.name}) - Photo"
+
+
+class SliderImages(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to="sliders")
+    
+    def __str__(self) -> str:
+        return f"{self.title}"
+    
+    class Meta:
+        ordering = [
+            "title",
+        ]
+        verbose_name = "Slider Image"
+        verbose_name_plural = "Slider Images"
+        indexes = [
+            models.Index(
+                fields=["id", "title"],
+            ),
+            models.Index(fields=["id"]),
+            models.Index(fields=["title"]),
+        ]

@@ -36,6 +36,11 @@ const pcHtml = `
                 id="cartItemsAmount2">0</span>
               товари</a>
           </div>
+          <div class="col-auto">
+            <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary close-cart-btn" onclick="closeCartDropdown()">
+              <i class="ri-close-fill fs-16"></i>
+            </button>
+          </div>
         </div>
       </div>
       <div data-simplebar="init" style="max-height: 160px;" class="simplebar-scrollable-y">
@@ -75,7 +80,7 @@ const pcHtml = `
       </div>
       <div class="p-3 border-bottom-0 border-start-0 border-end-0 border-dashed border" style="display: block;">
         <div class="d-flex justify-content-between align-items-center pb-3">
-          <h5 class="m-0 text-muted">Total:</h5>
+          <h5 class="m-0 text-muted">Сума:</h5>
           <div class="px-2">
             <h5 class="m-0" id="totalCartPrice"></h5>
           </div>
@@ -89,7 +94,7 @@ const pcHtml = `
   </div>
   </div>
   <div class="d-flex">
-    <a href="http://185.233.116.13:8000/">
+    <a href="https://www.sportrelaxnutritions.com">
       <img src="/static/images/logo-srn.png" alt="" height="56">
     </a>
   </div>
@@ -107,7 +112,7 @@ const mobileHtml = `
   </button>
 </div>
 <div class="d-flex">
-  <a href="http://185.233.116.13:8000/">
+  <a href="https://www.sportrelaxnutritions.com">
     <img src="/static/images/logo-srn.png" alt="" height="56">
   </a>
 </div>
@@ -151,6 +156,11 @@ const mobileHtml = `
                 id="cartItemsAmount2">0</span>
               товари</a>
           </div>
+          <div class="col-auto">
+            <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary close-cart-btn" onclick="closeCartDropdown()">
+              <i class="ri-close-fill fs-16"></i>
+            </button>
+          </div>
         </div>
       </div>
       <div data-simplebar="init" style="max-height: 160px;" class="simplebar-scrollable-y">
@@ -190,7 +200,7 @@ const mobileHtml = `
       </div>
       <div class="p-3 border-bottom-0 border-start-0 border-end-0 border-dashed border" style="display: block;">
         <div class="d-flex justify-content-between align-items-center pb-3">
-          <h5 class="m-0 text-muted">Total:</h5>
+          <h5 class="m-0 text-muted">Сума:</h5>
           <div class="px-2">
             <h5 class="m-0" id="totalCartPrice"></h5>
           </div>
@@ -211,10 +221,10 @@ function setupSearchEventListeners() {
   if (searchGood) {
     searchGood.addEventListener("input", function () {
       clearTimeout(typingTimer);
-      const searchValue = this.value.trim();
+      searchValue = this.value.trim();
       typingTimer = setTimeout(function () {
         currentPage = 1;
-        const url = goodCardsListUrl(orderBy, searchValue, null, filterBy);
+        const url = goodCardsListUrl(orderBy, searchValue, filterByProducer);
         goodCardsList(url, true);
       }, doneTypingInterval);
     });
@@ -224,10 +234,9 @@ function setupSearchEventListeners() {
 
   if (mobileSearchButton) {
     mobileSearchButton.addEventListener("click", function () {
-      const searchValue = document.getElementById("searchGoodPhone").value.trim();
-      console.log(searchValue);
+      searchValue = document.getElementById("searchGoodPhone").value.trim();
       currentPage = 1;
-      const url = goodCardsListUrl(orderBy, searchValue, null, filterBy);
+      const url = goodCardsListUrl(orderBy, searchValue, filterByProducer);
       goodCardsList(url, true);
     });
   } else {

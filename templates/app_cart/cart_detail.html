@@ -14,8 +14,8 @@
 {% block content %}
 
 <div class="main-content">
-  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
-    <div class="container-fluid">
+  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21); min-height: 850px;">
+    <div class="container-fluid" style="padding-left: 0px; padding-right: 0px; max-width: 1440px; margin-top: 15px;">
       <div class="row mb-3">
         <div class="col-xl-8">
           <div class="row align-items-center gy-3 mb-3">
@@ -160,7 +160,7 @@
               <div class="card-header bg-light-subtle border-bottom-dashed">
                 <div class="text-center">
                   <h6 class="mb-2">
-                    Маэш <span class="fw-semibold">промо</span> код ?
+                    Маєш <span class="fw-semibold">промо</span> код ?
                   </h6>
                 </div>
                 <div class="hstack gap-3 px-3 mx-n3">
@@ -248,6 +248,7 @@
 <script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
 <script src="{% static 'js/shop/goodsCardsList.js' %}"></script>
 <script src="{% static 'js/shop/goodsCart.js' %}"></script>
+<script src="{% static 'js/shop/goodDetailTopBar.js' %}"></script>
 <script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
 
 

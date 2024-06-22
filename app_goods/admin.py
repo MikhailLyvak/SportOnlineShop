@@ -2,6 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.utils.safestring import mark_safe
 from django.urls import reverse
 
 from .models import (
@@ -13,7 +14,8 @@ from .models import (
     GoodVarPhoto,
     GoodTypeCluster,
     GoodType,
-    AimFilters
+    AimFilters,
+    SliderImages,
 )
 # from app_orders.models import Order, OrderItem
 
@@ -54,6 +56,20 @@ class GoodVariantUpdateForm(forms.ModelForm):
         ]
 
 
+class SliderImagesAdmin(admin.ModelAdmin):
+    list_display = ('title', 'image_thumbnail')
+    search_fields = ('title',)
+    list_filter = ('title',)
+    ordering = ('title',)
+
+    def image_thumbnail(self, obj):
+        if obj.image:
+            image_url = obj.image.url
+            return mark_safe(f'<a href="{image_url}" target="_blank"><img src="{image_url}" style="height: 80px;"/></a>')
+        return '-'
+    image_thumbnail.short_description = 'Image'
+
+
 class GoodVarPhotoInline(admin.TabularInline):
     model = GoodVarPhoto
     extra = 1
@@ -90,6 +106,7 @@ admin.site.register(Good)
 admin.site.register(Size)
 admin.site.register(Taste)
 admin.site.register(AimFilters)
+admin.site.register(SliderImages, SliderImagesAdmin)
 # admin.site.register(Order)
 # admin.site.register(OrderItem)
 admin.site.register(GoodVariant, GoodVariantAdmin)

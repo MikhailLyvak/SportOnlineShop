@@ -99,3 +99,8 @@ class GoodTypeClusterSerializer(serializers.ModelSerializer):
         model = GoodTypeCluster
         fields = ['id', 'name', 'good_types']
 
+class SliderImagesSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = SliderImages
+        fields = ["image", ]

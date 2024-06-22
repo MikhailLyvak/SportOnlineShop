@@ -13,11 +13,12 @@ function cartGoodsUpdate() {
       const totalCartPrice = document.getElementById('totalCartPrice');
 
       // Update cart item count
-      cartItemsAmount1.textContent = data[0].items.length;
-      cartItemsAmount2.textContent = data[0].items.length;
+      const itemCount = data[0].items.length;
+      cartItemsAmount1.textContent = itemCount;
+      cartItemsAmount2.textContent = itemCount;
 
       // Show all items in the cart
-      if (data[0].items.length !== 0) {
+      if (itemCount !== 0) {
         let html = '';
         data[0].items.forEach(item => {
           const truncatedVariant = item.good_variant.length > 23 ? item.good_variant.substring(0, 23) + '...' : item.good_variant;
@@ -51,7 +52,7 @@ function cartGoodsUpdate() {
           `;
         });
         ItemsContainerCart.innerHTML = html;
-        totalCartPrice.textContent = data[0].total_price;
+        totalCartPrice.textContent = `${data[0].total_price} грн.`;
       } else {
         let html = '';
         html += `
@@ -65,16 +66,15 @@ function cartGoodsUpdate() {
             <h5 class="mb-3">Ваша корзина пуста!</h5>
           </div>
         </div>
-        `
+        `;
         ItemsContainerCart.innerHTML = html;
-        totalCartPrice.textContent = data[0].total_price;
+        totalCartPrice.textContent = `${data[0].total_price} грн.`;
       }
     })
     .catch(error => {
       console.error('Error fetching cart data:', error);
     })
-    .finally(function () {
-    });
+    .finally(function () {});
 }
 
 

@@ -17,7 +17,7 @@
 <!-- ============================================================== -->
 <div class="main-content">
   <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding-left: 0px; padding-right: 0px; max-width: 1440px; margin-top: 15px;">
       <div class="row">
         <div class="col-xl-9">
           <div class="card">
@@ -600,6 +600,7 @@
 {% block extra_js %}
 <script src="{% static 'libs/cleave.js/dist/cleave.min.js'%}"></script>
 <script src="{% static 'js/pages/form-masks.init.js'%}"></script>
+<script src="{% static 'js/shop/goodDetailTopBar.js' %}"></script>
 <script src="{% static 'libs/prismjs/prism.js'%}"></script>
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <script>
@@ -626,8 +627,77 @@
 </script>
 <script>
   const NP_API_KEY = "{{ NP_API_KEY }}"
+  const orderPk = "{{ order.pk }}";
+  const invoiceStatus = "{{ order.invoice_status }}";
+  const paymentType = "{{ order.payment_type }}";
+  const orderReference = "{{ order.order_reference }}";
 </script>
 <script>
+  async function updateOrderStatus(orderReference, status) {
+    try {
+        const response = await fetch('/update_order_status/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ order_pk: orderPk, status: status })
+        });
+  
+        if (!response.ok) {
+            throw new Error('Failed to update order status');
+        }
+  
+    } catch (error) {
+        console.error('Error updating order status:', error);
+    }
+  }
+
+  function checkPaymentStatus(orderReference, orderPk) {
+
+    console.log('Checking payment status...');
+  
+    let intervalId;
+
+    const checkStatus = async () => {
+        try {
+            const response = await fetch('/check-payment-status/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ order_reference: orderReference })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to check payment status');
+            }
+
+            const data = await response.json();
+
+            if (data.transactionStatus === 'Approved') {
+              await updateOrderStatus(orderReference, 'PAYED');
+              window.location.href = `/order-detail/${orderPk}`;
+              clearInterval(intervalId); // Stop checking status
+            }
+        } catch (error) {
+            console.error('Error checking payment status:', error);
+        }
+    };
+
+    // Call checkStatus every 5 seconds for 1 minute
+    const interval = setInterval(checkStatus, 5000);
+    setTimeout(async () => {
+      clearInterval(intervalId); // Stop checking status
+      await updateOrderStatus(orderReference, 'TIMEOUT');
+    }, 60000);
+  }
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (invoiceStatus === "FILLED" && paymentType === "OP") {
+    checkPaymentStatus(orderReference, orderPk);
+  }
+});
+
   function debounce(func, delay) {
     let timer;
     return function (...args) {
@@ -934,9 +1004,6 @@
           setTimeout(() => {
             window.location.href = paymentUrl;
         }, 1000);
-          setTimeout(() => {
-            checkPaymentStatus(orderReference, orderPk);
-        }, 1000);
         }
         
 
@@ -944,70 +1011,12 @@
         console.error('Error updating order:', error);
     }
   });
-
-  function checkPaymentStatus(orderReference, orderPk) {
-  
-    let intervalId;
-
-    const checkStatus = async () => {
-        try {
-            const response = await fetch('/check-payment-status/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ order_reference: orderReference })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to check payment status');
-            }
-
-            const data = await response.json();
-
-            if (data.transactionStatus === 'Approved') {
-              await updateOrderStatus(orderReference, 'PAYED');
-              window.location.href = `/order-detail/${orderPk}`;
-              clearInterval(intervalId); // Stop checking status
-            }
-        } catch (error) {
-            console.error('Error checking payment status:', error);
-        }
-    };
-
-    // Call checkStatus every 5 seconds for 1 minute
-    const interval = setInterval(checkStatus, 5000);
-    setTimeout(async () => {
-      clearInterval(intervalId); // Stop checking status
-      await updateOrderStatus(orderReference, 'TIMEOUT');
-  }, 60000);
-}
-
-async function updateOrderStatus(orderReference, status) {
-  const orderPk = "{{ order.pk }}";
-  try {
-      const response = await fetch('/update_order_status/', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ order_pk: orderPk, status: status })
-      });
-
-      if (!response.ok) {
-          throw new Error('Failed to update order status');
-      }
-
-  } catch (error) {
-      console.error('Error updating order status:', error);
-  }
-}
 });
 
 </script>
 <script>
   async function updateOrderStatusButton(orderReference, status) {
-    const orderPk = "{{ order.pk }}";
+
     try {
         const response = await fetch('/update_order_status/', {
             method: 'POST',

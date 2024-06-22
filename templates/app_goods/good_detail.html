@@ -18,13 +18,17 @@
 <div class="main-content">
 
   <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding-left: 0px; padding-right: 0px; max-width: 1440px; margin-top: 15px;">
 
       <!-- start page title -->
       <div class="row">
         <div class="col-12">
           <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Сторінка товару</h4>
+            <h4 class="mb-sm-0">
+              <a href="{% url 'app_goods:shop-goods' %}" class="text-decoration-underline" id="clearall">
+                До списку товарів
+              </a>
+            </h4>
           </div>
         </div>
       </div>
@@ -102,11 +106,8 @@
                         </div>
                       </div>
                       <div class="flex-shrink-0">
-                        <a class="btn btn-info m-1" href="{% url 'app_goods:shop-goods' %}">До списку товарів</a>
-                      </div>
-                      <div class="flex-shrink-0">
-                        <button class="btn btn-success waves-effect waves-light m-1" onclick=addToCart({{ good.id }})>
-                          <i class="ri-shopping-cart-2-line"></i>
+                        <button class="btn button-heartbeat btn-success waves-effect waves-light m-1" onclick=addToCart({{good.id}})>
+                          <i class="ri-shopping-cart-2-line fs-18"></i>
                         </button>
                       </div>
                     </div>
@@ -209,11 +210,11 @@
                     <!-- end row -->
 
                     <div class="mt-4 text-muted">
-                      <h5 class="fs-14">Description :</h5>
+                      <h5 class="fs-14">Опис товару :</h5>
                       <p>{{ good.description }}</p>
                     </div>
                     <div class="product-content mt-5">
-                      <h5 class="fs-14 mb-3">Product Description :</h5>
+                      <h5 class="fs-14 mb-3">Характеристики :</h5>
                       <nav>
                         <ul class="nav nav-tabs nav-tabs-custom nav-info" id="nav-tab" role="tablist">
                           <li class="nav-item" role="presentation">
@@ -278,6 +279,10 @@
                         </div>
                       </div>
                     </div>
+                    <h5 class="fs-14 mt-3 mb-3">Спробуй також :</h5>
+                    <div class="row row-cols-1 row-cols-xxl-6 m-0" id="TopGoodCardsListContainer">
+                      <!-- Товари завантажуються динамічно за допомогою AJAX -->
+                  </div>
                     <!-- product-content -->
                     <!-- end card body -->
                   </div>
@@ -318,9 +323,12 @@
 {% block extra_js %}
 <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 <script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
-<script src="{% static 'js/shop/goodsCardsList.js' %}"></script>
+<script src="{% static 'js/shop/temp_db.js' %}"></script>
+<script src="{% static 'js/shop/TopGoodsList.js' %}"></script>
+
 <script src="{% static 'js/shop/goodsCart.js' %}"></script>
 <script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
+<script src="{% static 'js/shop/goodDetailTopBar.js' %}"></script>
 <script src="{% static 'libs/swiper/swiper-bundle.min.js'%}"></script>
 <script src="{% static 'js/pages/ecommerce-product-details.init.js'%}"></script>
 

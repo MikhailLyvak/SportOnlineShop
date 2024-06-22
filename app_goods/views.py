@@ -3,13 +3,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.urls import reverse_lazy
 from django.views import generic
+from decimal import Decimal
+import os
+from django.conf import settings
 from utils.permissions import admin_login
 from rest_framework.views import APIView
 from django_filters.views import FilterView
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django.db.models import Prefetch, Q
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import filters, permissions
 from django.db.models.query import QuerySet
@@ -21,8 +25,10 @@ from .filters import GoodVariantFilter
 from .serializers import *
 from .pagination import Pagination
 
+from utils.excel_parser import parse_excel
 
-class AdminGoodsListView(LoginRequiredMixin, FilterView):
+
+class AdminGoodsListView(LoginRequiredMixin, ListView):
     model = GoodVariant
     template_name = "app_goods/admin_goods_list.html"
     context_object_name = "goods_list"
@@ -33,6 +39,10 @@ class AdminGoodsListView(LoginRequiredMixin, FilterView):
         queryset = GoodVariant.objects.select_related(
             "size", "taste", "good"
         ).prefetch_related("photos").order_by("-amount")
+        
+        good_filter = GoodVariantFilter(self.request.GET, queryset=queryset)
+
+        queryset = good_filter.qs
 
         name = self.request.GET.get("name")
         if name:
@@ -45,7 +55,7 @@ class AdminGoodsListView(LoginRequiredMixin, FilterView):
 
         name = self.request.GET.get("name", "")
         context["search_form"] = NameSearchForm(initial={"name": name})
-        context["good_filter"] = self.filterset_class(
+        context["good_filter"] = GoodVariantFilter(
             self.request.GET, queryset=self.get_queryset()
         )
         context["add_discount_form"] = GoodDiscountForm()
@@ -155,9 +165,15 @@ class GoodsListView(ListAPIView):
             .prefetch_related("photos").order_by("name")
         )
 
-        good_type_name = self.request.query_params.get("good_type_name")
+        good_type_name = self.request.query_params.get("good__good_type__name")
         if good_type_name:
-            queryset = queryset.filter(good__good_type__name=good_type_name)
+            good_type_list = good_type_name.split(',')
+            queryset = queryset.filter(good__good_type__name__in=good_type_list)
+
+        good_producer_names = self.request.query_params.get("good__producer__name")
+        if good_producer_names:
+            producers_list = good_producer_names.split(',')
+            queryset = queryset.filter(good__producer__name__in=producers_list)
             
         aim_filter_name = self.request.query_params.get("aim_filter")
         if aim_filter_name:
@@ -221,8 +237,69 @@ class GoodDetailPage(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        good = Good.objects.filter(goodvariant=self.object).first()
-        sizes = [(good_var.size.name, good_var.id) for good_var in good.goodvariant_set.all().order_by("size__name")]
-        print(sizes)
+        current_good_variant = self.object
+        good = current_good_variant.good
+        taste = current_good_variant.taste
+        good_var_taste = GoodVariant.objects.filter(taste=taste).first()
+        sizes = [(good_var.size.name, good_var.id) for good_var in good.goodvariant_set.filter(taste=good_var_taste.taste).order_by("size__name")]
+        top_goods = GoodVariant.objects.filter(is_top=True)[:6]
+        context["top_goods"] = top_goods
         context["sizes"] = sizes
         return context
+
+
+class Blog(TemplateView):
+    template_name = "coming_soon.html"
+    
+
+def parse_excel_view(request):
+    if request.method == "POST" and request.FILES.get("excel_file"):
+        effected_goods = 0
+        excel_file = request.FILES["excel_file"]
+
+        file_path = os.path.join(settings.MEDIA_ROOT, excel_file.name)
+        with open(file_path, "wb") as destination:
+            for chunk in excel_file.chunks():
+                destination.write(chunk)
+
+        try:
+            result_data = parse_excel(file_path)
+
+            for data in result_data:
+                good_var = GoodVariant.objects.filter(code=data.code).first()
+                if good_var:
+                    good_var.stock_price = data.price
+                    good_var.sell_price = round(data.price * Decimal('1.2'), 2)
+                    if good_var.on_discount:
+                        good_var.discount_price = round(
+                            good_var.sell_price
+                            * (100 - good_var.discount_percentage)
+                            / 100,
+                            2,
+                        )
+                    good_var.save()
+                    effected_goods += 1
+
+            os.remove(file_path)
+            messages.success(
+                request,
+                "Prices checked or updated successfully! For {} goods".format(effected_goods),
+            )
+            return redirect(reverse("app_goods:admin-goods"))
+
+        except Exception as e:
+            messages.warning(request, "Prices not updated becuse of problem!!!")
+            os.remove(file_path)
+            return redirect(reverse("app_goods:admin-goods"))
+
+    return redirect(reverse("app_goods:admin-goods"))
+
+
+class SliderImagesListAPIView(ListAPIView):
+    serializer_class = SliderImagesSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+    def get_queryset(self) -> QuerySet:
+        queryset = SliderImages.objects.all()
+        
+        return queryset

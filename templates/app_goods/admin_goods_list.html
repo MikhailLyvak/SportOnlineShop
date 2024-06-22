@@ -112,6 +112,12 @@
                   </div>
                 </div>
                 <div class="col-sm-auto">
+                  <a type="button" data-bs-toggle="modal" data-bs-target="#UpdateGoodsPricesModal"
+                    class="btn btn-info">
+                    <i class="ri-upload-cloud-2-fill align-bottom me-1"></i> Оновити прийс
+                  </a>
+                </div>
+                <div class="col-sm-auto">
                   <form action="" method="get">
                     {% csrf_token %}
                     <div class="col-sm">
@@ -129,7 +135,7 @@
               </div>
             </div>
             <!-- end card header -->
-            <div class="card-body" style="min-height:632px;">
+            <div class="card-body" style="min-height:550px;">
               <div class="tab-content text-muted">
                 <div class="tab-pane active" id="productnav-all" role="tabpanel">
                   <div id="table-product-list-all" class="table-card gridjs-border-none">
@@ -143,12 +149,6 @@
                                 style="width: 460px;">
                                 <div class="row align-items-center justify-content-center">
                                   <div class="col-12 m-0">Продукт</div>
-                                </div>
-                              </th>
-                              <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
-                                style="min-width: 70px;">
-                                <div class="row align-items-center justify-content-center">
-                                  <div class="col-12 m-0 text-center">К-ть</div>
                                 </div>
                               </th>
                               <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
@@ -209,7 +209,6 @@
                                     
                                   </div>
                                 </span></td>
-                              <td data-column-id="stock" class="gridjs-td text-center">{{ good.amount }}</td>
                               <td data-column-id="price" class="gridjs-td text-center"><span>{{ good.stock_price }}
                                   грн.</span></td>
                               <td data-column-id="orders" class="gridjs-td text-center">
@@ -367,7 +366,7 @@
             </div>
             <!-- end card body -->
           </div>
-          <div class="row">
+          <div class="row" style="min-height:50px;">
             <div class="col-4">
               <div class="text-start" style="margin-left: 50px;">
 
@@ -391,6 +390,29 @@
     </div>
   </div>
 </div>
+
+<div id="UpdateGoodsPricesModal" class="modal fade" tabindex="-1" aria-labelledby="UpdateGoodsPricesModalLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="UpdateGoodsPricesModalLabel">Оновлення цін з Excel прайсу</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+        </div>
+        <div class="modal-body">
+          <form id="uploadForm" method="post" enctype="multipart/form-data" action="{% url 'app_goods:parse_excel' %}">
+            {% csrf_token %}
+            <input class="form-control" type="file" name="excel_file">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Відміна</button>
+          <button class="btn btn-success" type="submit">Оновити ціни</button>
+        </div>
+        </form>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div>
 {% endblock content %}
 {% block extra_js %}
 

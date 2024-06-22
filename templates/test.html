@@ -1,37 +1,20 @@
-<li class="nav-item">
-  <a class="nav-link menu-link collapsed" href="#sidebarAdvanceUI" data-bs-toggle="collapse" role="button"
-    aria-expanded="false" aria-controls="sidebarAdvanceUI">
-    <i class="ri-stack-line"></i> <span data-key="t-advance-ui">Advance UI</span>
-  </a>
-  <div class="menu-dropdown collapse" id="sidebarAdvanceUI" style="">
-    <ul class="nav nav-sm flex-column">
-      <li class="nav-item">
-        <a href="advance-ui-sweetalerts.html" class="nav-link" data-key="t-sweet-alerts">Sweet Alerts</a>
-      </li>
-      <li class="nav-item">
-        <a href="advance-ui-nestable.html" class="nav-link" data-key="t-nestable-list">Nestable List</a>
-      </li>
-      <li class="nav-item">
-        <a href="advance-ui-scrollbar.html" class="nav-link" data-key="t-scrollbar">Scrollbar</a>
-      </li>
-      <li class="nav-item">
-        <a href="advance-ui-animation.html" class="nav-link" data-key="t-animation">Animation</a>
-      </li>
-      <li class="nav-item">
-        <a href="advance-ui-tour.html" class="nav-link" data-key="t-tour">Tour</a>
-      </li>
-      <li class="nav-item">
-        <a href="advance-ui-swiper.html" class="nav-link" data-key="t-swiper-slider">Swiper Slider</a>
-      </li>
-      <li class="nav-item">
-        <a href="advance-ui-ratings.html" class="nav-link" data-key="t-ratings">Ratings</a>
-      </li>
-      <li class="nav-item">
-        <a href="advance-ui-highlight.html" class="nav-link" data-key="t-highlight">Highlight</a>
-      </li>
-      <li class="nav-item">
-        <a href="advance-ui-scrollspy.html" class="nav-link" data-key="t-scrollSpy">ScrollSpy</a>
-      </li>
-    </ul>
+<div class="row align-items-center justify-content-center ${window.innerWidth < 768 ? 'mb-1' : 'mb-1'}">
+  <div class="col-8 text-start align-self-center pt-2">
+    ${good.on_discount ?
+      `<p class="text-danger m-0 mb-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-10' : 'fs-12')}"><del>${good.sell_price} грн.</del></p> <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-12' : 'fs-14')}">${good.discount_price} грн.</h2>` :
+      `<p class="text-primary m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-12' : 'fs-14')}">${good.sell_price} грн.</p>`
+    }
   </div>
-</li>
+  <div class="col-4 p-0 m-0 text-start">
+    <button class="btn btn-soft-success waves-effect waves-light ${window.innerWidth < 420 ? 'm-0' : 'm-1'}" onclick=addToCart(${good.id})>
+      <i class="ri-shopping-cart-2-line ${window.innerWidth < 420 ? 'f-14' : 'fs-14'}"></i>
+    </button>
+  </div>
+</div>
+
+<div class="d-flex" style="justify-content: space-between;">
+  <p>4,500.00 grn.</p>
+  <button class="btn btn-soft-success waves-effect waves-light ${window.innerWidth < 420 ? 'm-0' : 'm-1'}" onclick=addToCart(${good.id})>
+    <i class="ri-shopping-cart-2-line ${window.innerWidth < 420 ? 'f-14' : 'fs-14'}"></i>
+  </button>
+</div>

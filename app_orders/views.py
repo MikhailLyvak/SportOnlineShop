@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import status
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from utils.wayforpay import MLPay, PaymentStatus
 
 from utils.cart_calc import calculate_result
@@ -48,6 +49,7 @@ def create_order(request):
     return redirect("app_orders:order-detail-view", pk=create_order.pk)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class OrderDetail(DetailView):
     model = OrderFix
     template_name = "app_orders/order_detail.html"
@@ -74,7 +76,26 @@ class OrderDetail(DetailView):
         context["NP_API_KEY"] = os.environ.get("NP_API_KEY", "")
 
         return context
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests here. Typically used to process data from external services.
+        """
+        # Example: Process incoming POST data
+        post_data = request.POST
 
+        # Assuming you get an order ID from the POST data
+        print(post_data)
+        order_reference = post_data.get('orderReference')
+        order_status = post_data.get('transactionStatus')
+        
+        if order_status == "Approved":
+            order = OrderFix.objects.filter(order_reference=order_reference).first()
+            order.invoice_status == "PAYED"
+            order.save()
+        
+        return redirect("app_orders:order-detail-view", pk=order.pk)
+    
 
 class OrderViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = OrderFix.objects.all()
@@ -177,7 +198,7 @@ class AdminOrdersListView(LoginRequiredMixin, ListView):
     model = OrderFix
     template_name = "app_orders/admin_orders_list.html"
     context_object_name = "orders_list"
-    paginate_by = 9
+    paginate_by = 8
 
     def get_queryset(self) -> QuerySet:
         queryset = OrderFix.objects.exclude(

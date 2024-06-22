@@ -70,17 +70,23 @@ class CartDetailPage(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        session = self.request.session
+        if not session.session_key:
+            session.create()
 
-        cart_items = (
-            Cart.objects.get(session=self.request.session.session_key)
-            .items.select_related(
-                "good_variant",
-                "good_variant__size",
-                "good_variant__good__producer",
-                "good_variant__taste",  
-            ).prefetch_related("good_variant__photos")
-            .order_by("create_date")
-        )
+        session_key = session.session_key
+        
+        session_obj, created = Session.objects.get_or_create(session_key=session_key)
+        
+        cart, created = Cart.objects.get_or_create(session=session_obj)
+
+        cart_items = cart.items.select_related(
+            "good_variant",
+            "good_variant__size",
+            "good_variant__good__producer",
+            "good_variant__taste",  
+        ).prefetch_related("good_variant__photos").order_by("create_date")
         calc_result = calculate_result(cart_items)
         context["calc_result"] = calc_result
         context["cart_items"] = cart_items

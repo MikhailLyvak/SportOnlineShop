@@ -25,13 +25,20 @@ class GoodVariantFilter(django_filters.FilterSet):
         widget=forms.CheckboxSelectMultiple(),
         label="Good Type Name",
     )
-    
+
     is_top = django_filters.BooleanFilter(
         field_name="is_top",
         widget=forms.CheckboxInput(),
-        label="Show Top Goods",
+        label="Show Only Top Goods",
+        method='filter_is_top'
     )
 
     class Meta:
         model = GoodVariant
         fields = ["good__good_type__name", "is_top"]
+
+    def filter_is_top(self, queryset, name, value):
+        if value is False:
+            return queryset
+        return queryset.filter(**{name: value})
+

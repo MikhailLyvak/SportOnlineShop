@@ -1,93 +1,93 @@
-let orderBy = "name";
-let filterBy = null;
-let typingTimer;
-let nextUrl = null;
-const doneTypingInterval = 500;
-let opacityButton = 0.9;
-
-function goodCardsListUrl(order_by, searchValue, goodType, filterBy, aim = null) {
+function goodCardsListUrl(order_by, searchValue, filterByProducer, filterByType, aim = null) {
   let url
-  if (filterBy === undefined || filterBy === null) {
-    url = `/api/goods/?ordering=${order_by}${searchValue ? '&search=' + encodeURIComponent(searchValue) : ''}`;
-  } else {
-    url = `/api/goods/?ordering=${order_by}&good_type_name=${filterBy}${searchValue ? '&search=' + encodeURIComponent(searchValue) : ''}`;
+  console.log(searchValue);
+  url = `/api/goods/?ordering=${order_by}${searchValue ? '&search=' + encodeURIComponent(searchValue) : ''}`;
+
+  if (filterByProducer.length > 0) {
+    url += `&good__producer__name=${encodeURIComponent(filterByProducer.join(','))}`;
   }
 
-  if (goodType) {
-    url += `&good_type_name=${goodType}`;
+  if (filterByType.length > 0) {
+    url += `&good__good_type__name=${encodeURIComponent(filterByType.join(','))}`;
   }
 
   if (aim) {
-    url += `&aim_filter=${aim}`
+    url += `&aim_filter=${encodeURIComponent(aim)}`;
   }
+  console.log(url)
   return url;
 }
 
+function toggleProducerFilter(producerName, checkbox) {
+  if (checkbox.checked) {
+    filterByProducer.push(producerName);
+  } else {
+    filterByProducer = filterByProducer.filter(producer => producer !== producerName);
+  }
+  goodCardsList(goodCardsListUrl(orderBy, searchValue, filterByProducer, filterByType), true);
+}
+
+function toggleTypeFilter(typeName, checkbox) {
+  if (checkbox.checked) {
+    filterByType.push(typeName);
+  } else {
+    filterByType = filterByType.filter(typeMl => typeMl !== typeName);
+  }
+  goodCardsList(goodCardsListUrl(orderBy, searchValue, filterByProducer, filterByType), true);
+}
+
 function caruselLoader() {
-  const caruselDiv = document.getElementById("caruselDiv")
+  const caruselDiv = document.getElementById("caruselDiv");
 
-  const pcCarusel = `
-  <div class="card p-2 border border-2 m-0">
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                aria-label="Slide 3"></button>
+  // Fetch data from API
+  fetch('/api/sliders/')
+    .then(response => response.json())
+    .then(data => {
+      // Create carousel items for both PC and mobile versions
+      const pcCarusel = `
+        <div class="card p-2 border rounded-4 border-2 m-0">
+          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                  ${data.map((_, index) => `
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${index}"
+                        class="${index === 0 ? 'active' : ''}" aria-label="Slide ${index + 1}"></button>
+                  `).join('')}
+              </div>
+              <div class="carousel-inner" role="listbox">
+                  ${data.map((item, index) => `
+                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                      <img class="d-block img-fluid mx-auto" src="${item.image}" alt="Slide ${index + 1}">
+                    </div>
+                  `).join('')}
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                  data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                  data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+              </a>
+          </div>
         </div>
-        <div class="carousel-inner" role="listbox">
-            <div class="carousel-item active">
-                <img class="d-block img-fluid mx-auto" src="static/images/secondImage.jpg"
-                    alt="First slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block img-fluid mx-auto" src="static/images/secondImage.jpg"
-                    alt="Second slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block img-fluid mx-auto" src="static/images/secondImage.jpg"
-                    alt="Third slide">
-            </div>
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
-  </div>
-  `
+      `;
 
-  const mobileCarusle = `
-      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+      const mobileCarusel = `
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                  class="active" aria-current="true" aria-label="Slide 1"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                  aria-label="Slide 2"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                  aria-label="Slide 3"></button>
+              ${data.map((_, index) => `
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${index}"
+                    class="${index === 0 ? 'active' : ''}" aria-label="Slide ${index + 1}"></button>
+              `).join('')}
           </div>
           <div class="carousel-inner" role="listbox">
-              <div class="carousel-item active">
-                  <img class="d-block img-fluid mx-auto" src="static/images/secondImage.jpg"
-                      alt="First slide">
-              </div>
-              <div class="carousel-item">
-                  <img class="d-block img-fluid mx-auto" src="static/images/secondImage.jpg"
-                      alt="Second slide">
-              </div>
-              <div class="carousel-item">
-                  <img class="d-block img-fluid mx-auto" src="static/images/secondImage.jpg"
-                      alt="Third slide">
-              </div>
+              ${data.map((item, index) => `
+                <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                  <img class="d-block img-fluid mx-auto" src="${item.image}" alt="Slide ${index + 1}">
+                </div>
+              `).join('')}
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
               data-bs-slide="prev">
@@ -99,14 +99,17 @@ function caruselLoader() {
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="sr-only">Next</span>
           </a>
-      </div>
-  `
+        </div>
+      `;
 
-  if (window.innerWidth > 950) {
-    caruselDiv.innerHTML = pcCarusel;
-  } else {
-    caruselDiv.innerHTML = mobileCarusle;
-  }
+      // Determine which version to show based on screen width
+      const isMobile = window.innerWidth <= 950;
+      caruselDiv.innerHTML = isMobile ? mobileCarusel : pcCarusel;
+    })
+    .catch(error => {
+      console.error('Error fetching slider images:', error);
+      // Handle error scenario
+    });
 };
 
 function AdaptiveSettings() {
@@ -124,7 +127,7 @@ function AdaptiveSettings() {
 
 document.addEventListener("DOMContentLoaded", function () {
   // Load goods only once on initial page load
-  const url = goodCardsListUrl(orderBy, null, null, filterBy);
+  const url = goodCardsListUrl(orderBy, null, filterByProducer, filterByType);
   goodCardsList(url);
   TopGoodCardsList("/api/top-goods/");
   caruselLoader();
@@ -178,9 +181,9 @@ checkboxes.forEach(function (checkbox) {
       orderBy = checkbox.id;
       let url = ''
       if (document.getElementById('searchGood')) {
-        url = goodCardsListUrl(orderBy, document.getElementById('searchGood').value.trim(), null, filterBy);
+        url = goodCardsListUrl(orderBy, document.getElementById('searchGood').value.trim(), filterByProducer, filterByType);
       } else {
-        url = goodCardsListUrl(orderBy, document.getElementById('searchGoodPhone').value.trim(), null, filterBy);
+        url = goodCardsListUrl(orderBy, document.getElementById('searchGoodPhone').value.trim(), filterByProducer, filterByType);
       }
 
       goodCardsList(url, true);
@@ -204,7 +207,7 @@ function setColumnLayout() {
     numCols = Math.min(6, totalGoods);
   }
 
-  goodCardsListContainer.className = `row row-cols-1 row-cols-xxl-${numCols} g-2`;
+  goodCardsListContainer.className = `row row-cols-1 row-cols-xxl-${numCols} m-0`;
 }
 
 
@@ -234,7 +237,7 @@ function goodCardsList(url, isSearch = false) {
     .then(data => {
       if (data.results.length === 0) {
         goodCardsListContainer.innerHTML = `
-        <div class="alert border-dashed alert-danger" role="alert" style="transform: translate(100%);">
+        <div class="alert border-dashed alert-danger" role="alert">
         <div class="noresult"> <!-- or display: inline-flex; -->
         <div class="text-center">
           <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
@@ -262,8 +265,8 @@ function goodCardsList(url, isSearch = false) {
                 alt="Card image cap">
             </a>
             ${good.on_discount ? `<div class="ribbon-two ribbon-two-danger"><span class="fs-18">-${good.discount_percentage}%</span></div>` : ''}
-            <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body">
-              <h4 placeholder="${good.name}" class="card-title mb-2 ${window.innerWidth < 420 ? 'fs-12' : 'fs-14'}">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
+            <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body p-2">
+            <h4 placeholder="${good.name}" class="card-title mb-2 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-14')}">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
               <div class="row md-1 mt-1">
                 <div class="col-12">
                 ${sortedSizes.map((size, index) => `
@@ -275,19 +278,25 @@ function goodCardsList(url, isSearch = false) {
                 </div>
               </div>
 
-              <div class="row align-items-center justify-content-center ${window.innerWidth < 768 ? 'mb-1' : 'mb-1'}">
-                <div class="col-8 text-start align-self-center pt-2">
-                  ${good.on_discount ?
-            `<p class="text-danger m-0 mb-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-10' : 'fs-12')}"><del>${good.sell_price} грн.</del></p> <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-12' : 'fs-14')}">${good.discount_price} грн.</h2>` :
-            `<p class="text-primary m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-12' : 'fs-14')}">${good.sell_price} грн.</p>`
-          }
-                </div>
-                <div class="col-4 p-0 m-0 text-start">
+              <div class="d-flex" style="justify-content: space-between; align-items: center;">
+                ${good.on_discount ?
+                  `<div>
+                  <p class="text-danger d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-10' : 'fs-12')}">
+                    <del>${good.sell_price} грн.</del>
+                  </p>
+                  <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-12' : 'fs-14')}">
+                    ${good.discount_price} грн.
+                  </h2>
+                </div>` :
+                `<div>
+                  <p class="text-primary d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-12' : 'fs-14')}">
+                    ${good.sell_price} грн.
+                  </p>
+                </div>`
+                }
                 <button class="btn btn-soft-success waves-effect waves-light ${window.innerWidth < 420 ? 'm-0' : 'm-1'}" onclick=addToCart(${good.id})>
                   <i class="ri-shopping-cart-2-line ${window.innerWidth < 420 ? 'f-14' : 'fs-14'}"></i>
                 </button>
-                  
-                </div>
               </div>
             </div>
           </div>
@@ -329,7 +338,6 @@ function TopGoodCardsList(url) {
       return response.json();
     })
     .then(data => {
-      console.log(data);
       data.forEach(good => {
 
         const sortedSizes = good.sizes.slice().sort((a, b) => a.name.localeCompare(b.name)).slice(0, 4);
@@ -344,8 +352,8 @@ function TopGoodCardsList(url) {
                 alt="Card image cap">
             </a>
             ${good.on_discount ? `<div class="ribbon-two ribbon-two-danger"><span class="fs-18">-${good.discount_percentage}%</span></div>` : ''}
-            <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body">
-              <h4 placeholder="${good.name}" class="card-title mb-2 ${window.innerWidth < 420 ? 'fs-12' : 'fs-14'}">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
+            <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body p-2">
+              <h4 placeholder="${good.name}" class="card-title mb-2 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-14')}">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
               <div class="row md-1 mt-1">
                 <div class="col-12">
                 ${sortedSizes.map((size, index) => `
@@ -356,20 +364,25 @@ function TopGoodCardsList(url) {
               `).join('')}
                 </div>
               </div>
-
-              <div class="row align-items-center justify-content-center ${window.innerWidth < 768 ? 'mb-1' : 'mb-1'}">
-                <div class="col-8 text-start align-self-center pt-2">
-                  ${good.on_discount ?
-            `<p class="text-danger m-0 mb-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-10' : 'fs-12')}"><del>${good.sell_price} грн.</del></p> <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-12' : 'fs-14')}">${good.discount_price} грн.</h2>` :
-            `<p class="text-primary m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth < 768 ? 'fs-12' : 'fs-14')}">${good.sell_price} грн.</p>`
-          }
-                </div>
-                <div class="col-4 p-0 m-0 text-start">
+              <div class="d-flex" style="justify-content: space-between; align-items: center;">
+                ${good.on_discount ?
+                  `<div>
+                  <p class="text-danger d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-10' : 'fs-12')}">
+                    <del>${good.sell_price} грн.</del>
+                  </p>
+                  <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-12' : 'fs-14')}">
+                    ${good.discount_price} грн.
+                  </h2>
+                </div>` :
+                `<div>
+                  <p class="text-primary d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-12' : 'fs-14')}">
+                    ${good.sell_price} грн.
+                  </p>
+                </div>`
+                }
                 <button class="btn btn-soft-success waves-effect waves-light ${window.innerWidth < 420 ? 'm-0' : 'm-1'}" onclick=addToCart(${good.id})>
                   <i class="ri-shopping-cart-2-line ${window.innerWidth < 420 ? 'f-14' : 'fs-14'}"></i>
                 </button>
-                  
-                </div>
               </div>
             </div>
           </div>
@@ -400,7 +413,9 @@ function updatePaginationButtons() {
     nextButton.classList.remove('disabled');
   } else {
     var nextButton = document.getElementById('next_button');
-    nextButton.remove();
+    if (nextButton) {
+      nextButton.remove();
+    }
   }
 }
 
@@ -440,46 +455,6 @@ function notify(message, type) {
     backgroundColor: msg_color,
     stopOnFocus: true,
   }).showToast();
-}
-
-function addToCart(variantId) {
-  // Define the URL of the API endpoint
-  const addToCartUrl = '/api/add_to_cart/';
-
-  // Create the request body
-  const requestBody = {
-    variant_id: variantId
-  };
-
-  // Define Fetch options
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  };
-
-  // Perform the Fetch request
-  fetch(addToCartUrl, requestOptions)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to add item to cart');
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Handle successful response
-      console.log(data.message);
-    })
-    .catch(error => {
-      // Handle errors
-      console.error('Error adding item to cart:', error);
-    })
-    .finally(() => {
-      notify("Додано в корзину.", 'alert-success');
-      cartGoodsUpdate();
-    })
 }
 
 function notify(message, type) {

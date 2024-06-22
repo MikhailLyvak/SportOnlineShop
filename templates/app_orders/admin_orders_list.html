@@ -1,9 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'adminBase.html' %}
 {% load crispy_forms_tags widget_tweaks%}
 {% load crispy_forms_filters %}
 {% load static %}
 {% load humanize %}
 {% load i18n %}
+
+{% block header %}
+  {% include "includes/adminHeader.html" %}
+{% endblock header %}
 
 {% block sidebar %}
 {% include 'includes/adminSideBar.html' %}
@@ -80,7 +84,7 @@
         <div class="col-xl-9 col-lg-8">
           <div class="card border">
             <!-- end card header -->
-            <div class="card-body" style="min-height:690px;">
+            <div class="card-body" style="min-height:550px;">
               <div class="tab-content text-muted">
                 <div class="tab-pane active" id="productnav-all" role="tabpanel">
                   <div id="table-product-list-all" class="table-card gridjs-border-none">
@@ -136,7 +140,7 @@
                           </thead>
                           <tbody class="gridjs-tbody">
                             {% for order in orders_list %}
-                            <tr class="gridjs-tr" {% if order.is_delivered %} style="background-color: rgba(40, 237, 87, 0.28);" {% endif %}>
+                            <tr class="gridjs-tr" {% if order.is_delivered %} style="background-color: rgba(194, 255, 219, 0.28);" {% endif %}>
                               <td data-column-id="stock" class="gridjs-td text-center">
                                 № {{ order.pk }} 
                                   
@@ -204,8 +208,7 @@
                                           {% else %}
                                             <td>{{ order.total_clear_price|floatformat:"2"|intcomma }} грн.</td>
                                           {% endif %}
-                                        </tr>
-                                        
+                                        </tr>                                       
                                       </tbody>
                                       
                                     </table>
@@ -218,7 +221,7 @@
                               <td data-column-id="price" class="gridjs-td text-center"><span>
                                 <button
                                   type="button"
-                                  class="btn btn-info dropdown-toggle"
+                                  class="btn btn-light dropdown-toggle border"
                                   data-bs-toggle="dropdown"
                                   aria-haspopup="true"
                                   aria-expanded="false"
@@ -261,7 +264,7 @@
                               <td data-column-id="price" class="gridjs-td text-center"><span>
                                 <button
                                   type="button"
-                                  class="btn btn-primary dropdown-toggle"
+                                  class="btn btn-light dropdown-toggle border"
                                   data-bs-toggle="dropdown"
                                   aria-haspopup="true"
                                   aria-expanded="false"

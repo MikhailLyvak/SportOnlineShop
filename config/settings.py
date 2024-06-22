@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.humanize',
     'mathfilters',
-    "debug_toolbar",
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -85,9 +84,6 @@ MIDDLEWARE = [
 ]
 
 IS_DUBUG = env.bool("IS_DUBUG")
-
-if IS_DUBUG:
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
     
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda request: request.META.get('REMOTE_ADDR') == '127.0.0.1',
@@ -104,16 +100,17 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 CORS_ORIGIN_WHITELIST = [
     'http://185.233.116.13:8000',
     'http://localhost:8000',
+    "https://www.sportrelaxnutritions.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://185.233.116.13:8000",
+    'https://secure.wayforpay.com',
+    "https://www.sportrelaxnutritions.com",
+    "https://sportrelaxnutritions.com",
 ]
 
 ASSETS_ROOT = "/static/assets"
-
-
-STATIC_URL = "/static/assets/"
 
 AUTHENTICATION_BACKENDS = (
     "admin_user.backends.EmailBackend",

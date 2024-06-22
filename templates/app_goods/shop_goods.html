@@ -38,14 +38,14 @@
   class="main-content"
   style="background-image: url('https://images.pond5.com/nutrition-linear-icons-set-vitamins-illustration-239100396_iconl_nowm.jpeg'); min-height: 910px;"
 > -->
-<div class="main-content" id="test-bg">
+<div class="main-content">
 
     <!-- <div class="main-content bg-light"> -->
 
     <div class="page-content m-0" id="page-content-adaptive">
 
 
-        <div class="container-fluid" style="padding-left: 0px; padding-right: 0px;" id="container-fluid-adaptive">
+        <div class="container-fluid" style="padding-left: 0px; padding-right: 0px; max-width: 1440px; margin-top: 15px;" id="container-fluid-adaptive">
             <style>
                 /* Default style for both mobile and desktop */
                 .responsive-img {
@@ -85,14 +85,14 @@
             </style>
             <div class="row">
                 <div class="col-xl-3 col-lg-4" id="pc-filter" style="display: none;">
-                    <div class="card">
+                    <div class="card rounded-4 p-1 border border-2">
                         <div class="card-header">
                             <div class="d-flex mb-3">
                                 <div class="flex-grow-1">
                                     <h5 class="fs-16">Filters</h5>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <a href="#" class="text-decoration-underline" id="clearall">Clear All</a>
+                                    <a href="/" class="text-decoration-underline" id="clearall">Очистити фільтри</a>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                 </div>
                 <div class="col-xl-9 p-0">
                     <!-- With Indicators -->
-                    <div class="m-0" id="caruselDiv">
+                    <div class="m-0 rounded-4" id="caruselDiv">
 
                     </div>
                     <div class="row row-cols-1 row-cols-xxl-6 m-0" id="aimButtons">
@@ -125,6 +125,39 @@
                         </div>
                         <div class="card bg-danger m-2 mt-1" style="height: 5px; width: 99%;"></div>
                 </div>
+                <script>
+                    // Function to adjust font size based on window width
+                    function adjustFontSize() {
+                      // Get the current window width
+                      const windowWidth = window.innerWidth;
+                  
+                      // Select the elements to adjust
+                      const siteData = document.getElementById('siteData');
+                      const elementsToAdjust = siteData.querySelectorAll('h5, p');
+                  
+                      // Define the font size classes
+                      const smallFontSizeClass = 'small-font';
+                  
+                      // Check the window width and apply the appropriate font size
+                      if (windowWidth < 1280) {
+                        elementsToAdjust.forEach(element => {
+                          element.classList.add('fs-11');
+                        });
+                      } else {
+                        elementsToAdjust.forEach(element => {
+                          element.classList.remove('fs-11');
+                        });
+                      }
+                    }
+                  
+                    window.addEventListener('resize', adjustFontSize);
+
+                    // Add the load event listener
+                    window.addEventListener('load', adjustFontSize);
+                  
+                    // Initial font size adjustment
+                    adjustFontSize();
+                  </script>
                     <div class="row g-0 m-2 text-center" id="siteData">
                         <div class="col-6 col-sm-3">
                             <div class="p-3 border border-dashed border-start-0">
@@ -136,7 +169,7 @@
                         <div class="col-6 col-sm-3">
                             <div class="p-3 border border-dashed border-start-0">
                                 <h5 class="mb-1 text-success"><span class="counter-value">Безкоштовна доставка</span></h5>
-                                <p class="text-muted mb-0">для замовлень від 2 500 грн.</p>
+                                <p class="text-muted mb-0">від 2 500 грн.</p>
                             </div>
                         </div>
                         <!--end col-->
@@ -149,7 +182,7 @@
                         <!--end col-->
                         <div class="col-6 col-sm-3">
                             <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                <h5 class="mb-1 text-success"><span class="counter-value" data-target="18.92">500+ продіктів</span></h5>
+                                <h5 class="mb-1 text-success"><span class="counter-value" data-target="18.92">500+ продуктів</span></h5>
                                 <p class="text-muted mb-0">Широкий асортимент</p>
                             </div>
                         </div>
@@ -241,21 +274,24 @@
                 </div>
             </div>
             <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom2"
-                aria-labelledby="offcanvasBottomLabel2">
+                aria-labelledby="offcanvasBottomLabel2"  style="height: 73% !important; z-index: 2000">
                 <div class="offcanvas-header">
-                    <h5 id="offcanvasBottomLabel">Товари посортовані</h5>
+                    <h5 id="offcanvasBottomLabel">Фільтрування товарів</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body" id="main-filter">
-                    <button class="btn btn-soft-info" onclick="goodCardsList('/api/goods/', true)">
-                        <i class="ri-find-replace-line fs-18"></i> <span data-key="t-authentication">Очистити
-                            фільтри</span>
-                    </button>
-
-                    <input type="number" class="form-control" placeholder="From" id="prices-from">
-                    <input type="number" class="form-control" placeholder="To" id="prices-to">
-                    <div class="c-1-color" id="range-slider"></div>
+                <div class="offcanvas-body px-0" id="main-filter">
+                    <div class="accordion accordion-flush filter-accordion" id="finalFiltersContainerMobile">
+                        
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <a class="btn btn-soft-info" href="/">
+                                <i class="ri-find-replace-line fs-18"></i> <span data-key="t-authentication">Очистити
+                                    фільтри</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -364,6 +400,7 @@
 <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 <script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
 <script src="{% static 'js/shop/pageAdaptiveConfig.js' %}"></script>
+<script src="{% static 'js/shop/temp_db.js' %}"></script>
 <script src="{% static 'js/shop/goodsTopBar.js' %}"></script>
 <script src="{% static 'js/shop/goodsCardsList.js' %}"></script>
 <script src="{% static 'js/shop/aimButtons.js' %}"></script>
