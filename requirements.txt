@@ -10,6 +10,7 @@ django-crispy-forms==2.1
 django-debug-toolbar==4.3.0
 django-filter==24.1
 django-mathfilters==1.0.0
+django-tinymce==4.1.0
 django-widget-tweaks==1.5.0
 djangorestframework==3.14.0
 environs==11.0.0

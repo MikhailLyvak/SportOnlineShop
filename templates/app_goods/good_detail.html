@@ -17,7 +17,7 @@
 {% block content %}
 <div class="main-content">
 
-  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
+  <div class="page-content mt-1" style="background-color: rgba(164, 201, 215, 0.21)">
     <div class="container-fluid" style="padding-left: 0px; padding-right: 0px; max-width: 1440px; margin-top: 15px;">
 
       <!-- start page title -->
@@ -211,7 +211,7 @@
 
                     <div class="mt-4 text-muted">
                       <h5 class="fs-14">Опис товару :</h5>
-                      <p>{{ good.description }}</p>
+                      <p>{{ good.description|safe  }}</p>
                     </div>
                     <div class="product-content mt-5">
                       <h5 class="fs-14 mb-3">Характеристики :</h5>
@@ -259,7 +259,7 @@
                             <h5 class="font-size-16 mb-3">{{ good.good.producer.name }}</h5>
 
                             {% if good.good.producer.description %}
-                            <p>{{ good.good.producer.description }}</p>
+                            <p>{{ good.good.producer.description|safe  }}</p>
                             {% else %}
                             <p>Виробник не надав опису</p>
                             {% endif %}
@@ -280,7 +280,7 @@
                       </div>
                     </div>
                     <h5 class="fs-14 mt-3 mb-3">Спробуй також :</h5>
-                    <div class="row row-cols-1 row-cols-xxl-6 m-0" id="TopGoodCardsListContainer">
+                    <div class="row m-0" id="TopGoodCardsListContainer">
                       <!-- Товари завантажуються динамічно за допомогою AJAX -->
                   </div>
                     <!-- product-content -->
@@ -324,7 +324,7 @@
 <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 <script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
 <script src="{% static 'js/shop/temp_db.js' %}"></script>
-<script src="{% static 'js/shop/TopGoodsList.js' %}"></script>
+<script src="{% static 'js/shop/TopGoodsListDetail.js' %}"></script>
 
 <script src="{% static 'js/shop/goodsCart.js' %}"></script>
 <script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>

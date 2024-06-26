@@ -3,6 +3,8 @@ from django import forms
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
+from django.contrib.admin import widgets
+from tinymce.widgets import TinyMCE
 from django.urls import reverse
 
 from .models import (
@@ -21,6 +23,7 @@ from .models import (
 
 
 class GoodVariantForm(forms.ModelForm):
+    description = forms.CharField(widget=TinyMCE())
     class Meta:
         model = GoodVariant
         fields = [
@@ -42,6 +45,7 @@ class GoodVariantForm(forms.ModelForm):
 
 
 class GoodVariantUpdateForm(forms.ModelForm):
+    description = forms.CharField(widget=TinyMCE())
     class Meta:
         model = GoodVariant
         fields = [

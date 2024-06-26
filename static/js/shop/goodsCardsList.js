@@ -1,20 +1,18 @@
 function goodCardsListUrl(order_by, searchValue, filterByProducer, filterByType, aim = null) {
   let url
-  console.log(searchValue);
   url = `/api/goods/?ordering=${order_by}${searchValue ? '&search=' + encodeURIComponent(searchValue) : ''}`;
 
   if (filterByProducer.length > 0) {
     url += `&good__producer__name=${encodeURIComponent(filterByProducer.join(','))}`;
   }
 
-  if (filterByType.length > 0) {
+  if ((filterByType || []).length > 0) {
     url += `&good__good_type__name=${encodeURIComponent(filterByType.join(','))}`;
   }
 
   if (aim) {
     url += `&aim_filter=${encodeURIComponent(aim)}`;
   }
-  console.log(url)
   return url;
 }
 
@@ -126,6 +124,22 @@ function AdaptiveSettings() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+  const topGoods = document.getElementById("topGoods")
+  if (window.innerWidth < 1440 && window.innerWidth >= 1140) {
+    topGoods.style.cssText += 'margin-left: 90px; margin-right: 90px;';
+  }
+  const siteData = document.getElementById("siteData")
+  if (window.innerWidth < 1440 && window.innerWidth >= 1140) {
+    siteData.style.cssText += 'margin-left: 90px; margin-right: 90px;';
+  }
+  const simpleGoods = document.getElementById("simpleGoods")
+  if (window.innerWidth < 1440 && window.innerWidth >= 1140) {
+    simpleGoods.style.cssText += 'margin-left: 90px; margin-right: 90px;';
+  }
+  const aimButtons = document.getElementById("aimButtons")
+  if (window.innerWidth < 1440 && window.innerWidth >= 1140) {
+    aimButtons.style.cssText += 'margin-left: 90px !important; margin-right: 90px !important';
+  }
   // Load goods only once on initial page load
   const url = goodCardsListUrl(orderBy, null, filterByProducer, filterByType);
   goodCardsList(url);
@@ -207,7 +221,7 @@ function setColumnLayout() {
     numCols = Math.min(6, totalGoods);
   }
 
-  goodCardsListContainer.className = `row row-cols-1 row-cols-xxl-${numCols} m-0`;
+  goodCardsListContainer.className = `row row-cols-1 row-cols-md-${numCols} m-0`;
 }
 
 

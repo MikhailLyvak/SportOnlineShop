@@ -32,7 +32,7 @@ class AdminGoodsListView(LoginRequiredMixin, ListView):
     model = GoodVariant
     template_name = "app_goods/admin_goods_list.html"
     context_object_name = "goods_list"
-    paginate_by = 7
+    paginate_by = 5
     filterset_class = GoodVariantFilter
 
     def get_queryset(self) -> QuerySet:
@@ -160,7 +160,7 @@ class GoodsListView(ListAPIView):
 
     def get_queryset(self):
         queryset = (
-            GoodVariant.objects.filter(good__isnull=False, taste__isnull=False)
+            GoodVariant.objects.filter(good__isnull=False, taste__isnull=False, amount__gte=1)
             .select_related("size", "taste", "good__good_type", "good__producer")
             .prefetch_related("photos").order_by("name")
         )
@@ -303,3 +303,12 @@ class SliderImagesListAPIView(ListAPIView):
         queryset = SliderImages.objects.all()
         
         return queryset
+
+
+from django.http import HttpResponse
+from django.conf import settings
+import os
+
+def test_view(request):
+    static_files_dirs = [os.path.join(settings.BASE_DIR, "static")]
+    return HttpResponse(f"STATICFILES_DIRS: {static_files_dirs}")

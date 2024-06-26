@@ -42,7 +42,7 @@
 
     <!-- <div class="main-content bg-light"> -->
 
-    <div class="page-content m-0" id="page-content-adaptive">
+    <div class="page-content m-0" id="page-content-adaptive" style="margin-top: 1% !important;">
 
 
         <div class="container-fluid" style="padding-left: 0px; padding-right: 0px; max-width: 1440px; margin-top: 15px;" id="container-fluid-adaptive">
@@ -84,7 +84,7 @@
                 }
             </style>
             <div class="row">
-                <div class="col-xl-3 col-lg-4" id="pc-filter" style="display: none;">
+                <!-- <div class="col-xl-3 col-lg-4" id="pc-filter" style="display: none;">
                     <div class="card rounded-4 p-1 border border-2">
                         <div class="card-header">
                             <div class="d-flex mb-3">
@@ -100,27 +100,26 @@
                         <div class="accordion accordion-flush filter-accordion" id="finalFiltersContainer">
                         </div>
                     </div>
-                    <!-- end card -->
-                </div>
-                <div class="col-xl-9 p-0">
+                </div> -->
+                <div class="col-xl-12 p-0">
                     <!-- With Indicators -->
-                    <div class="m-0 rounded-4" id="caruselDiv">
+                    <div class="m-0 mb-2 rounded-4" id="caruselDiv">
 
                     </div>
-                    <div class="row row-cols-1 row-cols-xxl-6 m-0" id="aimButtons">
+                    <div class="row row-cols-1 row-cols-md-6 m-0" id="aimButtons" style="margin-top: 5px;">
                         <!-- JS динамічно відобразить тут кнопки -->
                     </div>
                     <div id="topGoods">
                         <div class="d-flex justify-content-center align-items-center mt-3 mb-0">
                             <i class="text-danger ri-fire-fill fs-20" style="padding-bottom: 10px;"></i>
                             <div class="card bg-danger m-2 mt-1 shadow-lg" style="height: 5px; width: 100%;"></div>
-                            <h3 style="white-space: nowrap;">Наші топ товари</h3>
+                            <h3 style="white-space: nowrap;">Топ товари</h3>
                             <div class="card bg-danger m-2 mt-1 shadow-lg" style="height: 5px; width: 100%;"></div>
                             <i class="text-danger ri-fire-fill fs-20" style="padding-bottom: 10px;"></i>
                         </div>
 
                         <!-- Top goods -->
-                        <div class="row row-cols-1 row-cols-xxl-6 m-0" id="TopGoodCardsListContainer">
+                        <div class="row row-cols-1 row-cols-md-6 m-0" id="TopGoodCardsListContainer">
                             <!-- Товари завантажуються динамічно за допомогою AJAX -->
                         </div>
                         <div class="card bg-danger m-2 mt-1" style="height: 5px; width: 99%;"></div>
@@ -158,29 +157,29 @@
                     // Initial font size adjustment
                     adjustFontSize();
                   </script>
-                    <div class="row g-0 m-2 text-center" id="siteData">
-                        <div class="col-6 col-sm-3">
+                    <div class="row text-center" id="siteData">
+                        <div class="col-xl-3 col-sm-3">
                             <div class="p-3 border border-dashed border-start-0">
                                 <h5 class="mb-1 text-success"><span class="counter-value" data-target="7585">1+ тис.</span></h5>
                                 <p class="text-muted mb-0">Задоволених замовників</p>
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-6 col-sm-3">
+                        <div class="col-xl-3 col-sm-3">
                             <div class="p-3 border border-dashed border-start-0">
                                 <h5 class="mb-1 text-success"><span class="counter-value">Безкоштовна доставка</span></h5>
                                 <p class="text-muted mb-0">від 2 500 грн.</p>
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-6 col-sm-3">
+                        <div class="col-xl-3 col-sm-3">
                             <div class="p-3 border border-dashed border-start-0">
                                 <h5 class="mb-1 text-success"><span class="counter-value" data-target="367">До 4 днів</span></h5>
                                 <p class="text-muted mb-0">Швидка доставка</p>
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-6 col-sm-3">
+                        <div class="col-xl-3 col-sm-3">
                             <div class="p-3 border border-dashed border-start-0 border-end-0">
                                 <h5 class="mb-1 text-success"><span class="counter-value" data-target="18.92">500+ продуктів</span></h5>
                                 <p class="text-muted mb-0">Широкий асортимент</p>
@@ -189,7 +188,7 @@
                         <!--end col-->
                     </div>
 
-
+                    <div id="simpleGoods">
                     <div class="d-flex justify-content-center align-items-center mb-3">
                         <i class="text-info ri-flashlight-fill fs-20"></i>
                         <div class="card bg-info m-2 mt-1" style="height: 5px; width: 100%;"></div>
@@ -197,11 +196,11 @@
                         <div class="card bg-info m-2 mt-1" style="height: 5px; width: 100%;"></div>
                         <i class="text-info ri-flashlight-fill fs-20"></i>
                     </div>
-                    <div class="row row-cols-1 row-cols-xxl-6 m-0" id="goodCardsListContainer">
+                    <div class="row row-cols-1 row-cols-md-6 m-0" id="goodCardsListContainer">
                         <!-- Товари завантажуються динамічно за допомогою AJAX -->
                     </div>
                     <div class="card bg-info m-2 mt-1" style="height: 5px; width: 100%;"></div>
-
+                </div>
                 </div>
 
 
@@ -244,8 +243,8 @@
                 </button>
             </div>
             <!-- Placement Offcanvas -->
-            <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom"
-                aria-labelledby="offcanvasBottomLabel" style="height: 35% !important; z-index: 2000">
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasBottom"
+                aria-labelledby="offcanvasBottomLabel" style="top: 65%; height: 35% !important; z-index: 2000">
                 <div class="offcanvas-header">
                     <h5 id="offcanvasBottomLabel">Товари посортовані</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
@@ -274,23 +273,23 @@
                 </div>
             </div>
             <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom2"
-                aria-labelledby="offcanvasBottomLabel2"  style="height: 73% !important; z-index: 2000">
-                <div class="offcanvas-header">
+                aria-labelledby="offcanvasBottomLabel2"  style="top: 27%; height: 73% !important; z-index: 2000">
+                <div class="offcanvas-header pb-0">
                     <h5 id="offcanvasBottomLabel">Фільтрування товарів</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body px-0" id="main-filter">
-                    <div class="accordion accordion-flush filter-accordion" id="finalFiltersContainerMobile">
-                        
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-12 text-center">
+                    <div class="row">
+                        <div class="col-12 mx-3 text-start">
                             <a class="btn btn-soft-info" href="/">
                                 <i class="ri-find-replace-line fs-18"></i> <span data-key="t-authentication">Очистити
                                     фільтри</span>
                             </a>
                         </div>
+                    </div>
+                    <div class="accordion accordion-flush filter-accordion" id="finalFiltersContainerMobile">
+                        
                     </div>
                 </div>
             </div>
@@ -333,8 +332,8 @@
             pcFilter.style.display = 'none';
             mobileFilter.style.display = 'flex';
         } else {
-            pcFilter.style.display = '';
-            mobileFilter.style.display = 'none';
+            pcFilter.style.display = 'none';
+            mobileFilter.style.display = 'flex';
         }
     }
 
@@ -388,7 +387,7 @@
 </script>
 
 <button onclick="scrollToTop()" class="btn btn-danger btn-icon rounded-pill" id="back-to-top"
-    style="position: fixed; top: 90px; right: 2px; opacity: 0.6;">
+    style="position: fixed; top: 110px; right: 2px; opacity: 0.6;">
     <i class="ri-arrow-up-line"></i>
 </button>
 

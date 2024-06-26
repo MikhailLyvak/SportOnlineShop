@@ -14,7 +14,7 @@
 {% endblock sidebar %}
 {% block content %}
 <div class="main-content">
-  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
+  <div class="page-content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
@@ -31,48 +31,6 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xl-3 col-lg-4">
-          <div class="card border ">
-            <div class="accordion accordion-flush filter-accordion">
-
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingBrands">
-                  <button class="accordion-button bg-transparent shadow-none" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseBrands" aria-expanded="true" aria-controls="flush-collapseBrands">
-                    <span class="text-muted text-uppercase fs-12 fw-medium">Можливо якийсь захочете фільтр</span> <span
-                      class="badge bg-success rounded-pill align-middle ms-1 filter-badge">
-                      9
-                  </button>
-                </h2>
-                <style>
-                  .form-container {
-                    max-height: 556px;
-                    overflow-y: auto;
-                  }
-
-                  .simplebar-scrollbar::before {
-                    background-color: rgba(125, 187, 247, 0.7);
-                    border-radius: 10px;
-                    opacity: 1;
-                    height: 75px;
-                    width: 8px;
-                  }
-                </style>
-                <div id="flush-collapseBrands" class="accordion-collapse collapse show"
-                  aria-labelledby="flush-headingBrands">
-                  <div class="accordion-body text-body pt-0">
-                    <div class="d-flex flex-column gap-2 mt-3 filter-check">
-                        <button class="btn btn-light text-success mt-3" type="submit">Застосувати</button>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-              <!-- end accordion-item -->
-            </div>
-          </div>
-          <!-- end card -->
-        </div>
         <style>
           .ml_display {
             display: flex;
@@ -81,10 +39,10 @@
           }
         </style>
         <!-- end col -->
-        <div class="col-xl-9 col-lg-8">
+        <div class="col-xl-12 col-lg-12">
           <div class="card border">
             <!-- end card header -->
-            <div class="card-body" style="min-height:550px;">
+            <div class="card-body" style="height: auto;">
               <div class="tab-content text-muted">
                 <div class="tab-pane active" id="productnav-all" role="tabpanel">
                   <div id="table-product-list-all" class="table-card gridjs-border-none">
@@ -95,13 +53,13 @@
                           <thead class="gridjs-thead">
                             <tr class="gridjs-tr">
                               <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
-                                style="width: 150px;">
+                                style="min-width: 70px;">
                                 <div class="row align-items-center justify-content-center">
-                                  <div class="col-12 m-0 text-center">№ замовлення</div>
+                                  <div class="col-12 m-0 text-center">№</div>
                                 </div>
                               </th>
                               <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
-                                style="min-width: 70px;">
+                                style="min-width: 105px;">
                                 <div class="row align-items-center justify-content-center">
                                   <div class="col-12 m-0 text-center">Сума</div>
                                 </div>
@@ -269,7 +227,7 @@
                                   aria-haspopup="true"
                                   aria-expanded="false"
                                 >
-                                  Список товарів
+                                  Товари
                                   <i class="ri-indent-decrease"></i>
                             </button>
                             <div class="dropdown-menu text-center m-2" style="white-space:nowrap;">

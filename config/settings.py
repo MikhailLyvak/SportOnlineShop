@@ -15,7 +15,8 @@ from pathlib import Path
 from environs import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = Env()
 env.read_env()
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.humanize',
     'mathfilters',
+    'tinymce',
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -201,10 +203,13 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "media/"
 
-
-
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 STATIC_URL = "/static/"
 STATIC_ROOT = "/static/"
+
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # Default primary key field type

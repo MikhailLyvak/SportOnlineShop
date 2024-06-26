@@ -1,5 +1,11 @@
 const pcHtml = `
 <div class="d-flex">
+    <a href="https://www.sportrelaxnutritions.com">
+      <img src="/static/images/logo-srn.png" alt="" height="82">
+    </a>
+  </div>
+<div class="d-flex">
+
   <button class="btn btn-ghost" style="margin-right: 15px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft" aria-controls="offcanvasLeft">
     <i class="ri-align-left text-muted fs-24"></i>
   </button>
@@ -93,11 +99,7 @@ const pcHtml = `
     </div>
   </div>
   </div>
-  <div class="d-flex">
-    <a href="https://www.sportrelaxnutritions.com">
-      <img src="/static/images/logo-srn.png" alt="" height="56">
-    </a>
-  </div>
+  
   <div id="phone-div" class="d-flex">
     <img src="/static/images/vodafon.png" alt="" height="38">
       <h4 class="m-2">+380 50 954 91 70</h4>

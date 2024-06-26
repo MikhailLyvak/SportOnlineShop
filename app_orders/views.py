@@ -198,7 +198,7 @@ class AdminOrdersListView(LoginRequiredMixin, ListView):
     model = OrderFix
     template_name = "app_orders/admin_orders_list.html"
     context_object_name = "orders_list"
-    paginate_by = 8
+    paginate_by = 5
 
     def get_queryset(self) -> QuerySet:
         queryset = OrderFix.objects.exclude(

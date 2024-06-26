@@ -13,7 +13,7 @@
 {% endblock sidebar %}
 {% block content %}
 <div class="main-content">
-  <div class="page-content" style="background-color: rgba(164, 201, 215, 0.21)">
+  <div class="page-content">
     <div class="container-fluid">
 
       <!-- start page title -->
@@ -73,7 +73,7 @@
                           {% for field in good_filter.form %}
                             <div class="form-group">
                               {% if field.name == "is_top" %}
-                                Показати лише топ товари:
+                                Показати топ товари:
                               {% endif %}
                               {{ field|attr:"class:text-start m-1" }}
                             </div>
@@ -135,7 +135,7 @@
               </div>
             </div>
             <!-- end card header -->
-            <div class="card-body" style="min-height:550px;">
+            <div class="card-body" style="height: auto;">
               <div class="tab-content text-muted">
                 <div class="tab-pane active" id="productnav-all" role="tabpanel">
                   <div id="table-product-list-all" class="table-card gridjs-border-none">
@@ -146,13 +146,13 @@
                           <thead class="gridjs-thead">
                             <tr class="gridjs-tr">
                               <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
-                                style="width: 460px;">
+                                style="width: 300px;">
                                 <div class="row align-items-center justify-content-center">
                                   <div class="col-12 m-0">Продукт</div>
                                 </div>
                               </th>
                               <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
-                                style="">
+                                style="width: 120px;">
                                 <div class="row align-items-center justify-content-center">
                                   <div class="col-12 m-0 text-center">Ціна закупки</div>
                                 </div>

@@ -112,11 +112,7 @@ function fetchDataAndRender() {
 
           let container;
           
-          if (window.innerWidth <= 1200) {
             container = document.getElementById('finalFiltersContainerMobile');
-          } else {
-            container = document.getElementById('finalFiltersContainer');
-          }
           
 
           if (!container) {

@@ -14,7 +14,8 @@ from .views import (
     set_to_top,
     remove_discount,
     add_or_remove_good,
-    parse_excel_view
+    parse_excel_view,
+    test_view
 )
 
 urlpatterns = [
@@ -31,7 +32,8 @@ urlpatterns = [
     path("api/top-goods/", TopGoodsListView.as_view(), name="api-goods"),
     path("api/types/", GoodVarClustersListView.as_view(), name="api-types"),
     path("blog/", Blog.as_view(), name="blog"),
-     path('parse-excel/', parse_excel_view, name='parse_excel'),
+    path('parse-excel/', parse_excel_view, name='parse_excel'),
+    path('test/', test_view),
 ]
 
 app_name = "app_goods"
