@@ -102,7 +102,7 @@ function createGoodTypeClustersAccordionItemHtml(goodTypeClusters) {
 }
 
 function fetchDataAndRender() {
-  fetch('https://www.sportrelaxnutritions.com/api/types/')
+  fetch('http://127.0.0.1:8000/api/types/')
       .then(response => response.json())
       .then(data => {
           if (!data || typeof data !== 'object') {

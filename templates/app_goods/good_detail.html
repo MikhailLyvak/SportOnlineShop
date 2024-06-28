@@ -7,6 +7,7 @@
 {% block extra_css %}
     <!--Swiper slider css-->
     <link href="{% static 'libs/swiper/swiper-bundle.min.css'%}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock extra_css %}
 
 {% block header %}
@@ -16,8 +17,22 @@
 
 {% block content %}
 <div class="main-content">
+  <style>
+    .custom-card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+  }
 
-  <div class="page-content mt-1" style="background-color: rgba(164, 201, 215, 0.21)">
+  .checked {
+    color: #f5c542;
+  }
+
+  .custom-card-body> :last-child {
+      margin-top: auto;
+  }
+  </style>
+  <div class="page-content mt-1" style="background-color: rgba(164, 201, 215, 0.21); margin-top: 1% !important;">
     <div class="container-fluid" style="padding-left: 0px; padding-right: 0px; max-width: 1440px; margin-top: 15px;">
 
       <!-- start page title -->
@@ -91,7 +106,7 @@
                   <div class="mt-xl-0 mt-5">
                     <div class="d-flex">
                       <div class="flex-grow-1">
-                        <h4>{{ good.good.name }}</h4>
+                        <h4>#{{ good.pk }} {{ good.good.name }}</h4>
                         <div class="hstack gap-3 flex-wrap">
                           <div>
                             <a href="#" class="text-primary d-block">

@@ -271,6 +271,16 @@ function goodCardsList(url, isSearch = false) {
         const cardDiv = document.createElement("div");
         cardDiv.classList.add("col-6", "m-0", "p-0");
 
+        const maxRating = 5;
+        const rating = good.stars_amount || 0; // Ensure rating is between 0 and 5
+        const fullStars = Math.min(maxRating, Math.max(0, rating)); // Clamp rating between 0 and 5
+        const emptyStars = maxRating - fullStars;
+
+        const ratingHtml = `
+          ${'<span class="fa fa-star checked"></span>'.repeat(fullStars)}
+          ${'<span class="fa fa-star"></span>'.repeat(emptyStars)}
+        `;
+
         const cardInnerHtml = `
           <div class="card card-animate m-2 mt-2 ribbon-box border border-info border-2 rounded-4 card-height-100" style="opacity: ${opacityButton};">
             <a href="/${good.id}/">
@@ -281,7 +291,12 @@ function goodCardsList(url, isSearch = false) {
             ${good.on_discount ? `<div class="ribbon-two ribbon-two-danger"><span class="fs-18">-${good.discount_percentage}%</span></div>` : ''}
             <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body p-2">
             <h4 placeholder="${good.name}" class="card-title mb-2 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-14')}">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
-              <div class="row md-1 mt-1">
+            <div class="row my-1">
+               <div class="d-flex" id="ratingGood_${good.id}">
+                ${ratingHtml}
+              </div>
+              </div>
+              <div class="row my-1">
                 <div class="col-12">
                 ${sortedSizes.map((size, index) => `
                 <a type="button" href="/${size.variant_id}/" class="btn ${getButtonColor(index, size.variant_id, good.id)} btn-sm waves-effect waves-light rounded-4 ${window.innerWidth < 420 ? 'fs-10' : ''}"
@@ -291,6 +306,7 @@ function goodCardsList(url, isSearch = false) {
               `).join('')}
                 </div>
               </div>
+              
 
               <div class="d-flex" style="justify-content: space-between; align-items: center;">
                 ${good.on_discount ?
@@ -358,6 +374,16 @@ function TopGoodCardsList(url) {
         const cardDiv = document.createElement("div");
         cardDiv.classList.add("col-6", "m-0", "p-0");
 
+        const maxRating = 5;
+        const rating = good.stars_amount || 0; // Ensure rating is between 0 and 5
+        const fullStars = Math.min(maxRating, Math.max(0, rating)); // Clamp rating between 0 and 5
+        const emptyStars = maxRating - fullStars;
+
+        const ratingHtml = `
+          ${'<span class="fa fa-star checked"></span>'.repeat(fullStars)}
+          ${'<span class="fa fa-star"></span>'.repeat(emptyStars)}
+        `;
+
         const cardInnerHtml = `
           <div class="card card-animate m-2 mt-2 ribbon-box border border-warning border-2 rounded-4 card-height-100" style="opacity: ${opacityButton};">
             <a href="/${good.id}/">
@@ -368,7 +394,12 @@ function TopGoodCardsList(url) {
             ${good.on_discount ? `<div class="ribbon-two ribbon-two-danger"><span class="fs-18">-${good.discount_percentage}%</span></div>` : ''}
             <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body p-2">
               <h4 placeholder="${good.name}" class="card-title mb-2 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-14')}">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
-              <div class="row md-1 mt-1">
+              <div class="row my-1">
+               <div class="d-flex" id="ratingGood_${good.id}">
+                ${ratingHtml}
+              </div>
+              </div>
+              <div class="row my-1">
                 <div class="col-12">
                 ${sortedSizes.map((size, index) => `
                 <a type="button" href="/${size.variant_id}/" class="btn ${getButtonColor(index, size.variant_id, good.id)} btn-sm waves-effect waves-light rounded-4 ${window.innerWidth < 420 ? 'fs-10' : ''}"
@@ -378,6 +409,7 @@ function TopGoodCardsList(url) {
               `).join('')}
                 </div>
               </div>
+              
               <div class="d-flex" style="justify-content: space-between; align-items: center;">
                 ${good.on_discount ?
                   `<div>
@@ -401,12 +433,6 @@ function TopGoodCardsList(url) {
             </div>
           </div>
         `;
-        // Кнопка купити відразу (ірмлементувати пізніше)
-
-        // <a class="btn btn-soft-success waves-effect waves-light m-1" href="#">
-        //   <i class="ri-shopping-cart-2-line fs-19"></i>
-        // </a>
-        // <i class="ri-shopping-basket-fill fs-19"></i>
 
         cardDiv.innerHTML = cardInnerHtml;
         goodCardsListContainer.appendChild(cardDiv);

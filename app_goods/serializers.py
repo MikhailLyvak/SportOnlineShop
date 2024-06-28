@@ -40,6 +40,7 @@ class GoodsListSerializer(serializers.ModelSerializer):
             "on_discount",
             "discount_percentage",
             "discount_price",
+            "stars_amount",
             "amount",
             "good",
             "sizes",

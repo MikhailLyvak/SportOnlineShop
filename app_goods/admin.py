@@ -34,6 +34,7 @@ class GoodVariantForm(forms.ModelForm):
             "size",
             "taste",
             "stock_price",
+            "stars_amount",
         ]
         
     def clean_code(self):
@@ -56,7 +57,8 @@ class GoodVariantUpdateForm(forms.ModelForm):
             "taste",
             "stock_price",
             "sell_price",
-            "is_top"
+            "is_top",
+            "stars_amount",
         ]
 
 

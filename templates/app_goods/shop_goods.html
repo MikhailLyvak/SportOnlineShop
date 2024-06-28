@@ -20,6 +20,7 @@
 <!-- 'monolith' theme -->
 <link rel="stylesheet" href="{% static 'libs/@simonwep/pickr/dist/themes/nano.min.css'%}" /> <!-- 'nano' theme -->
 <link rel="stylesheet" href="{% static 'css/ml_buttons.css'%}" /> <!-- 'nano' theme -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock extra_css %}
 {% block content %}
 
@@ -27,10 +28,20 @@
     .custom-card-body {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
     }
 
     .custom-card-body> :last-child {
         margin-top: auto;
+    }
+
+    .info-bars {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .checked {
+        color: #f5c542;
     }
 </style>
 
@@ -138,13 +149,13 @@
                       const smallFontSizeClass = 'small-font';
                   
                       // Check the window width and apply the appropriate font size
-                      if (windowWidth < 1280) {
+                      if (windowWidth <= 1024) {
                         elementsToAdjust.forEach(element => {
-                          element.classList.add('fs-11');
+                          element.classList.add('fs-12');
                         });
                       } else {
                         elementsToAdjust.forEach(element => {
-                          element.classList.remove('fs-11');
+                          element.classList.remove('fs-12');
                         });
                       }
                     }
@@ -158,36 +169,71 @@
                     adjustFontSize();
                   </script>
                     <div class="row text-center" id="siteData">
-                        <div class="col-xl-3 col-sm-3">
-                            <div class="p-3 border border-dashed border-start-0">
-                                <h5 class="mb-1 text-success"><span class="counter-value" data-target="7585">1+ тис.</span></h5>
-                                <p class="text-muted mb-0">Задоволених замовників</p>
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="p-3 border border-dashed border-start-0 info-bars">
+                                <div class="mx-2">
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title rounded-circle fs-2" style="background-color: rgba(49, 207, 138, 0.3) !important;">
+                                            <i class="ri-user-5-fill text-success"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style="width: 210px !important;">
+                                    <h5 class="mb-1 text-success"><span class="counter-value" data-target="7585">1+ тис.</span></h5>
+                                    <p class="text-muted mb-0">Задоволених замовників</p>
+                                </div>
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-xl-3 col-sm-3">
-                            <div class="p-3 border border-dashed border-start-0">
-                                <h5 class="mb-1 text-success"><span class="counter-value">Безкоштовна доставка</span></h5>
-                                <p class="text-muted mb-0">від 2 500 грн.</p>
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="p-3 border border-dashed border-start-0 info-bars">
+                                <div class="mx-2">
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title rounded-circle fs-2" style="background-color: rgba(49, 207, 138, 0.3) !important;">
+                                            <i class="ri-hand-heart-fill text-success"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style="width: 210px !important;">
+                                    <h5 class="mb-1 text-success"><span class="counter-value">Безкоштовна доставка</span></h5>
+                                    <p class="text-muted mb-0">від 2 500 грн.</p>
+                                </div>
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-xl-3 col-sm-3">
-                            <div class="p-3 border border-dashed border-start-0">
-                                <h5 class="mb-1 text-success"><span class="counter-value" data-target="367">До 4 днів</span></h5>
-                                <p class="text-muted mb-0">Швидка доставка</p>
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="p-3 border border-dashed border-start-0 info-bars">
+                                <div class="mx-2">
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title rounded-circle fs-2" style="background-color: rgba(49, 207, 138, 0.3) !important;">
+                                            <i class="ri-riding-fill text-success"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style="width: 210px !important;">
+                                    <h5 class="mb-1 text-success"><span class="counter-value">До 4 днів</span></h5>
+                                    <p class="text-muted mb-0">Швидка доставка</p>
+                                </div>
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-xl-3 col-sm-3">
-                            <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                <h5 class="mb-1 text-success"><span class="counter-value" data-target="18.92">500+ продуктів</span></h5>
-                                <p class="text-muted mb-0">Широкий асортимент</p>
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="p-3 border border-dashed border-start-0 info-bars">
+                                <div class="mx-2">
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title rounded-circle fs-2" style="background-color: rgba(49, 207, 138, 0.3) !important;">
+                                            <i class="ri-bubble-chart-fill text-success"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style="width: 210px !important;">
+                                    <h5 class="mb-1 text-success"><span class="counter-value">500+ продуктів</span></h5>
+                                    <p class="text-muted mb-0">Широкий асортимент</p>
+                                </div>
                             </div>
                         </div>
                         <!--end col-->
                     </div>
-
                     <div id="simpleGoods">
                     <div class="d-flex justify-content-center align-items-center mb-3">
                         <i class="text-info ri-flashlight-fill fs-20"></i>
@@ -396,6 +442,13 @@
 
 
 {% block extra_js %}
+<!-- prismjs plugin -->
+<script src="{% static 'libs/prismjs/prism.js'%}"></script>
+
+<!-- rater-js plugin -->
+<script src="{% static 'libs/rater-js/index.js'%}"></script>
+<!-- rating init -->
+<script src="{% static 'js/pages/rating.init.js'%}"></script>
 <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 <script src="https://unpkg.com/simplebar/dist/simplebar.min.js"></script>
 <script src="{% static 'js/shop/pageAdaptiveConfig.js' %}"></script>
@@ -405,7 +458,6 @@
 <script src="{% static 'js/shop/aimButtons.js' %}"></script>
 <script src="{% static 'js/shop/goodsCart.js' %}"></script>
 <script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
-<script src="{% static 'libs/prismjs/prism.js'%}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>

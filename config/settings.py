@@ -102,13 +102,13 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 CORS_ORIGIN_WHITELIST = [
     'http://185.233.116.13:8000',
     'http://localhost:8000',
-    "https://www.sportrelaxnutritions.com",
+    "http://127.0.0.1:8000",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://185.233.116.13:8000",
     'https://secure.wayforpay.com',
-    "https://www.sportrelaxnutritions.com",
+    "http://127.0.0.1:8000",
     "https://sportrelaxnutritions.com",
 ]
 

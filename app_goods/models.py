@@ -220,6 +220,8 @@ class GoodVariant(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     is_top = models.BooleanField(default=False)
+    is_locked = models.BooleanField(default=False)
+    stars_amount = models.PositiveIntegerField(default=5)
 
     class Meta:
         ordering = [
