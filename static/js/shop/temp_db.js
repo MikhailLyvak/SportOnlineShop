@@ -77,3 +77,24 @@ function addToCart(variantId) {
     cartDropdown.classList.remove('show');
     cartButton.setAttribute('aria-expanded', 'false');
   }
+
+  function setColumnLayout() {
+    let goodCardsListContainer;
+    try {
+      goodCardsListContainer = document.getElementById("goodCardsListContainer");
+    } finally {
+      goodCardsListContainer = document.getElementById("TopGoodCardsListContainer");
+    }
+    
+    const totalGoods = goodCardsListContainer.children.length;
+    const screenWidth = window.innerWidth;
+  
+    let numCols;
+    if (screenWidth < 576) {
+      numCols = 1;
+    } else {
+      numCols = Math.min(6, totalGoods);
+    }
+  
+    goodCardsListContainer.className = `row row-cols-1 row-cols-md-${numCols} m-0`;
+  }

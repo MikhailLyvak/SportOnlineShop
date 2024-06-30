@@ -111,14 +111,9 @@ function caruselLoader() {
 };
 
 function AdaptiveSettings() {
-  const mainContent = document.getElementById("test-bg")
-  if (window.innerWidth > 1200) {
-    mainContent.classList.add("m-2")
-    mainContent.classList.add("mt-3")
-  } else {
+  if (window.innerWidth <= 1200) {
     const contFluid = document.getElementById("container-fluid-adaptive")
     contFluid.classList.add("mt-3")
-    mainContent.classList.add("m-0")
   }
 }
 
@@ -207,23 +202,6 @@ checkboxes.forEach(function (checkbox) {
     }
   });
 });
-
-
-function setColumnLayout() {
-  const goodCardsListContainer = document.getElementById("goodCardsListContainer");
-  const totalGoods = goodCardsListContainer.children.length;
-  const screenWidth = window.innerWidth;
-
-  let numCols;
-  if (screenWidth < 576) {
-    numCols = 1;
-  } else {
-    numCols = Math.min(6, totalGoods);
-  }
-
-  goodCardsListContainer.className = `row row-cols-1 row-cols-md-${numCols} m-0`;
-}
-
 
 function goodCardsList(url, isSearch = false) {
   const goodCardsListContainer = document.getElementById("goodCardsListContainer");
