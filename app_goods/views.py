@@ -267,7 +267,7 @@ def parse_excel_view(request):
 
             for data in result_data:
                 good_var = GoodVariant.objects.filter(code=data.code).first()
-                if good_var:
+                if good_var and not good_var.is_locked:
                     good_var.stock_price = data.price
                     good_var.sell_price = round(data.price * Decimal('1.2'), 2)
                     if good_var.on_discount:
@@ -305,10 +305,8 @@ class SliderImagesListAPIView(ListAPIView):
         return queryset
 
 
-from django.http import HttpResponse
-from django.conf import settings
-import os
-
-def test_view(request):
-    static_files_dirs = [os.path.join(settings.BASE_DIR, "static")]
-    return HttpResponse(f"STATICFILES_DIRS: {static_files_dirs}")
+def block_from_price_update(request, pk: int) -> None:
+    good = get_object_or_404(GoodVariant, pk=pk)
+    good.is_locked = not good.is_locked
+    good.save()
+    return redirect(request.META.get("HTTP_REFERER"))

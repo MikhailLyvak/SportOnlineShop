@@ -71,7 +71,7 @@ function cartGoodsUpdate() {
       }
     })
     .catch(error => {
-      notify(error)
+      console.error('Error fetching data:', error);
     })
     .finally(function () {});
 }

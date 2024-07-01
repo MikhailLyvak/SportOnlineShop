@@ -15,7 +15,7 @@ from .views import (
     remove_discount,
     add_or_remove_good,
     parse_excel_view,
-    test_view
+    block_from_price_update
 )
 
 urlpatterns = [
@@ -25,6 +25,7 @@ urlpatterns = [
     path("good-add-discount/<int:pk>/", add_discount, name="good-add-discount"),
     path("good-add-or-remove/<int:pk>/", add_or_remove_good, name="good-add-or-remove"),
     path("good-remove-discount/<int:pk>/", remove_discount, name="remove-discount"),
+    path("block_price_update/<int:pk>/", block_from_price_update, name="block-price-update"),
     path("", ShopGoodsPage.as_view(), name="shop-goods"),
     path("<int:pk>/", GoodDetailPage.as_view(), name="good-detail"),
     path("api/goods/", GoodsListView.as_view(), name="api-goods"),
@@ -33,7 +34,6 @@ urlpatterns = [
     path("api/types/", GoodVarClustersListView.as_view(), name="api-types"),
     path("blog/", Blog.as_view(), name="blog"),
     path('parse-excel/', parse_excel_view, name='parse_excel'),
-    path('test/', test_view),
 ]
 
 app_name = "app_goods"

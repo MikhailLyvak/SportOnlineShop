@@ -35,64 +35,6 @@
       <!-- end page title -->
 
       <div class="row">
-        <div class="col-xl-3 col-lg-4">
-          <div class="card border ">
-            <div class="accordion accordion-flush filter-accordion">
-
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="flush-headingBrands">
-                  <button class="accordion-button bg-transparent shadow-none" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#flush-collapseBrands" aria-expanded="true" aria-controls="flush-collapseBrands">
-                    <span class="text-muted text-uppercase fs-12 fw-medium">Фільтр по типам</span> <span
-                      class="badge bg-success rounded-pill align-middle ms-1 filter-badge">
-                      {{ filter_amount }}
-                  </button>
-                </h2>
-                <style>
-                  .form-container {
-                    max-height: 556px;
-                    overflow-y: auto;
-                  }
-
-                  .simplebar-scrollbar::before {
-                    background-color: rgba(125, 187, 247, 0.7);
-                    border-radius: 10px;
-                    opacity: 1;
-                    height: 75px;
-                    width: 8px;
-                  }
-                </style>
-                <div id="flush-collapseBrands" class="accordion-collapse collapse show"
-                  aria-labelledby="flush-headingBrands">
-                  <div class="accordion-body text-body pt-0">
-                    <div class="d-flex flex-column gap-2 mt-3 filter-check">
-                      <form method="GET">
-                        <!-- SimpleBar scrollable container -->
-                        <div class="form-container simplebar" data-simplebar>
-                          <!-- Form fields -->
-                          {% for field in good_filter.form %}
-                            <div class="form-group">
-                              {% if field.name == "is_top" %}
-                                Показати топ товари:
-                              {% endif %}
-                              {{ field|attr:"class:text-start m-1" }}
-                            </div>
-                          {% endfor %}
-                        </div>
-                        <!-- Submit button -->
-                        <button class="btn btn-light text-success mt-3" type="submit">Застосувати</button>
-                      </form>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-              <!-- end accordion-item -->
-            </div>
-          </div>
-          <!-- end card -->
-        </div>
-        <!-- end col -->
         <style>
           .ml_display {
             display: flex;
@@ -100,16 +42,45 @@
             align-items: center;
           }
         </style>
-        <div class="col-xl-9 col-lg-8">
+        <div class="col-xl-12 col-lg-12">
           <div class="card border">
             <div class="card-header border-0">
               <div class="row g-4 ml_display">
-                <div class="col-sm-auto">
+                <div class="col-sm-auto d-flex">
                   <div>
                     <a href="{% url 'admin:app_goods_goodvariant_add' %}?next={% url 'admin_user:profile_view' %}"
                       class="btn btn-success" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Додати
                       товар</a>
                   </div>
+                  <div class="btn-group" style="margin-left:30px;">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Фільтр <i class="ri-filter-line"></i></button>
+                    <div class="dropdown-menu text-center" style="width: 220px;">
+                        <form method="GET">
+                          
+                          <!-- SimpleBar scrollable container -->
+                        <div class="form-container simplebar text-start mx-2" data-simplebar>
+                          <!-- Form fields -->
+                          {% for field in good_filter.form %}
+                            <div class="form-group">
+                                {% if field.name == "is_top" %}
+                                    {{ field }}
+                                    <label>{{ field.label }}</label>
+                                {% elif field.name == "is_locked" %}
+                                    {{ field }}
+                                    <label>{{ field.label }}</label>
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <!-- Submit button -->
+                          
+                        <div class="dropdown-divider"></div>
+                        <button class="btn btn-light text-success" type="submit">Застосувати</button>
+                      </form>
+                    </div>
+                </div>
                 </div>
                 <div class="col-sm-auto">
                   <a type="button" data-bs-toggle="modal" data-bs-target="#UpdateGoodsPricesModal"
@@ -146,13 +117,13 @@
                           <thead class="gridjs-thead">
                             <tr class="gridjs-tr">
                               <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
-                                style="width: 300px;">
+                                style="width: 350px;">
                                 <div class="row align-items-center justify-content-center">
                                   <div class="col-12 m-0">Продукт</div>
                                 </div>
                               </th>
                               <th data-column-id="stock" class="gridjs-th gridjs-th-sort text-muted" tabindex="0"
-                                style="width: 120px;">
+                                style="width: 160px;">
                                 <div class="row align-items-center justify-content-center">
                                   <div class="col-12 m-0 text-center">Ціна закупки</div>
                                 </div>
@@ -185,8 +156,12 @@
                           <tbody class="gridjs-tbody">
                             {% for good in goods_list %}
                             <tr class="gridjs-tr" {% if good.amount == 0 %} style="background-color: rgba(235, 76, 76, 0.21)" {% endif %}>
-                              <td data-column-id="product" class="gridjs-td"><span>
-                                  <div class="d-flex align-items-center">
+                              <td data-column-id="product" class="gridjs-td" style="max-width: 350px;"><span>
+                                  <div class="d-flex align-items-center justify-content-start">
+                                    <div class="d-flex mx-1 align-items-center">
+                                      <i class="ri-star-fill fs-18 text-warning mx-1"></i>
+                                      {{ good.stars_amount }}
+                                    </div>
                                     <div class="flex-shrink-0 me-3">
                                       <div class="avatar-sm bg-light rounded p-1">
                                         <img {% if good.photos.exists %} src="{{ good.photos.first.photo.url }}" 
@@ -202,15 +177,22 @@
                                     
                                     {% if good.is_top %}
                                       <div>
-                                        <i title="Топ товар" class="ri-star-s-fill fs-18 text-warning"></i>
+                                        <i title="Топ товар" class="ri-medal-fill fs-18 text-warning"></i>
                                       </div>
                                     {% endif %}
+                                    
                                       
                                     
                                   </div>
                                 </span></td>
-                              <td data-column-id="price" class="gridjs-td text-center"><span>{{ good.stock_price }}
-                                  грн.</span></td>
+                              <td data-column-id="price" class="gridjs-td text-center">
+                                <span>
+                                  {{ good.stock_price }}грн.
+                                </span>
+                                {% if good.is_locked %}
+                                  <i class="ri-lock-2-fill align-bottom me-2 text-success"></i>
+                                {% endif %}
+                              </td>
                               <td data-column-id="orders" class="gridjs-td text-center">
                                 {% if good.on_discount %}
                                 <div class="row">
@@ -277,6 +259,22 @@
                                               </a>
                                           </li>
                                       {% endif %}
+                                      
+                                      
+                                      <li>
+                                        <a class="dropdown-item edit-list" data-edit-id="1" href="{% url 'app_goods:block-price-update' good.id %}">
+                                            
+                                            {% if good.is_locked %}
+                                              <i class="ri-lock-unlock-fill align-bottom me-2 text-muted"></i>
+                                              Розблокувати оновлення ціни
+                                            {% else %}
+                                              <i class="ri-lock-2-fill align-bottom me-2 text-muted"></i>
+                                              Заблокувати оновлення ціни
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                      
+                                        
                                       
 
                                       

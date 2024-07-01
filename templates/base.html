@@ -168,59 +168,28 @@
     <!-- App js -->
     <script src="{% static 'js/app.js'%}"></script>
     {% endblock javascript %}
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasLeftLabel">
-      <div class="offcanvas-header border-bottom">
-        <a href="https://www.sportrelaxnutritions.com">
-          <img src="/static/images/logo-srn.png" alt="" height="64">
-        </a>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    {% include 'includes/burgerMainPageSideBar.html' %}
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasBottom2" aria-labelledby="offcanvasBottomLabel2">
+      <div class="offcanvas-header pb-0">
+          <h5 id="offcanvasBottomLabel">Фільтрування товарів</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+              aria-label="Close"></button>
       </div>
-      <div class="offcanvas-body">
-          <div class="row border-bottom">
-            <div class="col-12">
-              <h4 class=text-muted>
-                Швидка навігація
-              </h4>
-              <div class="row ms-1 mb-3">
-                <div class="col-xxl-12 mb-1"><a class="text-info ьи fs-16" href="/">
-                  <i class="ri-gift-2-line"></i>
-                  Товари
-                </a></div>
-                <div class="col-xxl-12 mb-1"><a class="text-info fs-16" href="blog/">
-                  <i class="ri-contacts-line"></i>
-                  Блог
-                </a></div>
-              </div>
-            </div>
-          </div>
-          <div class="row border-bottom mt-3">
-            <div class="col-12">
-              <h4 class=text-muted>
-                Контакти
-              </h4>
-              <div class="row ms-1 mb-3">
-                <div class="col-xxl-12 mb-1"><a class="text-info fs-16" href="#">
-                  <i class="ri-gift-2-line"></i>
-                  +380 50 954 91 70
-                </a></div>
-                <div class="col-xxl-12 mb-1"><a class="text-info fs-16" href="#">
-                  <i class="ri-shopping-cart-2-line"></i>
-                  sportrelaxnutritions@gmail.com
-                </a></div>
-              </div>
-            </div>
+      <div class="offcanvas-body px-0" id="main-filter">
+          <div class="accordion accordion-flush filter-accordion" id="finalFiltersContainerMobile">
+              
           </div>
       </div>
       <div class="offcanvas-footer border-top p-3 text-center">
-        <div class="row">
-            <div class="col-6">
-                <a href="/" type="button" class="btn btn-light w-100" id="reset-layout">Очистити фільтри</a>
-            </div>
-            <div class="col-6">
-                <a href="https://my-fit.com.ua/plan-fitness/" target="_blank" class="btn btn-info w-100">Онлайн тренування</a>
-            </div>
-        </div>
-    </div>
+          <div class="row">
+              <div class="col-6">
+                  <a href="/" type="button" class="btn btn-light w-100" id="reset-layout">Очистити фільтри</a>
+              </div>
+              <div class="col-6">
+                  <a href="https://my-fit.com.ua/plan-fitness/" target="_blank" class="btn btn-info w-100">Онлайн тренування</a>
+              </div>
+          </div>
+      </div>
   </div>
 </body>
 

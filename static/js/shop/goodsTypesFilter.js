@@ -102,7 +102,7 @@ function createGoodTypeClustersAccordionItemHtml(goodTypeClusters) {
 }
 
 function fetchDataAndRender() {
-  fetch('https://www.sportrelaxnutritions.com/api/types/')
+  fetch('http://127.0.0.1:8000/api/types/')
       .then(response => response.json())
       .then(data => {
           if (!data || typeof data !== 'object') {
@@ -112,6 +112,7 @@ function fetchDataAndRender() {
 
           let container;
           
+            container2 = document.getElementById('finalFiltersContainerMobile2');
             container = document.getElementById('finalFiltersContainerMobile');
           
 
@@ -122,6 +123,7 @@ function fetchDataAndRender() {
 
           if (data.producers) {
               container.innerHTML += createProducersAccordionItemHtml(data.producers);
+              container2.innerHTML += createProducersAccordionItemHtml(data.producers);
           }
 
         //   if (data.aim_filters) {
@@ -130,6 +132,7 @@ function fetchDataAndRender() {
 
           if (data.good_type_clusters) {
               container.innerHTML += createGoodTypeClustersAccordionItemHtml(data.good_type_clusters);
+              container2.innerHTML += createGoodTypeClustersAccordionItemHtml(data.good_type_clusters);
           }
       })
       .catch(error => {

@@ -29,16 +29,29 @@ class GoodVariantFilter(django_filters.FilterSet):
     is_top = django_filters.BooleanFilter(
         field_name="is_top",
         widget=forms.CheckboxInput(),
-        label="Show Only Top Goods",
+        label="Тільки топ товари",
         method='filter_is_top'
+    )
+    
+    is_locked = django_filters.BooleanFilter(
+        field_name="is_locked",
+        widget=forms.CheckboxInput(),
+        label="Тільки захищені від зміни ціни",
+        method='filter_is_locked'
     )
 
     class Meta:
         model = GoodVariant
-        fields = ["good__good_type__name", "is_top"]
+        fields = ["good__good_type__name", "is_top", "is_locked"]
 
     def filter_is_top(self, queryset, name, value):
         if value is False:
             return queryset
         return queryset.filter(**{name: value})
+    
+    def filter_is_locked(self, queryset, name, value):
+        if value is False:
+            return queryset
+        return queryset.filter(**{name: value})
+
 
