@@ -103,6 +103,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://185.233.116.13:8000',
     'http://localhost:8000',
     "http://127.0.0.1:8000",
+    "https://sportrelaxnutritions.com",
+    "https://www.sportrelaxnutritions.com"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -110,6 +112,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://secure.wayforpay.com',
     "http://127.0.0.1:8000",
     "https://sportrelaxnutritions.com",
+    "https://www.sportrelaxnutritions.com"
 ]
 
 ASSETS_ROOT = "/static/assets"

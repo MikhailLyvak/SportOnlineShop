@@ -3,6 +3,13 @@ const pcHtml = `
   <button class="btn btn-ghost" style="margin-right: 15px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft" aria-controls="offcanvasLeft">
     <i class="ri-align-left text-muted fs-24"></i>
   </button>
+</div>
+<div class="d-flex">
+  <a href="https://www.sportrelaxnutritions.com">
+    <img src="/static/images/logo-srn.png" alt="" height="56">
+  </a>
+</div>
+<div class="d-flex">
   <div class="dropdown topbar-head-dropdown ms-1 header-item">  <!-- Корзина -->
     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
       id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
@@ -83,16 +90,6 @@ const pcHtml = `
       </div>
     </div>
   </div>
-  </div>
-  <div class="d-flex">
-    <a href="http://127.0.0.1:8000">
-      <img src="/static/images/logo-srn.png" alt="" height="56">
-    </a>
-  </div>
-  <div id="phone-div" class="d-flex">
-    <img src="/static/images/vodafon.png" alt="" height="38">
-      <h4 class="m-2">+380 50 954 91 70</h4>
-  </div>
 </div>
 `
 
@@ -103,7 +100,7 @@ const mobileHtml = `
   </button>
 </div>
 <div class="d-flex">
-  <a href="http://127.0.0.1:8000">
+  <a href="https://www.sportrelaxnutritions.com">
     <img src="/static/images/logo-srn.png" alt="" height="56">
   </a>
 </div>
@@ -237,5 +234,5 @@ function topBarContent() {
 
 document.addEventListener("DOMContentLoaded", function () {
   topBarContent();
-  window.addEventListener("resize", topBarContent);
+  // window.addEventListener("resize", topBarContent);
 });

@@ -2,9 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
   cartGoodsUpdate()
 });
 
-
 function cartGoodsUpdate() {
-  fetch('/api/cart_items/')
+  fetch('/api/cart_items/', { cache: 'no-store' })
     .then(response => response.json())
     .then(data => {
       const cartItemsAmount1 = document.getElementById('cartItemsAmount1');
@@ -72,7 +71,7 @@ function cartGoodsUpdate() {
       }
     })
     .catch(error => {
-      console.error('Error fetching cart data:', error);
+      notify(error)
     })
     .finally(function () {});
 }

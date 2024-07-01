@@ -1,6 +1,6 @@
 const pcHtml = `
 <div class="d-flex">
-    <a href="http://127.0.0.1:8000">
+    <a href="https://www.sportrelaxnutritions.com">
       <img src="/static/images/logo-srn.png" alt="" height="82">
     </a>
   </div>
@@ -114,7 +114,7 @@ const mobileHtml = `
   </button>
 </div>
 <div class="d-flex">
-  <a href="http://127.0.0.1:8000">
+  <a href="https://www.sportrelaxnutritions.com">
     <img src="/static/images/logo-srn.png" alt="" height="56">
   </a>
 </div>
@@ -263,5 +263,5 @@ function topBarContent() {
 
 document.addEventListener("DOMContentLoaded", function () {
   topBarContent();
-  window.addEventListener("resize", topBarContent);
+  // window.addEventListener("resize", topBarContent);
 });
