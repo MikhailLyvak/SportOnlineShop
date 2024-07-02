@@ -51,7 +51,7 @@ function createAimButtons() {
             <div style="position: relative; height: 100px; width: ${widthML};">
               <div class="shadow-lg card-animate" id="box">
                 <p
-                  style="margin-left: ${marginLeft}; font-size: 15px; color: #2995b3; text-wrap: pretty; max-width: 60%;"
+                  style="margin-left: ${marginLeft}; font-size: 15px; color: #2995b3; text-wrap: pretty; max-width: 60%;  font-style: oblique 10deg; font-family: Georgia, serif !important;"
                   class="mt-3"
                 >
                   ${btn.title}

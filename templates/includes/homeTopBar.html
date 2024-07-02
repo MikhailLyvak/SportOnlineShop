@@ -22,8 +22,22 @@
       </g>
     </svg>
   </div>
+  <style>
+    @media (max-width: 499px) {
+      .navbar-header {
+          height: 60px;
+      }
+  }
+
+  /* Apply height for widths 500px and above */
+  @media (min-width: 500px) {
+      .navbar-header {
+          height: 90px;
+      }
+  }
+  </style>
   <div class="layout-width">
-    <div class="navbar-header justify-content-center" style="height: 90px;">
+    <div class="navbar-header justify-content-center">
       <style>
         .ml-header-flex {
           display: flex;
@@ -32,7 +46,7 @@
           width: 100%;
         }
       </style>
-      <div class="ml-header-flex" style="max-width: 1440px; height: auto;" id="goodsTopBar">
+      <div class="ml-header-flex mt-1" style="max-width: 1440px; height: auto;" id="goodsTopBar">
         <!-- Контент топ бару підгружаєтьс ядинамічно за допомогою "goodsTopBar.js" -->
       </div>
       </div>

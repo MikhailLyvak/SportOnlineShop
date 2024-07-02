@@ -23,7 +23,7 @@ from .serializers import OrderSerializer, OrderStatusUpdateSerializer
 from app_cart.models import Cart, CartItem
 import os
 import json
-
+from django.contrib import messages
 
 @transaction.atomic
 def create_order(request):
@@ -34,6 +34,10 @@ def create_order(request):
 
     # Fetch or create a Session instance associated with the session key
     session_instance, _ = Session.objects.get_or_create(session_key=session_key)
+    
+    if cart_items.count() == 0:
+        messages.error(request, "Ваш кошик пустий! Додайте товари в кошик для оформлення замовлення.")
+        return redirect("app_cart:cart-detail")
 
     # Create the Order instance with the associated Session instance
     create_order = OrderFix.objects.create(session=session_key)

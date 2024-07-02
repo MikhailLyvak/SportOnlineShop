@@ -292,12 +292,12 @@ function goodCardsList(url, isSearch = false) {
                   <p class="text-danger d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-10' : 'fs-12')}">
                     <del>${good.sell_price} грн.</del>
                   </p>
-                  <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-12' : 'fs-14')}">
+                  <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-15' : 'fs-14')}">
                     ${good.discount_price} грн.
                   </h2>
                 </div>` :
                 `<div>
-                  <p class="text-primary d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-12' : 'fs-14')}">
+                  <p class="text-primary d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-15' : 'fs-14')}">
                     ${good.sell_price} грн.
                   </p>
                 </div>`
@@ -391,15 +391,15 @@ function TopGoodCardsList(url) {
               <div class="d-flex" style="justify-content: space-between; align-items: center;">
                 ${good.on_discount ?
                   `<div>
-                  <p class="text-danger d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-10' : 'fs-12')}">
+                  <p class="text-danger d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-12')}">
                     <del>${good.sell_price} грн.</del>
                   </p>
-                  <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-12' : 'fs-14')}">
+                  <h2 class="text-success m-0 mt-0 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-15' : 'fs-14')}">
                     ${good.discount_price} грн.
                   </h2>
                 </div>` :
                 `<div>
-                  <p class="text-primary d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-10' : (window.innerWidth <= 1440 ? 'fs-12' : 'fs-14')}">
+                  <p class="text-primary d-flex align-items-center m-0 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-15' : 'fs-14')}">
                     ${good.sell_price} грн.
                   </p>
                 </div>`

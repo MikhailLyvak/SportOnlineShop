@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
   cartGoodsUpdate()
 });
 
+window.addEventListener('pageshow', function (event) {
+  if (event.persisted) {
+    cartGoodsUpdate();
+  }
+});
+
 function cartGoodsUpdate() {
   fetch('/api/cart_items/', { cache: 'no-store' })
     .then(response => response.json())
@@ -62,7 +68,7 @@ function cartGoodsUpdate() {
                 <i class="bx bx-cart"></i>
               </div>
             </div>
-            <h5 class="mb-3">Ваша корзина пуста!</h5>
+            <h5 class="mb-3">Ваш кошик пустий!</h5>
           </div>
         </div>
         `;

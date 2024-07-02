@@ -26,7 +26,7 @@ const pcHtml = `
       <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
         <div class="row align-items-center">
           <div class="col">
-            <h6 class="m-0 fs-16 fw-semibold"> Моя корзина</h6>
+            <h6 class="m-0 fs-16 fw-semibold"> Мій кошик</h6>
           </div>
           <div class="col-auto">
             <!-- <button type="button" class="btn btn-soft-secondary waves-effect">secondary</button> -->
@@ -85,7 +85,7 @@ const pcHtml = `
         </div>
 
         <a href="/cart/" class="btn btn-success text-center w-100">
-          До корзини
+          До кошика
         </a>
       </div>
     </div>
@@ -121,7 +121,7 @@ const mobileHtml = `
       <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
         <div class="row align-items-center">
           <div class="col">
-            <h6 class="m-0 fs-16 fw-semibold"> Моя корзина</h6>
+            <h6 class="m-0 fs-16 fw-semibold"> Мій кошик</h6>
           </div>
           <div class="col-auto">
             <!-- <button type="button" class="btn btn-soft-secondary waves-effect">secondary</button> -->
@@ -180,7 +180,7 @@ const mobileHtml = `
         </div>
 
         <a href="/cart/" class="btn btn-success text-center w-100">
-          До корзини
+          До кошика
         </a>
       </div>
     </div>
