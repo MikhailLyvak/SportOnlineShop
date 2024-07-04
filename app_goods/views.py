@@ -178,6 +178,15 @@ class GoodsListView(ListAPIView):
         aim_filter_name = self.request.query_params.get("aim_filter")
         if aim_filter_name:
             queryset = queryset.filter(good__aim_filter__db_name=aim_filter_name)
+            
+        min_price = self.request.query_params.get("min_price")
+        max_price = self.request.query_params.get("max_price")
+
+        if min_price:
+            queryset = queryset.filter(sell_price__gte=min_price)
+
+        if max_price:
+            queryset = queryset.filter(sell_price__lte=max_price)
 
         return queryset
 

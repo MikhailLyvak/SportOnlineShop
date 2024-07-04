@@ -1,4 +1,4 @@
-function goodCardsListUrl(order_by, searchValue, filterByProducer, filterByType, aim = null) {
+function goodCardsListUrl(order_by, searchValue, filterByProducer, filterByType, aim = null, minPrice = minSearchPrice, maxPrice = maxSearchPrice) {
   let url
   url = `/api/goods/?ordering=${order_by}${searchValue ? '&search=' + encodeURIComponent(searchValue) : ''}`;
 
@@ -13,6 +13,9 @@ function goodCardsListUrl(order_by, searchValue, filterByProducer, filterByType,
   if (aim) {
     url += `&aim_filter=${encodeURIComponent(aim)}`;
   }
+
+  url += `&min_price=${minSearchPrice || ''}&max_price=${maxSearchPrice || ''}`;
+
   return url;
 }
 
@@ -136,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
     aimButtons.style.cssText += 'margin-left: 90px !important; margin-right: 90px !important';
   }
   // Load goods only once on initial page load
-  const url = goodCardsListUrl(orderBy, null, filterByProducer, filterByType);
+  const url = goodCardsListUrl(orderBy, null, filterByProducer, filterByType, null, minSearchPrice, maxSearchPrice);
   goodCardsList(url);
   TopGoodCardsList("/api/top-goods/");
   caruselLoader();
@@ -155,8 +158,8 @@ function adjustOffcanvasClass() {
   if (window.innerWidth > 1200) {
     offcanvasElement.classList.remove('offcanvas-bottom');
     offcanvasElement.classList.add('offcanvas-end');
-    offcanvasElement2.classList.remove('offcanvas-bottom');
-    offcanvasElement2.classList.add('offcanvas-end');
+    // offcanvasElement2.classList.remove('offcanvas-bottom');
+    // offcanvasElement2.classList.add('offcanvas-end');
   } else {
     offcanvasElement.classList.remove('offcanvas-end');
     offcanvasElement.classList.add('offcanvas-bottom');
@@ -190,9 +193,9 @@ checkboxes.forEach(function (checkbox) {
       orderBy = checkbox.id;
       let url = ''
       if (document.getElementById('searchGood')) {
-        url = goodCardsListUrl(orderBy, document.getElementById('searchGood').value.trim(), filterByProducer, filterByType);
+        url = goodCardsListUrl(orderBy, document.getElementById('searchGood').value.trim(), filterByProducer, filterByType, null, minSearchPrice, maxSearchPrice);
       } else {
-        url = goodCardsListUrl(orderBy, document.getElementById('searchGoodPhone').value.trim(), filterByProducer, filterByType);
+        url = goodCardsListUrl(orderBy, document.getElementById('searchGoodPhone').value.trim(), filterByProducer, filterByType, null, minSearchPrice, maxSearchPrice);
       }
 
       goodCardsList(url, true);
@@ -229,7 +232,7 @@ function goodCardsList(url, isSearch = false) {
     .then(data => {
       if (data.results.length === 0) {
         goodCardsListContainer.innerHTML = `
-        <div class="alert border-dashed alert-danger" role="alert">
+        <div class="alert border-dashed alert-danger" role="alert" style="width: 100%">
         <div class="noresult"> <!-- or display: inline-flex; -->
         <div class="text-center">
           <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
@@ -267,8 +270,8 @@ function goodCardsList(url, isSearch = false) {
                 alt="Card image cap">
             </a>
             ${good.on_discount ? `<div class="ribbon-two ribbon-two-danger"><span class="fs-18">-${good.discount_percentage}%</span></div>` : ''}
-            <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body p-2">
-            <h4 placeholder="${good.name}" class="card-title mb-2 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-14')}">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
+            <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body px-2">
+            <h4 placeholder="${good.name}" class="card-title align-items-start mb-2 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-14')}" style="min-height: 29px !important">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
             <div class="row my-1">
                <div class="d-flex" id="ratingGood_${good.id}">
                 ${ratingHtml}
@@ -370,8 +373,8 @@ function TopGoodCardsList(url) {
                 alt="Card image cap">
             </a>
             ${good.on_discount ? `<div class="ribbon-two ribbon-two-danger"><span class="fs-18">-${good.discount_percentage}%</span></div>` : ''}
-            <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body p-2">
-              <h4 placeholder="${good.name}" class="card-title mb-2 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-14')}">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
+            <div class="card-body border-top rounded-4-top rounded-4  border-2 justify-content-end custom-card-body px-2">
+              <h4 placeholder="${good.name}" class="card-title align-items-start mb-2 ${window.innerWidth < 420 ? 'fs-12' : (window.innerWidth <= 1440 ? 'fs-13' : 'fs-14')}" style="min-height: 29px !important">${good.name.length > 30 ? good.name.substring(0, 37) + '...' : good.name}</h4>
               <div class="row my-1">
                <div class="d-flex" id="ratingGood_${good.id}">
                 ${ratingHtml}

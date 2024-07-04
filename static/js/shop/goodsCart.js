@@ -18,7 +18,10 @@ function cartGoodsUpdate() {
       const totalCartPrice = document.getElementById('totalCartPrice');
 
       // Update cart item count
-      const itemCount = data[0].items.length;
+      let itemCount = 0;
+      if (data.length > 0) {
+        itemCount = data[0].items.length;
+      }
       cartItemsAmount1.textContent = itemCount;
       cartItemsAmount2.textContent = itemCount;
 

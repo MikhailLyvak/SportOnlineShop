@@ -103,11 +103,27 @@ class GoodVariantAdmin(admin.ModelAdmin):
             request, "GoodVariant was successfully updated.", level=messages.SUCCESS
         )
         return HttpResponseRedirect(reverse("app_goods:admin-goods"))
+    
+
+class ProducerForm(forms.ModelForm):
+    description = forms.CharField(widget=TinyMCE())
+    
+    class Meta:
+        model = Producer
+        fields = [
+            "name",
+            "description",
+            "photo",
+        ]
+
+class ProducerAdmin(admin.ModelAdmin):
+    form = ProducerForm
+    search_fields = ["name"]
 
 
 admin.site.register(GoodType)
 admin.site.register(GoodTypeCluster)
-admin.site.register(Producer)
+admin.site.register(Producer, ProducerAdmin)
 admin.site.register(Good)
 admin.site.register(Size)
 admin.site.register(Taste)
