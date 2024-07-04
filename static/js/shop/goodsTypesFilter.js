@@ -1,6 +1,6 @@
 function rangePicker(id) {
     return `
-        <div class="card">
+        <div class="card pb-2">
             <div id="${id}" class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr mx-3 my-3" style="height: 12px !important;"></div>
             <div class="d-inline-flex gap-2 mt-2">
                 <input type="number" class="form-control mx-3" min="-20" max="40" step="1" id="${id}-start" placeholder="Start Value" disabled>
@@ -91,16 +91,16 @@ function fetchDataAndRender() {
             container.innerHTML += rangePicker('slider1');
             container2.innerHTML += rangePicker('slider2');
 
-                
-            if (data.producers) {
-                
-                container.innerHTML += createProducersAccordionItemHtml(data.producers);
-                container2.innerHTML += createProducersAccordionItemHtml(data.producers);
-            }
 
             if (data.good_type_clusters) {
                 container.innerHTML += createGoodTypeClustersAccordionItemHtml(data.good_type_clusters);
                 container2.innerHTML += createGoodTypeClustersAccordionItemHtml(data.good_type_clusters);
+            }
+
+            if (data.producers) {
+                
+                container.innerHTML += createProducersAccordionItemHtml(data.producers);
+                container2.innerHTML += createProducersAccordionItemHtml(data.producers);
             }
 
             // Delay the initialization to ensure the element is in the DOM
@@ -115,69 +115,42 @@ function fetchDataAndRender() {
         });
 }
 
-function createProducersAccordionItemHtml(producers) {
-    let html = `
-      <div class="card mb-0">
-          <div class="card-header text-muted fs-14">
-              ВИРОБНИКИ
-              <span class="badge bg-info rounded-pill align-middle ms-1 filter-badge">${producers.length}</span>
-          </div>
-          <div class="card-body">
+  function createProducersAccordionItemHtml(producers) {
+    let html = '';
+    html += `
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingCluster_producers">
+                <button class="accordion-button bg-transparent shadow-none collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#flush-collapseCluster_producers"
+                    aria-expanded="true" aria-controls="flush-collapseCluster_producers">
+                    <span class="text-muted text-uppercase fs-12 fw-medium">ВИРОБНИКИ</span> 
+                    <span class="badge bg-info rounded-pill align-middle ms-1 filter-badge">${producers.length}</span>
+                </button>
+            </h2>
+            <div id="flush-collapseCluster_producers" class="accordion-collapse collapse"
+                aria-labelledby="flush-headingCluster_producers">
+                <div class="accordion-body text-body pt-1">
+                    <div class="d-flex flex-column gap-2 filter-check">
     `;
-  
+
     producers.forEach(producer => {
         html += `
-          
-            <div class="form-check m-2">
-            <input class="form-check-input" type="checkbox" value="${producer.name}" id="producerCheckbox${producer.id}" onchange="toggleProducerFilter('${producer.name}', this)">
-                <label class="form-check-label" for="producerRadio${producer.id}">${producer.name}</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="${producer.name}" id="producerCheckbox${producer.id}" onchange="toggleProducerFilter('${producer.name}', this)">
+                <label class="form-check-label" for="goodTypeRadio${producer.id}">${producer.name}</label>
             </div>
-          
         `;
     });
-  
-    html += `</div>
-      </div>
-    `
+
+    html += `
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
   
     return html;
   }
-
-// function createAimFiltersAccordionItemHtml(aimFilters) {
-//   let html = `
-//       <div class="accordion-item">
-//           <h2 class="accordion-header" id="flush-headingAimFilters">
-//               <button class="accordion-button bg-transparent shadow-none collapsed" type="button"
-//                   data-bs-toggle="collapse" data-bs-target="#flush-collapseAimFilters"
-//                   aria-expanded="true" aria-controls="flush-collapseAimFilters">
-//                   <span class="text-muted text-uppercase fs-12 fw-medium">Цілі тренування</span> 
-//                   <span class="badge bg-info rounded-pill align-middle ms-1 filter-badge">${aimFilters.length}</span>
-//               </button>
-//           </h2>
-//           <div id="flush-collapseAimFilters" class="accordion-collapse collapse"
-//               aria-labelledby="flush-headingAimFilters">
-//               <div class="accordion-body text-body pt-1">
-//                   <div class="d-flex flex-column gap-2 filter-check">
-//   `;
-
-//   aimFilters.forEach(aimFilter => {
-//       html += `
-//           <div class="form-check">
-//               <input class="form-check-input" type="checkbox" value="${aimFilter.title}" id="aimFilterRadio${aimFilter.id}">
-//               <label class="form-check-label" for="aimFilterRadio${aimFilter.id}">${aimFilter.title}</label>
-//           </div>
-//       `;
-//   });
-
-//   html += `
-//                   </div>
-//               </div>
-//           </div>
-//       </div>
-//   `;
-
-//   return html;
-// }
 
   function createGoodTypeClustersAccordionItemHtml(goodTypeClusters) {
     let html = '';
