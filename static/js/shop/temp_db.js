@@ -2,6 +2,8 @@ let orderBy = "name";
 let searchValue = null;
 let filterByProducer = [];
 let filterByType = [];
+let minSearchPrice = 0;
+let maxSearchPrice = 5000;
 
 let typingTimer;
 let nextUrl = null;

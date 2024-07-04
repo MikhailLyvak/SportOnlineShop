@@ -43,6 +43,26 @@
     .checked {
         color: #f5c542;
     }
+    /* Custom CSS to adjust range slider handles */
+    .noUi-handle {
+        width: 14px; /* Adjust width as needed */
+        height: 14px; /* Adjust height as needed */
+        background-color: #007bff; /* Example background color */
+        border: 2px solid #007bff; /* Example border */
+        border-radius: 50%; /* Ensures round shape */
+        transform: translate(-10%, -20%); /* Center horizontally and vertically */
+    }
+
+    .noUi-connect {
+        background: #52b5d1 !important;
+    }
+
+    .noUi-horizontal .noUi-handle {
+        width: 18px !important; /* Adjust width as needed */
+        height: 18px !important; /* Adjust height as needed */
+        transform: translate(-10%, +10%); /* Center horizontally and vertically */
+    }
+
 </style>
 
 <!-- <div
@@ -53,7 +73,7 @@
 
     <!-- <div class="main-content bg-light"> -->
 
-    <div class="page-content m-0" id="page-content-adaptive" style="margin-top: 1% !important;">
+    <div class="page-content m-0 main-content-adaptive" id="page-content-adaptive" style="margin-top: 1% !important;">
 
 
         <div class="container-fluid" style="padding-left: 0px; padding-right: 0px; max-width: 1440px; margin-top: 15px;" id="container-fluid-adaptive">
@@ -76,6 +96,12 @@
                     .responsive-img {
                         max-height: 300px;
                         min-height: 172px;
+                    }
+                }
+
+                @media (max-width: 767px) {
+                    .main-content-adaptive {
+                        padding-top: 50px !important;
                     }
                 }
             </style>
@@ -423,6 +449,9 @@
 
 
 {% block extra_js %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
 <!-- prismjs plugin -->
 <script src="{% static 'libs/prismjs/prism.js'%}"></script>
 
@@ -440,8 +469,7 @@
 <script src="{% static 'js/shop/goodsCart.js' %}"></script>
 <script src="{% static 'js/shop/goodsTypesFilter.js' %}"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
+
 
 
 
